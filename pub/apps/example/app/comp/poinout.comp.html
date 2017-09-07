@@ -1,0 +1,39 @@
+<comp-poinout>
+  <elem-editable-text
+    class="fs:140pc fw:600"
+    text={ getValue && getValue('obj.poinoutTitle') }
+    on-edit={ handleEdit }
+    cb-extras={ getValue('obj.poinoutTitle', 'id') }/>
+
+  <div class="p-tb:50px ta:l" if={loaded}>
+    <elem-leaf poinject={opts.poinject} on-edit={handleEdit} />
+  </div>
+
+  <script>
+    const self = Object.assign(this, {
+      loaded: !opts.opts.SERVER,
+      opts: opts.opts,
+      poinject: opts.opts.poinject,
+    });
+
+    self.getValue   = self.opts.SERVER ? (path) => path : store.getValue;
+    if(self.opts.SERVER || opts.opts.SERVER) return;
+
+    self.handleEdit = store.handleEdit.bind(store);
+
+    store.on('editSuccess', () => {
+      return self.update({ opts: store.opts, poinject: store.opts.poinject });
+    });
+
+    self.on('update', () =>
+      console.log('after update', self.poinject));
+
+      // self.getPoinject = () =>
+      //   window.fetch('/poinject')
+      //     .then(res => res.json())
+      //     .then(json => self.update({ loaded: true, poinject: json }));
+      //
+      // self.getPoinject();
+
+  </script>
+</comp-poinout>

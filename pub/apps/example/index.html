@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<!-- for Google -->
+		<meta name="description" content={ opts.meta.description } />
+		<meta name="author" content={ opts.meta.author } />
+		<meta name="copyright" content="{ opts.meta.title }. All Rights Reserved." />
+		<meta name="application-name" content={ opts.meta.title } />
+		<!-- for Facebook -->
+		<meta property="og:title" content={ opts.meta.title } />
+		<meta property="og:image" content={ opts.meta.image } />
+		<meta property="og:url" content={ opts.meta.url } />
+		<meta property="og:description" content={ opts.meta.description } />
+		<!-- for Twitter -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={ opts.meta.title } />
+		<meta name="twitter:description" content={ opts.meta.description } />
+		<meta name="twitter:image" content={ opts.meta.image } />
+		<!-- favicon -->
+		<!-- <link rel="shortcut icon" type="image/x-icon" href={ opts.meta.favicon } /> -->
+
+		<link rel="stylesheet" href="https://cdn.rawgit.com/noneedsystem/fuico/0.0.8/style.css">
+		<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500" rel="stylesheet">
+
+		<title>{ opts.meta.title }</title>
+	  <script>
+	  	//var opts = { JSON.stringify(opts) }
+	  </script>
+	</head>
+
+	<body class="prim:dorange sec:lime800 err:red warn:yellow ff:Quicksand_all fw:300 fs:15px lg-fs:16px lh:1.3 bg:F1F1F1">
+	  <main id="main" class="mxw:800px">
+	  	{ HTML }
+	  	<route/>
+	  </main>
+
+		<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/riot@3.6/riot.min.js" defer></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/riot-route/3.1.1/route.min.js" defer></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/riot@3.6/riot+compiler.min.js" defer></script>-->
+		<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/riot/3.6.1/riot.min.js"></script> -->
+		<script type="text/javascript" src="./assets/libs/riot.js"></script>
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/riot-route/3.1.1/route.min.js"></script>
+		<!-- <script src="https://unpkg.com/riot-router@0.9/dist/router.min.js"></script> -->
+		<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/riot/3.6.1/riot+compiler.min.js"></script> -->
+		<script type="text/javascript" src="./assets/libs/riot+compiler.js"></script>
+
+		<script type="text/javascript" src="https://cdn.rawgit.com/noneedsystem/fucss/0.6.7/fucss.js" defer></script>
+
+
+		<!-- riot components -->
+		{ SCRIPTS }
+		<!-- <script type="riot/tag" data-src="./app/comp/zen.tag.html" defer></script>
+		<script type="riot/tag" data-src="./app/comp/navigation.tag.html" defer></script>
+		<script type="riot/tag" data-src="./app/comp/palette.tag.html" defer></script>
+		<script type="riot/tag" data-src="./app/page/main.page.html" defer></script>
+		<script type="riot/tag" data-src="./app/page/sub.page.html" defer></script>
+		<script type="riot/tag" data-src="./app/page/sub2.page.html" defer></script> -->
+
+		<!-- mixins -->
+		<script type="text/javascript" src="./assets/mixins/store.mixin.js"></script>
+		<!-- stores -->
+		<script type="text/javascript" src="./assets/stores/app.store.js"></script>
+		<!-- init -->
+		<script type="text/javascript" src="./assets/scripts/init.js"></script>
+
+		<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/superagent/1.2.0/superagent.min.js" defer></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js" defer></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js" defer></script>
+		<script type="text/javascript" src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js" defer></script>-->
+
+	</body>
+</html>

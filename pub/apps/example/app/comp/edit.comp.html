@@ -1,0 +1,10 @@
+<comp-edit>
+  <div class="bg:white op:0.5 w,h:100pc ps:fx t,l:0" onclick={opts.oneditclose} />
+  <div class="ps:fx t:20pc w:80pc l:10pc fs:10px_button">
+    <div class="ps:rl">
+      <elem-editable-text autofocus={true} class="p:20px bg:white w:100pc fux-boxs" max={ 5000 } text={ opts.editable.value } />
+      <button if={false} class="bg:sec c:white p:20px m-t:15px dp:ib br:50pc"><i class="fu-check" /></button>
+      <button if={false} onclick={opts.oneditclose} class="bg:err c:white p:20px m-t:15px dp:ib br:50pc"><i class="fu-cross" /></button>
+    </div>
+  </div>
+</comp-edit>

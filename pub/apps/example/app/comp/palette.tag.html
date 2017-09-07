@@ -1,0 +1,27 @@
+<palette>
+  <div class="dp:flx flxw:wrp">
+    <span 
+      each="{ color, key in colors }" 
+      class="w:100pc sm-w:32pc m-t:10px fs:80pc c:white fw:400 p:10px_div ta:l fux-boxsh bg:white p:5px">
+      <div style="background-color: { color }">{ color } { key }</div>
+      <div
+        each="{ modifier, val in colorModifiers}"
+        class="fs:80pc fux-fadeIn"  
+        style="background-color: { generateColor(color, modifier) }">
+          { generateColor(color, modifier) } { key }{ val } 
+      </div>
+    </span>
+  </div>
+  
+  <script>
+    var tag = this;
+    if(!this.opts.server){
+      this.colors = window.fucss && window.fucss.colors || {};
+      // colors using alphas
+      //this.colorModifiers = ['a13', 'a31', 'a50', 'a7', 'a85', '', 'a91', 'a81', 'a71', 'a52'];
+      this.colorModifiers = window.fucss && window.fucss.colorMods || {};
+      this.generateColor = window.fucss && window.fucss.generateColor || {};
+    }
+  </script>
+  
+</palette>

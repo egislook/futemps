@@ -1,0 +1,34 @@
+{
+    "title": "any",
+    "meta": {
+      "title": "poinout | main page",
+      "description": "small app example",
+      "image": "image.png",
+      "author": "noneedsystem",
+      "favicon": "favicon.png",
+      "url": "www.poinout.com"
+    },
+    "route": {},
+    "routes": {
+      "main": {
+        "name": "main",
+        "link": "/",
+        "title": "Main",
+        "view": "page-main",
+        "meta": {
+          "title": "poinout | main page",
+          "description": "app main page"
+        }
+      },
+      "gallery": {
+        "name": "gallery",
+        "link": "/gallery",
+        "title": "Gallery",
+        "view": "page-gallery",
+        "meta": {
+          "title": "poinout | gallery",
+          "description": "gallery page description"
+        }
+      }
+    }
+}

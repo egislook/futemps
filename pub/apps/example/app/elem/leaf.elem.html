@@ -1,0 +1,49 @@
+<elem-leaf>
+  <div class={'p-b:10px': !childIsValue}>
+
+    <div if={leaf} class="p-l:12px dp:ib">
+      <i if={leaf.type === 'field' && !childIsValue} class="fu-minus dp:ib fs:10px" />
+      <elem-editable-text
+        class="fw:500 p:2px-5px dp:ib fc-bg:white"
+        text={leaf.value}
+        on-edit={opts.onEdit}
+        cb-extras={leaf.id} />
+      <i if={childIsValue} class="fu-chevron-small-right op:0.2" />
+      <elem-editable-text
+        if={childIsValue}
+        class="dp:ib va:t p:2px-10px fc-bg:white"
+        text={child && child.value}
+        on-edit={opts.onEdit}
+        cb-extras={child && child.id} />
+    </div>
+
+    <div class="p-l:30px" if={!childIsValue}>
+      <elem-leaf each={leaf in child} leaf={leaf} poinject={parent.opts.poinject} on-edit={parent.opts.onEdit} />
+    </div>
+  </div>
+
+  <script>
+    const self = Object.assign(this, {
+      leaf: opts.leaf,
+      childIsValue: null,
+      child: null,
+    });
+
+    self.setChild = () => {
+      
+      let child = self.leaf
+        ? self.opts.poinject.filter(leaf => leaf.parent === self.leaf.id)
+        : opts.poinject.filter(leaf => !leaf.parent);
+
+      if(child.length > 1){ self.child = child; return; }
+
+      self.child = child.shift();
+      self.childIsValue = true;
+    }
+
+    self.setChild();
+    this.on('update', () => self.setChild());
+
+  </script>
+
+</elem-leaf>

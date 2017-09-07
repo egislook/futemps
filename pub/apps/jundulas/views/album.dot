@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{=it.server.selectedAlbum.title}} | {{=it.Meta.Title}}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<!-- for Google -->
+		<meta name="description" content="{{=it.server.selectedAlbum.description}} {{=it.Meta.Description}}" />
+		<meta name="author" content="{{=it.Meta.Author}}" />
+		<meta name="copyright" content="{{=it.server.selectedAlbum.title}} {{=it.Meta.Title}}" />
+		<meta name="application-name" content="{{=it.server.selectedAlbum.title}} {{=it.Meta.Title}}" />
+		<!-- for Facebook -->
+		<meta property="og:title" content="{{=it.server.selectedAlbum.title}} {{=it.Meta.Title}}" />
+		<meta property="og:image" content="{{=it.server.selectedAlbum.primaryPhoto}}" />
+		<meta property="og:url" content="{{=it.server.url}}" />
+		<meta property="og:description" content="{{=it.server.selectedAlbum.description}} {{=it.Meta.Description}}" />
+		<!-- for Twitter -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content="{{=it.server.selectedAlbum.title}} {{=it.Meta.Title}}" />
+		<meta name="twitter:description" content="{{=it.server.selectedAlbum.description}} {{=it.Meta.Description}}" />
+		<meta name="twitter:image" content="{{=it.server.selectedAlbum.primaryPhoto}}" />
+		<!-- favicon -->
+		<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+		<!-- We need this! --> 
+		<link rel="stylesheet" type="text/css" href="/album.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700,300,200" rel="stylesheet" type="text/css">
+		<style>
+			input:focus,
+			textarea:focus{
+				outline: none;
+			}
+		</style>
+	</head>
+	<body class="ff:Ubuntu fs:14px md-fs:16px lh:1.5 bg:ccca1 c:fff ta:c m:0 bz:bb_all m:0-auto_all td:n_a">
+		<div class="fux-spin"></div>
+		
+		<nav class="ps:fx w:100pc z:2 bg:000a8 t:0 ps:fx">
+	    <div class="w:100pc p:0-10px md-p:20px md-dp:tb">
+	      <div class="md-dp:tc md-va:m md-ta:l m-tb:10px">
+	        <a href="/" class="dp:tb w:100pc c:fff tr:uc lh:1">
+	        	<div class="dp:tc va:m w:30px">
+	        		<img class="w:100pc va:m" src="{{=it.Header.Logo}}"></img>
+	        	</div>
+    				<div class="dp:tc va:m ta:l p-l:10px">
+    				  <h1 class="fw:300 fs:100pc m-b:2px">{{=it.Header.Name}}</h1>
+      				<h2 class="c:999 ltrs:4px fs:60pc md-fs:67pc">Photographer</h2>
+    				</div>
+    			</a>
+  			</div>
+  			<div class="md-dp:tc md-va:m md-ta:r ta:c m-tb:10px c:fff_a">
+  				<div class="dp:ib ta:c">
+  					<a href="/#flickr" class="dp:ib m-rl:5px fw:300 tr:uc">Albums</a>
+	    			<a href="/#feedback" class="dp:ib m-rl:5px fw:300 tr:uc">Feedback</a>
+	    			<a href="/#contact" class="dp:ib m-rl:5px fw:300 tr:uc">Contacts</a>
+  				</div>
+  				<div class="ps:ab r:10px t:10px md-ps:rl md-l:0 md-t:0 dp:ib ta:c md-m-l:10px bd:fffa8-sld-1px_i w,h,lh:28px_i m-l:5px_i">
+  					<a href="{{=it.Contacts.Social.Instagram}}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+	  				<a href="{{=it.Contacts.Social.Facebook}}" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+	  				<a href="{{=it.Contacts.Social.GooglePlus}}" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+	  			</div>
+  			</div>
+			</div>
+	  </nav>
+	  
+	  {{? it.server.selectedAlbum}}
+		<div id="slideshow" class="ps:rl md-h:600px h:400px">
+			<div class="ps:ab t:0 l:0 b:0 r:0 bg-sz:cv bg-ps:c-t bg-rp:nrp" style="background-image: url({{=it.server.selectedAlbum.primaryPhoto}});">
+				<div class="ps:ab dp:tb w:100pc h:100pc md-p:30px c:fff bg:000a4 ta:c">
+				</div>
+			</div>
+		</div>
+		{{?}}
+  		
+  		
+		<section class="mxw:900px dp:ib ps:rel t:200npx z:1 sm-m-rl:50px">
+		  <div class="ta:l w:100pc bg:000a4 pdg:20px-3pc">
+				<h1 class="tr:uc fw:300 fs:200pc">{{=it.server.selectedAlbum.title}}</h1>
+				<p class="fs:90pc fw:300">{{=it.libs.moment(it.server.selectedAlbum.date).format('MMMM DD, YYYY')}}</p>
+			</div>
+			
+			<div class="bg:fff sm-bd:sld-1px-666a1">
+  		  <p class="c:444 pdg:30px-3pc ta:l fw:200 ltrs:1px">{{=it.server.selectedAlbum.description}}</p>
+  		  {{~it.server.selectedAlbum.photos :photo}}
+  		    <img class="dp:bk w:100pc mrg-t:5px" src="{{=photo}}"/>
+  		  {{~}}
+		  </div>
+		  
+		  <div class="ps:fx p:10px-20px bg:000a5 z:3 b:0 c:fff sm-m-rl:1px fw:300 w:100pc sm-w:auto">
+		    <span class="p-r:30px dp:ib ws:np">
+		      <small class="fs:70pc dp:ib lh:30px va:t">Share</small>
+		      <div class="dp:ib md-m-l:5px bd:fffa8-sld-1px_i w,h,lh:28px_i m-l:5px_i c:fff_a">
+		        <a class="" href="https://www.facebook.com/sharer/sharer.php?u={{=it.server.url}}" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+		      </div>
+		    </span>
+		    <h2 class="tr:uc fw:300 fs:100pc dp:ib">{{=it.server.selectedAlbum.title}}</h2>
+		  </div>
+	  </section>
+	  
+	  <section>
+	    
+	    <div class="mxw:900px of:hd ps:rl t:150npx c:000 fw:300">
+	      <div class="w:49pc fl:l mxw:300px m-r:1pc">
+	        <p class="p-tb:10px ta:l fs:80pc">Previous Album</p>
+	        <div class="h:200px bg-sz:cv bg-ps:c bg-rp:nrp" style="background-image: url({{=it.server.prevAlbum.primaryPhoto}});"></div>
+	        <p class="p:20px bg:fff bd-b:e6e6e6-sld-1px tr:uc fs:120pc">{{=it.server.prevAlbum.title}}</p>
+	      </div>
+	      
+	      <div class="w:49pc fl:r mxw:300px m-l:1pc">
+	        <p class="p-tb:10px ta:r fs:80pc">Next Album</p>
+	         <div class="h:200px bg-sz:cv bg-ps:c bg-rp:nrp" style="background-image: url({{=it.server.nextAlbum.primaryPhoto}});"></div>
+	         <p class="p:20px bg:fff bd-b:e6e6e6-sld-1px tr:uc fs:120pc">{{=it.server.nextAlbum.title}}</p>
+  	    </div>
+	    </div>
+	    
+  		<a href="/album/{{=it.server.prevAlbum.id}}/{{=it.server.prevAlbum.title}}" class="ta:l ps:fx c:ccc hv-c:fff w:50pc t,b,l:0 lh:100vh hv-bg:000a8_i va:m h:100vh">
+  	    <i class="fa fa-angle-left fa-3x p:3pc"></i>
+  	  </a>
+  	  
+  	  <a href="/album/{{=it.server.nextAlbum.id}}/{{=it.server.nextAlbum.title}}" class="ta:r ps:fx c:ccc hv-c:fff w:50pc t,b,r:0 lh:100vh hv-bg:000a8_i va:m h:100vh">
+  		  <i class="fa fa-angle-right fa-3x p:3pc"></i>
+  		</a>
+  		
+		</section>
+		
+		<!-- footer -->
+		<footer id="Footer" class="p:20px-5pc bg:000 c:fffa5 bd-t:fffa1-1px-sd ps:rel z:2">
+			<div class="md-dp:tb w:100pc mxw:1170px fs:80pc">
+				<p class="md-dp:tc md-va:m m-tb:10px ta:c md-ta:l">Copyright {{=it.year}} {{=it.Header.Name}}. All Rights Reserved.</p>
+				<p class="md-dp:tc md-va:m m-tb:10px ta:c md-ta:r">
+					Powered by <a href="http://poinout.com" target=":blank" class="c:fff hv-c:6441A5">Poinout</a>
+				</p>
+			</div>
+		</footer>
+	
+		<!-- scripts -->
+		{{? false}}<script src="https://cdn.rawgit.com/noneedsystem/fucss/0.6.0/fucss.js"></script>{{?}}
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	</body>
+</html>

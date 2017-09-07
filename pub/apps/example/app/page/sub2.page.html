@@ -1,0 +1,26 @@
+<page-sub2>
+
+  <navigation routes={ content.routes } active={ route.name } />
+  <h1>{ getValue('meta.title') } { getValue('routes.sub2.title') }</h1>
+  <zen meta={ content.meta }/>
+
+  <elem-editable-text
+    class="fs:140pc fw:600"
+    text={ getValue('routes.sub.meta.description') }
+    cb-extras={ getValue('routes.sub.meta.description', 'id') }
+    on-edit={ handleEdit } />
+
+  <elem-editable-text
+    max={5000}
+    text={ getValue('text2') }
+    cb-extras={ getValue('text2', 'id') }
+    on-edit={ handleEdit } />
+
+  <palette if={!opts.SERVER} />
+
+  <script>
+    this.mixin('store');
+    if(!!this.opts.SERVER) return;
+
+  </script>
+</page-sub2>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{=it.Meta.Title}}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<!-- for Google -->
+		<meta name="description" content="{{=it.Meta.Description}}" />
+		<meta name="author" content="{{=it.Meta.Author}}" />
+		<meta name="copyright" content="{{=it.Meta.Title}}. All Rights Reserved." />
+		<meta name="application-name" content="{{=it.Meta.Title}}" />
+		<!-- for Facebook -->
+		<meta property="og:title" content="{{=it.Meta.Title}}" />
+		<meta property="og:image" content="{{=it.Header.Cover}}" />
+		<meta property="og:url" content="{{=it.Meta.Url}}" />
+		<meta property="og:description" content="{{=it.Meta.Description}}" />
+		<!-- for Twitter -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content="{{=it.Meta.Title}}" />
+		<meta name="twitter:description" content="{{=it.Meta.Description}}" />
+		<meta name="twitter:image" content="{{=it.Header.Cover}}" />
+		<!-- favicon -->
+		<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+		<!-- We need this! --> 
+		{{? true}}<link rel="stylesheet" type="text/css" href="/home.css">{{?}}
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700,300,200">
+		<style>
+			input:focus,
+			textarea:focus{
+				outline: none;
+			}
+		</style>
+	</head>
+	<body class="ff:Ubuntu fs:13px md-fs:16px lh:1.5 bg:000 ta:c c:fff m:0 bz:bb_all m:0-auto_all td:n_a">
+		<div class="fux-spin"></div>
+		<secion id="top">
+			<nav class="ps:fx w:100pc z:2 bg:000a8 t:0 ps:fx">
+		    <div class="w:100pc p:0-10px md-p:20px md-dp:tb">
+		      <div class="md-dp:tc md-va:m md-ta:l m-tb:10px">
+		        <a href="/#top" class="dp:tb w:100pc c:fff tr:uc lh:1">
+		        	<div class="dp:tc va:m w:30px">
+		        		<img class="w:100pc va:m" src="{{=it.Header.Logo}}"></img>
+		        	</div>
+	    				<div class="dp:tc va:m ta:l p-l:10px">
+	    				  <h1 class="fw:300 fs:100pc m-b:3px">{{=it.Header.Name}}</h1>
+	      				<h2 class="c:999 ltrs:4px fs:60pc md-fs:67pc">Photographer</h2>
+	    				</div>
+	    			</a>
+	  			</div>
+	  			<div class="md-dp:tc md-va:m md-ta:r ta:c m-tb:10px c:fff_a">
+	  				<div class="dp:ib ta:c">
+	  					<a href="#albums" class="dp:ib m-rl:5px fw:300 tr:uc">Albums</a>
+		    			<a href="#feedback" class="dp:ib m-rl:5px fw:300 tr:uc">Feedback</a>
+		    			<a href="#contact" class="dp:ib m-rl:5px fw:300 tr:uc">Contacts</a>
+	  				</div>
+	  				<div class="ps:ab r:10px t:10px md-ps:rl md-l:0 md-t:0 dp:ib ta:c md-m-l:10px bd:fffa8-sld-1px_i w,h,lh:28px_i m-l:5px_i">
+	  					<a href="{{=it.Contacts.Social.Instagram}}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+		  				<a href="{{=it.Contacts.Social.Facebook}}" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+		  				<a href="{{=it.Contacts.Social.GooglePlus}}" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+		  			</div>
+	  			</div>
+				</div>
+		  </nav>
+		  
+			<div id="slideshow" class="ps:rl h:500px">
+				<div class="ps:ab t,l,b,r:0 bg-sz:cv bg-ps:c bg-rp:nrp" 
+					style="background-image: url({{=it.Header.Cover}});">
+					<div class="ps:ab dp:tb w:100pc h:100pc p:30px c:fff bg:000a7 ta:c p-t:70px">
+						<div class="dp:tc va:m ta:c">
+							<div class="m:30px-0">
+								<img class="va:m w:100px" src="{{=it.Header.Logo}}"></img>
+							</div>
+							<div class="lh:1">
+								<h1 class="tr:uc fs:196pc fw:300">{{=it.Header.Name}}</h1>
+								<h2 class="tr:uc fs:110pc c:aaa fw:400 ltrs:9px p-l:9px md-ltrs:11px md-p-l:11px md-m-t:5px">Photographer</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+		<div id="header" class="dp:tb w:100pc bg:000">
+			<div class="dp:tc va:m p:15px-5pc of:auto mxh:40px c:fff_a">
+				<a href="#tag" class="dp:ib m:5px-1pc fw:300 tr:uc">all</a>
+				{{~it.server.tags :tag :index}}
+					{{? tag !== 'hidden' && index < 8}}
+						<a href="#tag/{{=tag}}" class="dp:ib m:5px-1pc fw:300 tr:uc"><small class="lh:25px va:t m-r:2px">#</small>{{=tag}}</a>
+					{{?}}
+				{{~}}
+			</div>
+		</div>
+		
+		<div id="albums" class="bg:000 ta:c p-b:5px">
+			{{~it.flickr :Album}}{{? !it.libs.lodash.includes(Album.tags, 'hidden')}}<div id="{{=Album.id}}" class="p:2px dp:ib va:b h:400px w:100pc sm-w:50pc md-w:33pc">
+				<div class="ps:rl bg-sz:cv bg-ps:c h:100pc bg-rp:nrp" style="background-image: url({{=Album.primaryPhoto}});">
+					<a href="/album/{{=Album.id}}/{{=Album.title}}" class="bg:000a4 h:100pc">
+						<div class="dp:tb w:100pc h:100pc">
+							<div class="dp:tc va:b h:100pc p:20px c:fff ta:c">
+								<div class="ta:l ps:ab b:30px l:35px fs:70pc">
+									{{? it.libs.lodash.includes(Album.tags, 'wedding')}}<img class="w:30px" src="{{=it.Icons.wedding}}"></img>{{?}}
+									{{? false}} {{= Album.photos.length}} {{?}}
+								</div>
+								<h1 class="fs:120pc tr:uc ta:r fw:300 bg:000a7 p:15px p-l:50px">{{=Album.title}}</h1>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>{{?}}{{~}}
+		</div>
+		
+		<!-- Feedback -->
+		<section id="feedback" class="p:40px-0-30px md-p:60px-0-30px bg:0000">
+			<div class="mxw:900px p-rl:3pc dp:tb m-b:60px">
+				<h1 class="fs:200pc fw:300 bd:eee-sld-1px p:5px-30px dp:ib m-tb:15px tr:uc">{{=it.Feedback.Title}}</h1>
+				<p class="c:eee fs:110pc fw:300">{{=it.Feedback.Description}}</p>
+			</div>
+			
+			<div class="sm-p-rl:50px">
+				{{~ it.Feedback.feedbacks :feedback}}
+					<div class="dp:tb w:100pc m-tb:20px">
+						<div class="p:5px md-dp:tc md-w:50pc ps:rl h:300px">
+							<div class="ps:ab t,l,b,r:0 bg-sz:cv bg-ps:c bg-rp:nrp h,w:100pc" style="background-image: url({{=feedback.img}});">
+								<div class="ps:ab w,h:100pc bg:000a1"></div>
+							</div>
+						</div>
+						<div class="md-w:50pc md-dp:tc ta:l p:30px-5pc-60px sm-p-rl:30px bg:191919 ps:rl bd-t:262626-sld-1px bd-r:262626-sld-1px bd-l:000-sld-1px">
+							<p class="c:e6e6e6 ltrs:1px fw:100 fs:85pc ta:l">
+								<i class="fa fa-quote-left fa-lg fa-pull-left c:be2727 p:10px" aria-hidden="true"></i>
+								{{=feedback.description}}
+							</p>
+							<h1 class="tr:uc c:be2727 fs:160pc fw:300 m:20px ps:ab r,b:0">{{=feedback.name}}</h1>
+						</div>
+					</div>
+				{{~}}
+			</div>
+		</section>
+		
+		
+		<div class="mxw:900px p-rl:5pc dp:tb m-b:60px md-m-t:30px">
+			<h1 class="fs:200pc fw:300 bd:eee-sld-1px p:5px-30px dp:ib m-tb:15px tr:uc">{{=it.Contacts.Title}}</h1>
+			<p class="c:eee fs:110pc fw:300">{{=it.Contacts.Signature}}</p>
+		</div>
+		
+		<!-- Contact -->
+		<section id="contact" class="p:10px-5pc md-p:30px-5pc bg:191919 bd-tb:000a1-1px-sd">
+			
+			{{? false}}<h1 class="fs:220pc fw:300">{{=it.Contacts.Title}}</h1>
+			<p class="mxw:900px m-b:40px p-rl:5pc c:fffa8">{{=it.Contacts.Signature}}</p>{{?}}
+			
+			<div class="fs:120pc mxw:500px m-b:40px m-t:10px">
+				<p class="mrg:10px md-dp:ib"><i class="fa fa-phone fa-fw c:be2727 m-r:5px"></i>{{=it.Contacts.Phone}}</p>
+				<p class="mrg:10px md-dp:ib"><i class="fa fa-envelope fa-fw c:be2727 m-r:5px"></i>{{=it.Contacts.Email}}</p>
+			</div>
+			
+			<div class="mxw:700px">
+				<form id="contactForm" action="https://poinout.herokuapp.com/api/email" method="post" enctype="application/x-www-form-urlencoded" class="ps:rl w:100pc m-t:30px ta:l">
+					<div id="contactFormMessage" class="dp:n ps:ab z:2 l:0 t:0 w,h:100pc bd:000-dashed-2px">
+						<div class="dp:tb w,h:100pc bg:191919">
+							<div class="dp:tc va:m ta:c">
+								<h1 class="tr:uc fw:300 fs:200pc">{{=it.Messaging.SuccessEmail.Title}}</h1>
+								<p class="fw:300">{{=it.Messaging.SuccessEmail.Message}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="p:5px">
+						<div class="dp:tb w:100pc m-tb:10px">
+							<div class="dp:tc w:49pc p-r:2pc">
+								<input type="hidden" name="app" value="{{=it.server.poinoutApp}}"/>
+								<input type="text" name="subject" placeholder="Your name*" required class="fw:300 fs:80pc c:fff w:100pc p:20px bg:n bd:fffa3-dashed-2px ol:n fc-bd-c:be2727">
+							</div>
+							<div class="dp:tc w:49pc">
+								<input type="text" name="from" placeholder="Your e-mail*" required class="fw:300 fs:80pc c:fff w:100pc p:20px bg:n bd:fffa3-dashed-2px ol:n fc-bd-c:be2727">
+							</div>
+						</div>
+						<div class="m-tb:10px">
+							<textarea type="text" name="text" placeholder="Enter Your message*" required rows="5" class="fw:300 fs:80pc c:fff w:100pc p:20px bg:n bd:fffa3-dashed-2px ol:n fc-bd-c:be2727"></textarea>
+						</div>
+						<div class="ta:c m-tb:10px">
+							<button type="submit" class="fw:400 crs:pointer dp:ib ps:rl lh:40px p-rl:30px bd:0 bg:000 bd:be2727-sld-2px fs:90pc tr:uc c:aaa hv-c:fff ol:n">
+								Send Message
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			
+		</section>
+		
+		<!-- footer -->
+		<footer id="Footer" class="p:20px-5pc c:fffa5 bd-t:fffa1-1px-sd c:fff">
+			<div class="md-dp:tb w:100pc mxw:1170px fs:80pc">
+				<p class="md-dp:tc md-va:m m-tb:10px ta:c md-ta:l">Copyright {{=it.year}} {{=it.Header.Name}}. All Rights Reserved.</p>
+				<p class="md-dp:tc md-va:m m-tb:10px ta:c md-ta:r">
+					Powered by <a href="http://poinout.com" target=":blank" class="c:fff hv-c:6441A5">Poinout</a>
+				</p>
+			</div>
+		</footer>
+	
+		<!-- scripts -->
+		{{? false}}<script src="https://cdn.rawgit.com/noneedsystem/fucss/0.6.0/fucss.js"></script>{{?}}
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		
+		<script>
+			
+			
+			var poinout = {
+				json: {{=it.json}}
+			};
+			
+			poinout.hashChecker = function(){
+				var hash = window.location.hash.replace(/^#\/?|\/$/g, '').split('/');
+				var page = hash[0];
+				var prop = hash[1];
+				
+				poinout.tagCheker(page, prop);
+			}
+			
+			poinout.tagCheker = function(page, prop){
+				if(page !== 'tag') return;
+				
+				var albums = $('#albums > div');
+				albums.addClass('dp:ib').removeClass('dp:n');
+				
+				if(!prop) return;
+				
+				poinout.json.flickr.forEach(function(album){
+					album.tags.indexOf(prop) === -1 && $('#'+album.id).addClass('dp:n').removeClass('dp:ib');
+				});
+			}
+			
+			window.addEventListener('hashchange', poinout.hashChecker, false);
+			(poinout.hashChecker)();
+			
+			$('#contactForm').on('submit', function(){
+				var self = $(this),
+					url  = self.attr('action'),
+					type = self.attr('method'),
+					data = {};
+						
+				self.find('[name]').each(function(index, value){
+					var that = $(this),
+					name = that.attr('name'),
+					value = that.val();
+					data[name] = value;
+				});
+				
+				$.ajax({
+					url: url,
+					type: type,
+					data: data,
+					success: function(){
+						$('#contactFormMessage').fadeIn();
+					}
+				});
+				
+				return false;
+			});
+			
+			
+		</script>
+	</body>
+</html>

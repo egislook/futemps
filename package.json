@@ -1,0 +1,26 @@
+{
+  "name": "futemps",
+  "version": "1.0.0",
+  "description": "simple template generator",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --ignore /public -e html,js index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "html5",
+    "poinout",
+    "riot",
+    "node",
+    "express"
+  ],
+  "author": "noneedsystem",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

@@ -1,0 +1,23 @@
+<page-sub>
+
+  <navigation routes={ content.routes } active={ route.name } />
+  <h1>{ getValue('meta.title') } { getValue('routes.sub.title') }</h1>
+  <zen meta={ content.meta }/>
+
+  <elem-editable-text
+    class="fs:140pc fw:600"
+    text={ getValue('routes.sub.meta.description') }
+    cb-extras={ getValue('routes.sub.meta.description', 'id') }
+    on-edit={ handleEdit } />
+
+  <elem-editable-text
+    max={5000}
+    text={ getValue('text2') }
+    cb-extras={ getValue('text2', 'id') }
+    on-edit={ handleEdit } />
+
+    <script>
+      this.mixin('store');
+    </script>
+    
+</page-sub>

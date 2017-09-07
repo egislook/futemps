@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rokas Jundulas</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+	<!-- for Google -->
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<meta name="copyright" content="" />
+	<meta name="application-name" content="" />
+	<!-- for Facebook -->
+	<meta property="og:title" content="" />
+	<meta property="og:image" content="" />
+	<meta property="og:url" content="" />
+	<meta property="og:description" content="" />
+	<!-- for Twitter -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:description" content="" />
+	<meta name="twitter:image" content="" />
+	<!-- favicon -->
+	<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+	<!-- We need this! --> 
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+	<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,500,700,300' rel='stylesheet' type='text/css'>
+</head>
+<body class="ff:Ubuntu fs:14px md-fs:16px lh:1.5px bg:fff m:0 bs:bb_all m:0-auto_all td:n_a">
+	{{=layout.body}}
+	<!-- scripts -->
+	<script src="https://cdn.rawgit.com/noneedsystem/fucss/0.5.2/fucss.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</body>
+</html>

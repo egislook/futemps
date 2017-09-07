@@ -1,0 +1,210 @@
+<album-horizontal>
+  <div ref="scrollable" class="h:100pc w:100pc md-ov:auto">
+  	<div
+  	  ref="container" 
+  	  class="h:100pc mdx-w:100pc-! fux-trans dp:flx ai:c mdx-fd:col p:80px-0-100px ov:hd">
+  	  
+  	     <img 
+  	      each="{ photo, i in loadedPhotos }" 
+  	      onclick="{ moveToIndex.bind(e, i) }"
+  	      class="{
+  	        'md-h:100pc mxh:680px md-p-r:20px md-lc-p-r:0 mdx-w:100pc mdx-p-b:15px mdx-lc-p-b:80px fux-trans': true,
+  	        'md-op:0.5 md-crs:pt': i !== photoIndex,
+  	        'md-fux-boxsh': i === photoIndex
+          }" 
+  	      src="{ photo.src }"/>
+  	    
+        <div if="{ !loaded }" class="ps:rel w:100pc md-mnw:680px mdx-mnh:200px h:100pc mdx-w:100pc-!">
+          <span class="fux-spinner" />
+        </div>
+        
+  	</div>
+  	
+  	<button if="{ loadedPhotos.length && photoIndex > 0 }" onclick="{ moveToPrev }" class="mdx-dp:n ps:fx t:50pc l:0 bg:black c:white">
+			<i class="fa fa-angle-left fa-2x p-rl:20px" />
+		</button>
+  	
+  	<button if="{ loadedPhotos.length && photoIndex < loadedPhotos.length - 1 }" onclick="{ moveToNext }" class="mdx-dp:n ps:fx t:50pc r:0 bg:black c:white">
+			<i class="fa fa-angle-right fa-2x p-rl:20px" />
+		</button>
+		
+  </div>
+  <script>
+    let tag = this;
+    this.album = this.opts.json.album || {};
+    this.albumLength = this.album.photos.length;
+    // photo loading
+    this.loaded = null;
+    this.loadedPhotos = [];
+    // photo autoswitching
+    this.photoIndex = 0;
+    // dimensions
+    
+    this.on('mount', () => {
+      this.handleImageLoading(0);
+      window.addEventListener('scroll', this.handleScroll);
+      window.addEventListener('keydown', this.handleKey);
+    })
+    
+    this.handleScroll = () => {
+      let children = tag.refs.container.children;
+      let curImg = children[tag.photoIndex];
+      if(window.pageXOffset - curImg.offsetLeft > window.innerWidth/2){
+        tag.moveToPhoto();
+      } else if(window.pageXOffset - curImg.offsetLeft < (window.innerWidth/2) * -1){
+        tag.moveToPhoto(-1);
+      }
+    }
+    
+    this.handleKey = (e) => {
+      switch(e.keyCode){
+        case 39: return tag.moveToPhoto();
+        case 37: return tag.moveToPhoto(-1);
+      }
+    }
+    
+    this.moveToIndex = (index, e) => {
+      tag.moveToPhoto(0, index);
+    }
+    
+    this.moveToNext = () => {
+      tag.moveToPhoto(1);
+    }
+    
+    this.moveToPrev = () => {
+      tag.moveToPhoto(-1);
+    }
+    
+    this.moveToPhoto = (increaseBy, index) => {
+      if(index !== undefined){
+        if(tag.photoIndex === index) return;
+        tag.photoIndex = index;
+      } else {
+        increaseBy = increaseBy || 1;
+        if(tag.photoIndex + increaseBy === tag.loadedPhotos.length){
+          tag.photoIndex = 0
+        } else if(tag.photoIndex + increaseBy < 0){
+          tag.photoIndex = tag.loadedPhotos.length - 1;
+        } else {
+          tag.photoIndex = tag.photoIndex + increaseBy;
+        }
+      }
+      
+      let img = tag.refs.container.children[tag.photoIndex];
+      let left = img.offsetLeft - (window.innerWidth - img.offsetWidth + 20) / 2;
+      window.scrollTo(left, 0);
+      tag.update();
+    }
+    
+    /*window.onresize = _.throttle((e) => {
+    }, 100)*/
+    
+    this.updatePosition = () => {
+      let containerWidth = tag.loaded ? 0 : tag.loaderWidth;
+      tag.loadedPhotos.forEach((photo) => {
+        containerWidth += (tag.containerHeight * photo.ratio) + 20 
+      });
+      tag.update({ containerWidth });
+    }
+    
+    this.handleImageLoading = (index, max) => {
+      index = index || 0;
+      max = max || tag.albumLength - 1;
+      let padding = 20;
+      if(index === max){
+        tag.update({ loaded: true,  containerWidth: tag.containerWidth - tag.loaderWidth - padding});
+        return;
+      }
+      let img = new Image();
+      let src = tag.album.photos[index].replace('_c.jpg', '_b.jpg');
+      img.src = src;
+      img.onload = () => {
+        let photo = { 
+          src: src, 
+          ratio: img.width / img.height,
+          width: img.width,
+          height: img.height
+        };
+        
+        tag.loadedPhotos.push(photo);
+        //console.log(tag.loaderWidth);
+        tag.update({
+          containerWidth: tag.containerWidth + (tag.containerHeight * photo.ratio) + padding 
+        });
+        
+        
+        
+        false && !tag.autoSwitchingOn && tag.loadedPhotos.length > 1 && tag.autoSwitching();
+        tag.handleImageLoading(index + 1, max);
+      };
+    }
+    
+    // http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
+    /*window.requestAnimFrame = (() => {
+      return  window.requestAnimationFrame       
+        || window.webkitRequestAnimationFrame 
+        || window.mozRequestAnimationFrame
+        || ((cb) => {
+          console.log('tadam');
+          window.setTimeout(cb, 1000 / 60)
+        })
+    })();*/
+    
+    // main function
+    /*function scrollToY(scrollTargetY, speed, easing) {
+        // scrollTargetY: the target scrollY property of the window
+        // speed: time in pixels per second
+        // easing: easing equation to use
+    
+        var scrollY = window.scrollY,
+            scrollTargetY = scrollTargetY || 0,
+            speed = speed || 2000,
+            easing = easing || 'easeOutSine',
+            currentTime = 0;
+    
+        // min time .1, max time .8 seconds
+        var time = Math.max(.1, Math.min(Math.abs(scrollY - scrollTargetY) / speed, .8));
+    
+        // easing equations from https://github.com/danro/easing-js/blob/master/easing.js
+        var PI_D2 = Math.PI / 2,
+            easingEquations = {
+                easeOutSine: function (pos) {
+                    return Math.sin(pos * (Math.PI / 2));
+                },
+                easeInOutSine: function (pos) {
+                    return (-0.5 * (Math.cos(Math.PI * pos) - 1));
+                },
+                easeInOutQuint: function (pos) {
+                    if ((pos /= 0.5) < 1) {
+                        return 0.5 * Math.pow(pos, 5);
+                    }
+                    return 0.5 * (Math.pow((pos - 2), 5) + 2);
+                }
+            };
+    
+        // add animation loop
+        function tick() {
+            currentTime += 1 / 60;
+    
+            var p = currentTime / time;
+            var t = easingEquations[easing](p);
+    
+            if (p < 1) {
+                requestAnimFrame(tick);
+    
+                window.scrollTo(0, scrollY + ((scrollTargetY - scrollY) * t));
+            } else {
+                console.log('scroll done');
+                window.scrollTo(0, scrollTargetY);
+            }
+        }
+    
+        // call it once to get started
+        tick();
+    }*/
+    
+    // scroll it!
+    //setTimeout( () => scrollToY(0, 1500, 'easeInOutQuint'), 5000);
+    
+  </script>
+</album-horizontal>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{{=it.server.selectedAlbum.title}} | {{=it.Meta.Title}}</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<!-- for Google -->
+		<meta name="description" content="{{=it.server.selectedAlbum.description}} {{=it.Meta.Description}}" />
+		<meta name="author" content="{{=it.Meta.Author}}" />
+		<meta name="copyright" content="{{=it.server.selectedAlbum.title}} {{=it.Meta.Title}}" />
+		<meta name="application-name" content="{{=it.server.selectedAlbum.title}} {{=it.Meta.Title}}" />
+		<!-- for Facebook -->
+		<meta property="og:title" content="{{=it.server.selectedAlbum.title}} {{=it.Meta.Title}}" />
+		<meta property="og:image" content="{{=it.server.selectedAlbum.primaryPhoto}}" />
+		<meta property="og:url" content="{{=it.server.url}}" />
+		<meta property="og:description" content="{{=it.server.selectedAlbum.description}} {{=it.Meta.Description}}" />
+		<!-- for Twitter -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content="{{=it.server.selectedAlbum.title}} {{=it.Meta.Title}}" />
+		<meta name="twitter:description" content="{{=it.server.selectedAlbum.description}} {{=it.Meta.Description}}" />
+		<meta name="twitter:image" content="{{=it.server.selectedAlbum.primaryPhoto}}" />
+		<!-- favicon -->
+		<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+		<!-- We need this! --> 
+		{{? true}}<link rel="stylesheet" type="text/css" href="/album.css">{{?}}
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700,300,200" rel="stylesheet" type="text/css">
+		<style>
+			input:focus,
+			textarea:focus{
+				outline: none;
+			}
+			html{
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body class="ff:Ubuntu fs:14px md-fs:16px lh:1.5 bg:111 c:fff ta:c m:0 bz:bb_all m:0-auto_all td:n_a h:100pc">
+		<div class="fux-spin"></div>
+		
+		<nav class="ps:fx w:100pc z:2 bg:000a8 t:0 ps:fx">
+	    <div class="w:100pc p:0-10px md-p:20px md-dp:tb">
+	      <div class="md-dp:tc md-va:m md-ta:l m-tb:10px">
+	        <a href="/" class="dp:tb w:100pc c:fff tr:uc lh:1">
+	        	<div class="dp:tc va:m w:30px">
+	        		<img class="w:100pc va:m" src="{{=it.Header.Logo}}"></img>
+	        	</div>
+    				<div class="dp:tc va:m ta:l p-l:10px">
+    				  <h1 class="fw:300 fs:100pc m-b:2px">{{=it.Header.Name}}</h1>
+      				<h2 class="c:999 ltrs:4px fs:60pc md-fs:67pc">Photographer</h2>
+    				</div>
+    			</a>
+  			</div>
+  			<div class="md-dp:tc md-va:m md-ta:r ta:c m-tb:10px c:fffa8_a">
+  				<div class="dp:ib ta:c">
+  					<a href="/#flickr" class="dp:ib m-rl:5px fw:300 tr:uc">Albums</a>
+	    			<a href="/#feedback" class="dp:ib m-rl:5px fw:300 tr:uc">Feedback</a>
+	    			<a href="/#contact" class="dp:ib m-rl:5px fw:300 tr:uc">Contacts</a>
+  				</div>
+  				<div class="ps:ab r:10px t:10px md-ps:rl md-l:0 md-t:0 dp:ib ta:c md-m-l:10px bd:fffa8-sld-1px_i w,h,lh:28px_i m-l:5px_i">
+  					<a href="{{=it.Contacts.Social.Instagram}}" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+	  				<a href="{{=it.Contacts.Social.Facebook}}" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+	  				<a href="{{=it.Contacts.Social.GooglePlus}}" target="_blank"><i class="fa fa-google-plus" aria-hidden="true"></i></a>
+	  			</div>
+  			</div>
+			</div>
+	  </nav>
+	  
+	  <album-horizontal></album-horizontal>
+	  
+	  
+		<footer class="bg:000a4 md-pdg:18px-2pc pdg:10px-2pc md-h:auto ps:fx l:0 b:0 w:100pc dp:tb">
+			
+			<div class="md-dp:tc dp:n va:m">
+				<span class="p-r:30px dp:ib ws:np">
+		      <small class="fs:70pc dp:ib lh:30px">Share</small>
+		      <div class="dp:ib md-m-l:5px bd:fffa8-sld-1px_i w,h,lh:28px_i m-l:5px_i c:fff_a">
+		        <a class="" href="https://www.facebook.com/sharer/sharer.php?u={{=it.server.url}}" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+		      </div>
+		    </span>
+			</div>
+			
+			<div class="dp:tc w:100pc ta:l lh:1.2 va:m">
+				<h1 class="tr:uc fw:300 fs:200pc">{{=it.server.selectedAlbum.title}}</h1>
+				<p class="fs:90pc fw:300">{{=it.libs.moment(it.server.selectedAlbum.date).format('MMMM DD, YYYY')}}</p>
+				<p class="c:444 p-t:20px ta:l fw:200 ltrs:1px dp:n">{{=it.server.selectedAlbum.description}}</p>
+			</div>
+			
+			<div class="dp:tc va:m sm-mnw:200px c:fffa7">
+				<div class="dp:tb">
+					<div class="sm-dp:tc dp:bk va:m lh:1 w:100pc ta:r">
+						<a class="c:inh" href="/album/{{=it.server.nextAlbum.id}}/{{=it.server.nextAlbum.title}}">
+							<p class="fs:65pc p:0 fw:300 m-b:5px">Next Album</p>
+		        	<h2 class="tr:uc fw:300 fs:110pc sm-dp:ib p:0 dp:n">{{=it.server.nextAlbum.title}}</h2>
+	        	</a>
+					</div>
+					<div class="sm-dp:tc p-l:10px dp:bk">
+						<a href="/album/{{=it.server.nextAlbum.id}}/{{=it.server.nextAlbum.title}}">
+							<div class="w,h:50px bg-sz:cv bg-ps:c bg-rp:nrp op:0.9 md-op:0.7" style="background-image: url({{=it.server.nextAlbum.primaryPhoto}});"></div>
+						</a>
+					</div>
+				</div>
+			</div>
+			
+		</footer>
+		
+		<!-- scripts -->
+		<script src="https://cdn.jsdelivr.net/riot/3.0.5/riot.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/riot/3.0.5/riot+compiler.js"></script>
+		{{? false}}
+			<script src="https://cdn.rawgit.com/noneedsystem/fucss/0.6.6a/fucss.min.js"></script>
+			<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js"></script>
+		{{?}}
+		<script type="riot/tag" src="/app/album-horizontal.tag.html"></script>
+		<script>
+			riot.mount('album-horizontal', { json: {{=it.json}} });
+		</script>
+	</body>
+</html>

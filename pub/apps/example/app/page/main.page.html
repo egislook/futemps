@@ -1,0 +1,33 @@
+<page-main>
+
+  <navigation routes={ content.routes } active={ route.name } />
+  <h1>{ getValue('meta.title') } { getValue('routes.main.title') }</h1>
+  <zen meta={ content.meta } />
+
+  <elem-editable-text
+    class="fs:140pc fw:600"
+    text={ getValue('routes.main.meta.description') }
+    cb-extras={ getValue('routes.main.meta.description', 'id') }
+    on-edit={ handleEdit } />
+
+  <elem-editable-text
+    max={5000}
+    text={ getValue('text') }
+    cb-extras={ getValue('text', 'id') }
+    on-edit={ handleEdit } />
+
+  <elem-editable-text
+    class="fs:140pc fw:600"
+    text={ getValue('poinoutTitle') }
+    on-edit={ handleEdit }
+    cb-extras={ getValue('poinoutTitle', 'id') }/>
+
+  <div class="p-tb:50px ta:l">
+    <elem-leaf poinject={poinject} on-edit={handleEdit} />
+  </div>
+
+  <script>
+    this.mixin('store');
+  </script>
+
+</page-main>
