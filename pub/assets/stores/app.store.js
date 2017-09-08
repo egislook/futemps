@@ -46,4 +46,29 @@ class appStore{
         console.log(json);
       });
   }
+
+  handleCreate(value, leaf, cb){
+    const self = this;
+    window.fetch('/poinject/', {
+      headers: { 'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify({ value, parent: leaf.parent, type: leaf.type })
+    }).then(res => res.json())
+      .then(json => {
+        self.setOpts(json.opts);
+        console.log(json);
+      });
+  }
+
+  handleDelete(id, cb){
+    const self = this;
+    window.fetch('/poinject/'+id, {
+      headers: { 'Content-Type': 'application/json'},
+      method: 'DELETE'
+    }).then(res => res.json())
+      .then(json => {
+        self.setOpts(json.opts);
+        console.log(json);
+      });
+  }
 }

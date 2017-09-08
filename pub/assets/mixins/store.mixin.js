@@ -8,8 +8,11 @@ function storeMixin(stores){
       this.route    = this.appStore.route;
 
       this.getValue       = this.appStore.getValue.bind(this.appStore);
-      this.handleEdit     = this.appStore.handleEdit.bind(this.appStore);
       this.getActiveRoute = this.appStore.getActiveRoute.bind(this.appStore);
+
+      this.handleEdit     = this.appStore.handleEdit.bind(this.appStore);
+      this.handleCreate   = this.appStore.handleCreate.bind(this.appStore);
+      this.handleDelete   = this.appStore.handleDelete.bind(this.appStore);
 
       let self = this;
       this.appStore.on('storeUpdated',

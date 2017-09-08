@@ -1,7 +1,12 @@
 {
+  "experiment": {
+    "field1": "value1",
+    "field2": "value2",
+    "field3": {}
+  },
   "title": "set new title of the appssssssss",
   "testField": "some value",
-  "text": "Note that this will simply add all attributes of obj2 to obj1 which might not be what you want if you still want to use the unmodified obj1. If you're using a framework that craps all over your prototypes then you have to get fancier with checks like hasOwnProperty, but that code will work for 99% of casessss.ss ggggssss",
+  "text": "Note that this will simply add all attributes \nof obj2 to obj1 which might not be what you want if you still want to use the unmodified obj1. If you're using a framework that craps all over your prototypes then you have to get fancier with checks like hasOwnProperty, but that code will work for 99% of casessss.ss ggggssss",
   "text2": "Careful: the variable \"settings\" will be modified, though. jQuery doesn't return a new instance.The reason for this (and for the naming) is that .extend() was developed to extend objects, rather than to munge stuff together. If you want a new object (e.g. settings is defaults you don't want to touch), you can always jQuery.extend({}, settings, options)",
   "poinoutTitle": "Poinout",
   "meta": {
