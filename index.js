@@ -68,8 +68,8 @@ actions.getContent((json) => {
 });
 
 /** Server Routing */
-app.get('/poinject/:path?', require('./func/poinject.func.js').get);
-app.patch('/poinject/:id',  require('./func/poinject.func.js').patch);
+app.use('/poinject', require('./func/poinject.func.js'));
+app.use('/upload', require('./func/upload.func.js'));
 
 app.listen(process.env.PORT || 3000,
   () => console.log(`Example app listening on port ${process.env.PORT || 3000}!`));

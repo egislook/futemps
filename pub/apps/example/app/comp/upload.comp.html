@@ -1,0 +1,138 @@
+<comp-upload>
+  <div class="p:20px">
+    <form method="post" enctype="multipart/form-data">
+      <input id="file" class="op:0 ps:ab w,h:0 dp:n" type="file" name="files" onchange={change} multiple />
+      <label for="file" onclick={upload} class="dp:ib p:15px-30px bg:prim c:white br:3px crs:pt fux-boxsh fw:400">
+        Upload {files.length || ''}
+      </label>
+    </form>
+
+    <div class="p:10px w:100pc dp:flx flxf:wrap jc:c">
+      <div
+        class="m:10px ps:rl ta:l op:0.8 hv-op:1 hv-op:0_span crs:pt fux-trans"
+        onclick={file.format === 'image' && fullscreen(i)}
+        each={file, i in files}>
+
+        <div class="mnw:200px w:200px mnh:120px dp:flx ai:c bg:white">
+          <img if={file.format === 'image'} class="dp:bk w:100pc" src={file.src} />
+          <p if={file.format !== 'image'} class="fu-file fs:200pc c:black200"></p>
+        </div>
+
+        <span class="ps:ab t,l:0 w,h:100pc bg:blacka5">
+          <i class="fux-spinner brd-t-c:prim-! brd-w:1px-!" />
+        </span>
+
+        <i class="ps:ab t,r:15npx fu-cross bg:white br:50pc p:10px fux-boxsh" onclick={remove(i)} />
+
+        <span if={true} class="ps:ab b,l:0 w:100pc c:white bg:blacka5 fs:80pc p:5px-10px">
+          <h2 class="fw:500">{file.name}</h2>
+          <div class="fw:400 fs:70pc dp:flx flxf:wrap jc:sb m:0_p w:100pc">
+            <p>{file.mbSize}MB</p>
+            <p>{file.type}</p>
+          </div>
+        </span>
+
+      </div>
+    </div>
+
+    <div if={fullsceenFile} class="t,l:0 w,h:100pc ps:fx bg:blacka9 dp:flx jc:c ai:c fux-fadeIn" onclick={fullscreenExit}>
+      <div class="w:80pc mxh:100pc p:1pc bg:white br:2px fux-boxsh of:auto">
+        <img src={fullsceenFile.src} class="dp:bk w:100pc" />
+      </div>
+    </div>
+
+  </div>
+
+
+  <script>
+    const tag = this;
+    tag.num = 0;
+    tag.files = [];
+    tag.fullsceenFile = null;
+
+    this.upload = (e) => {
+      tag.num++;
+      tag.update();
+    };
+
+    this.remove = (index) =>
+      (e) => {
+        e.stopPropagation();
+        tag.files.splice(index, 1);
+        //console.log(tag.files);
+        tag.update();
+      }
+
+    this.loadFile = (fileItem, cb) => {
+      console.log('FILE ITEM', fileItem);
+      var reader = new FileReader();
+
+      reader.onload = ((file) => function(e){
+
+        file.src = e.target.result;
+        file.mbSize = (file.size / (1024 * 1024)).toFixed(2);
+        file.format = file.type.split('/').shift();
+
+        var data = new FormData();
+        console.log(fileItem);
+        data.append('file', fileItem);
+
+        fetch('/upload', {
+          method: 'POST',
+          body: data
+        })
+        .then(res     => res.json())
+        .then(json    => console.log(json))
+        .catch(error  => console.log(error));
+
+        if(file.format !== 'image'){
+          console.log(file);
+          tag.files.push(file);
+          tag.update();
+          return cb && cb();
+        }
+
+        let img = new Image();
+        img.src = file.src;
+
+        img.onload = function(){
+          file.height = this.height;
+          file.width = this.width;
+          console.log(file);
+          tag.files.push(file);
+          tag.update();
+          return cb && cb();
+        }
+
+      })(fileItem);
+
+      //console.log(fileItem);
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(fileItem);
+    }
+
+    this.change = (e) => {
+      const files = e.target.files;
+
+      for(let i = 0; i < files.length; i++){
+        const file = files.item(i);
+        this.loadFile(file);
+      }
+
+      e.target.value = '';
+    }
+
+    this.fullscreen = (index) =>
+      (e) => {
+        tag.fullsceenFile = tag.files[index];
+        document.body.classList.add('fux-clear');
+        tag.update();
+      }
+
+    this.fullscreenExit = () => {
+      document.body.classList.remove('fux-clear');
+      tag.update({ fullsceenFile: null })
+    }
+
+  </script>
+</comp-upload>

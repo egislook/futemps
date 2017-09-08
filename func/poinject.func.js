@@ -1,9 +1,19 @@
+const express   = require('express');
+const router    = express.Router();
 const poinouter = require('../../poinouter');
 
-exports.get = (req, res) =>
-  res.send(poinouter.poinject(req.params.path));
+router.get('/:path?', get);
+router.patch('/:id', patch);
 
-exports.patch = (req, res) => {
+module.exports = router;
+exports.get = get;
+exports.patch = patch;
+
+function get(req, res){
+  res.send(poinouter.poinject(req.params.path));
+}
+
+function patch(req, res){
   if(!req.params.id)
     return res.status(400)
       .json({ ok: false, msg: 'id is not specified' });
@@ -20,5 +30,4 @@ exports.patch = (req, res) => {
 
   return res.status(200)
     .json({ ok: true, msg: `value of the ${req.params.id} has been changed`, opts});
-
 }
