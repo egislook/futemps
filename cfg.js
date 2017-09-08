@@ -6,9 +6,13 @@ module.exports = ((appName = 'example') => {
     assetsPath:       `${__dirname}/pub/assets`,
     storesPath:       `${__dirname}/pub/assets/stores`,
     mixinsPath:       `${__dirname}/pub/assets/mixins`,
+    filesPath:        `${__dirname}/pub/assets/files`,
 
     rootFilename:     'index.html',
     contentFilename:  'content.json',
+
+    filesUrl: '/assets/files',
+
   };
   cfg.rootFilePath =    (() => `${cfg.appPath}/${cfg.rootFilename}`)();
   cfg.contentFilePath = (() => `${cfg.appPath}/${cfg.contentFilename}`)();
