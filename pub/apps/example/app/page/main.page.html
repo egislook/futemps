@@ -13,8 +13,8 @@
 
   <elem-text
     max={5000}
-    text={ getValue('text') }
-    cb-extras={ getValue('text', 'id') }
+    text={ getValue('todo') }
+    cb-extras={ getValue('todo', 'id') }
     on-edit={ handleEdit } />
 
   <elem-text
@@ -23,8 +23,9 @@
     on-edit={ handleEdit }
     cb-extras={ getValue('poinoutTitle', 'id') }/>
 
+
   <div class="p-tb:50px ta:l">
-    <elem-leaf poinject={poinject} on-edit={handleEdit} on-create={handleCreate} on-delete={handleDelete} />
+    <elem-leaf poinject={poinject} on-edit={handleEdit} on-create={handleCreate} on-delete={handleDelete} mode-edit={false} />
   </div>
 
   <script>

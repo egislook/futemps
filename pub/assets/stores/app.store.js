@@ -56,6 +56,7 @@ class appStore{
     }).then(res => res.json())
       .then(json => {
         self.setOpts(json.opts);
+        cb && cb();
         console.log(json);
       });
   }

@@ -1,23 +1,23 @@
 <elem-leaf>
   <div>
+    <div class="p-l:10px dp:ib">
 
-    <div if={leaf} class="p-l:10px dp:ib">
-
-      <a class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={handleDelete} />
+      <a if={leaf} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={leaf.id === 'ghost' && handleDeleteGhost || handleDelete} />
 
       <elem-text
-        class="fw:500 p:2px-5px fc-bg:white ps:rl dp:ib mnw:100px"
+        if={leaf}
+        class="fw:500 p:2px-5px fc-bg:white ps:rl dp:ib mnw:60px"
         text={leaf.value}
-        placeholder={opts.fieldPlaceholder}
-        on-edit={opts.onEdit}
+        placeholder="new field"
+        on-edit={handleEditField}
         cb-extras={opts.cbExtras || leaf.id}
         autofocus={opts.autofocus} />
 
-        <a if={!childIsValue && !ghostLeaf && leaf.id !== 'ghost' } class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleAddFieldGhost} />
+        <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleAddFieldGhost} />
 
-        <a if={leaf.type === 'field' && !childIsValue && leaf.id !== 'ghost' && !noChildren} class="fu-chevron-small-down p:5px c:grey fs:70pc m-b:4px" />
+        <a if={leaf && leaf.type === 'field' && !childIsValue && leaf.id !== 'ghost' && !noChildren} class="fu-chevron-small-down p:5px c:grey fs:70pc m-b:4px" />
         <a if={childIsValue || ghostLeaf && ghostLeaf.type === 'value'} class="fu-chevron-small-right p:5px c:grey fs:70pc m-b:4px" />
-        
+
         <a if={ noChildren && leaf.id !== 'ghost' && !ghostLeaf } class="fu-text_fields fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleAddValueGhost} />
         <a if={ noChildren && leaf.id !== 'ghost' && !ghostLeaf } class="fu-camera fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleAddValueGhost} />
 
@@ -28,9 +28,7 @@
           placeholder="value"
           cb-extras={ghostLeaf}
           on-edit={parent.opts.onCreate} />
-
-        <a if={ghostLeaf && ghostLeaf.type === 'value'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={handleDeleteGhost} />
-
+        
         <elem-text
           if={childIsValue}
           class="dp:ib va:t p:2px-5px fc-bg:white"
@@ -38,21 +36,32 @@
           placeholder={opts.valuePlaceholder}
           on-edit={opts.onEdit}
           cb-extras={child && child.id} />
+
+        <a if={ghostLeaf && ghostLeaf.type === 'value' || childIsValue}
+          class="fu-trash fs:70pc m-b:4px dp:ib c:grey300"
+          onclick={childIsValue && handleDeleteValue || handleDeleteGhost} />
+
     </div>
 
     <div class="p-l:25px bd-l:1px-ds-grey200" if={!childIsValue}>
+      <a if={!leaf} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px m-l:5px" onclick={handleAddFieldGhost} />
       <elem-leaf
         if={ghostLeaf && ghostLeaf.type === 'field'}
         leaf={ghostLeaf}
-        poinject={parent.opts.poinject}
+        poinject={opts.poinject}
         autofocus={true}
-        field-placeholder="field"
-        value-placeholder="value"
         cb-extras={ghostLeaf}
-        on-edit={parent.opts.onCreate}
-        on-delete={parent.opts.onDelete} />
+        on-edit={opts.onCreate}
+        on-delete={opts.onDelete} />
 
-      <elem-leaf each={leaf in child} leaf={leaf} poinject={parent.opts.poinject} on-edit={parent.opts.onEdit} on-create={parent.opts.onCreate} on-delete={parent.opts.onDelete} />
+      <elem-leaf
+        each={leaf in child}
+        leaf={leaf}
+        mode-edit={parent.opts.modeEdit}
+        poinject={parent.opts.poinject}
+        on-edit={parent.opts.onEdit}
+        on-create={parent.opts.onCreate}
+        on-delete={parent.opts.onDelete} />
     </div>
   </div>
 
@@ -79,13 +88,22 @@
     self.handleAddValueGhost = (e) => self.handleAddGhost('value');
 
     self.handleDelete = () => opts.onDelete(self.leaf.id);
-    self.handleDeleteGhost = () => self.update({ ghostLeaf: null })
+    self.handleDeleteGhost = () => {
+      if(self.leaf.id === 'ghost')
+        return self.parent.update({ ghostLeaf: null });
+
+      self.update({ ghostLeaf: null });
+    }
+    self.handleDeleteValue = () => opts.onDelete(self.child.id);
+
+    self.handleEditField = (value, leaf) =>
+      self.opts.onEdit(value, leaf, self.handleDeleteGhost);
 
     self.setChild = () => {
 
       let child = self.leaf
         ? self.opts.poinject.filter(leaf => leaf.parent === self.leaf.id)
-        : opts.poinject.filter(leaf => !leaf.parent);
+        : self.opts.poinject.filter(leaf => !leaf.parent);
 
       if(child.length > 1){ self.child = child; return; }
       if(child.length === 1 && child[0].type === 'field'){

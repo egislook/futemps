@@ -1,8 +1,16 @@
 {
+  "Top level": "One more top lvl value",
+  "New field": "New value",
+  "testing": {
+    "Add one more": "Sharing",
+    "fieldE": "delete works"
+  },
+  "todo": "fix delete fn (value delete)\nadd move feature\nadd sorting feature\nadd image uploading feature\nadd extend colapse feature\nmake experimental todo\nsort data structure / dynamic quiestion\n---\n(done) add new field on top lvl",
   "experiment": {
-    "field1": "value1",
-    "field2": "value2",
-    "field3": {}
+    "field4": {},
+    "field3": {},
+    "field2": {},
+    "field1": {}
   },
   "title": "set new title of the appssssssss",
   "testField": "some value",
@@ -25,7 +33,7 @@
       "view": "page-main",
       "meta": {
         "title": "poinout | main page",
-        "description": "app main page description haha"
+        "description": "Lets call it TODO"
       }
     },
     "sub": {
