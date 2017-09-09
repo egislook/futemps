@@ -23,13 +23,13 @@
     on-edit={ handleEdit }
     cb-extras={ getValue('poinoutTitle', 'id') }/>
 
-
-  <div class="p-tb:50px ta:l">
-    <elem-leaf poinject={poinject} on-edit={handleEdit} on-create={handleCreate} on-delete={handleDelete} mode-edit={false} />
+  <div class="p-tb:30px ta:l">
+    <elem-leaf poinject={poinject} on-edit={handleEdit} on-create={handleCreate} on-delete={handleDelete} on-upload={handleUpload} mode-edit={false} />
   </div>
 
   <script>
     this.mixin('store');
+    console.log( this.getValue('gallery') )
   </script>
 
 </page-main>

@@ -15,6 +15,21 @@
     cb-extras={ getValue('text2', 'id') }
     on-edit={ handleEdit } />
 
+  <div class="w:100pc ps:rl m-tb:30px">
+    <img class="dp:bk w:100pc" src={ getValue('gallery.album2.img') } />
+    <span class="ps:ab b,l:0 w:100pc c:white bg:blacka5 fs:80pc p:20px-30px ta:l">
+      <elem-text
+        class="fs:120pc fw:500"
+        text={ getValue('gallery.album2.title') }
+        cb-extras={ getValue('gallery.album2.title', 'id') }
+        on-edit={ handleEdit } />
+      <div if={false} class="fw:400 fs:70pc dp:flx flxf:wrap jc:sb m:0_p w:100pc">
+        <p>{file.sizeMb}MB</p>
+        <p>{file.mimetype}</p>
+      </div>
+    </span>
+  </div>
+
     <script>
       this.mixin('store');
     </script>

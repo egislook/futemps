@@ -61,6 +61,28 @@ class appStore{
       });
   }
 
+  handleUpload(files, parent, cb){
+    if(!files.length)
+      return;
+
+    upload(files.item(0), (err, json) => {
+      this.handleCreate(json.src, { parent, type: 'value' }, cb);
+    });
+
+    function upload(fileItem, cb){
+      var data = new FormData();
+      data.append('file', fileItem);
+
+      fetch('/upload', {
+        method: 'POST',
+        body: data
+      })
+      .then(res     => res.json())
+      .then(json    => cb(null, json))
+      .catch(err    => cb(err));
+    }
+  }
+
   handleDelete(id, cb){
     const self = this;
     window.fetch('/poinject/'+id, {

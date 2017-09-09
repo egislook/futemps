@@ -2,6 +2,7 @@ const express   = require('express');
 const router    = express.Router();
 const poinouter = require('../../poinouter');
 
+router.get('/all', getAll);
 router.get('/:path?', get);
 router.patch('/:id', patch);
 router.post('/', post);
@@ -14,7 +15,11 @@ exports.post = post;
 exports.delete = deleteFn;
 
 function get(req, res){
-  res.send(poinouter.poinject(req.params.path));
+  res.json(poinouter.poinject(req.params.path));
+}
+
+function getAll(req, res){
+  res.json(poinouter.poinjectAll());
 }
 
 

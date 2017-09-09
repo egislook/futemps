@@ -28,6 +28,9 @@ mixins.store = storeMixin(stores);
 
 /** actions */
 actions.initRouter = () => {
+  /** Server Routing */
+  app.use('/poinject', require('./func/poinject.func.js'));
+  app.use('/upload', require('./func/upload.func.js'));
   app.get('/content', (req, res) => {
     res.json({
       poinject: poinouter.poinject(),
@@ -66,10 +69,6 @@ actions.getContent((json) => {
   stores.appStore = new appStore(json);
   actions.initRouter();
 });
-
-/** Server Routing */
-app.use('/poinject', require('./func/poinject.func.js'));
-app.use('/upload', require('./func/upload.func.js'));
 
 app.listen(process.env.PORT || 3000,
   () => console.log(`Example app listening on port ${process.env.PORT || 3000}!`));

@@ -18,8 +18,12 @@
         <a if={leaf && leaf.type === 'field' && !childIsValue && leaf.id !== 'ghost' && !noChildren} class="fu-chevron-small-down p:5px c:grey fs:70pc m-b:4px" />
         <a if={childIsValue || ghostLeaf && ghostLeaf.type === 'value'} class="fu-chevron-small-right p:5px c:grey fs:70pc m-b:4px" />
 
-        <a if={ noChildren && leaf.id !== 'ghost' && !ghostLeaf } class="fu-text_fields fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleAddValueGhost} />
-        <a if={ noChildren && leaf.id !== 'ghost' && !ghostLeaf } class="fu-camera fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleAddValueGhost} />
+        <span if={ noChildren && leaf.id !== 'ghost' && !ghostLeaf }>
+          <a class="fu-text_fields fs:70pc p:5px c:white bg:grey300 m-b:4px dp:ib m-t:2px" onclick={handleAddValueGhost} />
+
+          <input id="image" class="op:0 ps:ab w,h:0 dp:n" type="file" name="files" onchange={handleImageUpload} />
+          <label for="image" class="fu-camera fs:70pc p:5px c:white bg:grey300 dp:ib m-b:6px" />
+        </span>
 
         <elem-text
           class="dp:ib va:t p:2px-5px fc-bg:white"
@@ -28,14 +32,18 @@
           placeholder="value"
           cb-extras={ghostLeaf}
           on-edit={parent.opts.onCreate} />
-        
+
         <elem-text
-          if={childIsValue}
+          if={childIsValue && !childIsImage}
           class="dp:ib va:t p:2px-5px fc-bg:white"
           text={child && child.value}
           placeholder={opts.valuePlaceholder}
           on-edit={opts.onEdit}
           cb-extras={child && child.id} />
+
+        <span if={childIsImage} class="w:175px fux-boxsh bd:3px-sd-white m-b:5px">
+          <img class="dp:bk w:100pc" src={child.value} />
+        </span>
 
         <a if={ghostLeaf && ghostLeaf.type === 'value' || childIsValue}
           class="fu-trash fs:70pc m-b:4px dp:ib c:grey300"
@@ -61,7 +69,8 @@
         poinject={parent.opts.poinject}
         on-edit={parent.opts.onEdit}
         on-create={parent.opts.onCreate}
-        on-delete={parent.opts.onDelete} />
+        on-delete={parent.opts.onDelete}
+        on-upload={parent.opts.onUpload} />
     </div>
   </div>
 
@@ -69,6 +78,7 @@
     const self = Object.assign(this, {
       leaf: opts.leaf,
       childIsValue: null,
+      childIsImage: null,
       noChildren: null,
       child: null,
       ghostLeaf: null,
@@ -99,6 +109,11 @@
     self.handleEditField = (value, leaf) =>
       self.opts.onEdit(value, leaf, self.handleDeleteGhost);
 
+    self.handleImageUpload = (e) => {
+      self.opts.onUpload(e.target.files, self.leaf.id);
+      e.target.value = '';
+    }
+
     self.setChild = () => {
 
       let child = self.leaf
@@ -118,6 +133,7 @@
 
       self.child = child.shift();
       self.childIsValue = self.leaf.id !== 'ghost' && self.child;
+      self.childIsImage = self.child.value.indexOf('jpg') !== -1;
     }
 
     self.setChild();

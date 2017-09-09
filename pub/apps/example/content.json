@@ -1,11 +1,18 @@
 {
-  "Top level": "One more top lvl value",
-  "New field": "New value",
-  "testing": {
-    "Add one more": "Sharing",
-    "fieldE": "delete works"
+  "gallery": {
+    "album2": {
+      "title": "flowers here my friend and something a bit more\nSmall title huh?",
+      "img": "/assets/files/file-1504996810958-07.jpg"
+    },
+    "album1": {
+      "title": "sunset here my friend",
+      "img": "/assets/files/file-1504996813985-10.jpg"
+    }
   },
-  "todo": "fix delete fn (value delete)\nadd move feature\nadd sorting feature\nadd image uploading feature\nadd extend colapse feature\nmake experimental todo\nsort data structure / dynamic quiestion\n---\n(done) add new field on top lvl",
+  "testing": {
+    "asdasd": {}
+  },
+  "todo": "Bug: incorrect ancestors list is generated.\nadd move feature\nadd sorting feature\nadd image uploading feature\nadd extend colapse feature\nmake experimental todo\nsort data structure / dynamic quiestion\n---\n(temp fix) delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
   "experiment": {
     "field4": {},
     "field3": {},
@@ -39,7 +46,7 @@
     "sub": {
       "name": "sub",
       "link": "/sub",
-      "title": "Sub",
+      "title": "Gallery",
       "view": "page-sub",
       "meta": {
         "title": "poinout | sub page",
@@ -49,7 +56,7 @@
     "sub2": {
       "name": "sub2",
       "link": "/sub2",
-      "title": "Sub2",
+      "title": "Palette",
       "view": "page-sub2",
       "meta": {
         "title": "poinout | sub2 page",

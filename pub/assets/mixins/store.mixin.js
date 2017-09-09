@@ -12,6 +12,7 @@ function storeMixin(stores){
 
       this.handleEdit     = this.appStore.handleEdit.bind(this.appStore);
       this.handleCreate   = this.appStore.handleCreate.bind(this.appStore);
+      this.handleUpload   = this.appStore.handleUpload.bind(this.appStore);
       this.handleDelete   = this.appStore.handleDelete.bind(this.appStore);
 
       let self = this;
