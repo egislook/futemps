@@ -24,18 +24,29 @@ class appStore{
   /** CONTENT DATA */
   getValue(path, field='value'){
     const self = this;
-    let leaf = self.poinject && self.poinject.filter(leaf => leaf.path === path);
+    let leaf = self.poinject && self.poinject.filter(leaf => leaf.path === path || leaf.id === path);
 
     if(!leaf || leaf && !leaf.length)
       return `${path}`;
     if(leaf.length === 1)
       return leaf.shift()[field];
 
-    return JSON.stringify(leaf.map(obj => obj.value), 0, 2);
+    return leaf.map(obj => obj.value);
+    //return JSON.stringify(leaf.map(obj => obj.value), 0, 2);
+  }
+
+  getLeaf(id){
+    let self = this;
+    let leaf = self.poinject && self.poinject.filter(leaf => leaf.id === id);
+    if(!leaf || leaf && !leaf.length)
+      return `${id}`;
+    if(leaf.length === 1)
+      return leaf.shift();
   }
 
   handleEdit(value, id, cb){
     const self = this;
+    console.log(value, id);
     window.fetch('/poinject/'+id, {
       headers: { 'Content-Type': 'application/json'},
       method: 'PATCH',
@@ -43,6 +54,7 @@ class appStore{
     }).then(res => res.json())
       .then(json => {
         self.setOpts(json.opts);
+        cb && cb();
         console.log(json);
       });
   }
@@ -61,12 +73,20 @@ class appStore{
       });
   }
 
-  handleUpload(files, parent, cb){
-    if(!files.length)
+  handleUpload(id, e, cb){
+
+    const file = e.target && e.target.files && e.target.files.item(0);
+    e.target.value = '';
+
+    if(!file)
       return;
 
-    upload(files.item(0), (err, json) => {
-      this.handleCreate(json.src, { parent, type: 'value' }, cb);
+    const self = this;
+
+    upload(file, (err, json) => {
+      self.getLeaf(id).type === 'field'
+        ? this.handleCreate(json.src, { parent: id, type: 'value' }, cb)
+        : this.handleEdit(json.src, id, cb);
     });
 
     function upload(fileItem, cb){

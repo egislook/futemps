@@ -1,0 +1,29 @@
+<page-palette>
+
+  <navigation routes={ content.routes } active={ route.name } />
+
+  <section class="mxw:800px p-rl:2pc">
+
+    <elem-text
+      class="fs:140pc fw:600 p-tb:20px"
+      text={ getValue('routes.palette.meta.title') }
+      cb-extras={ getValue('routes.palette.meta.description', 'id') }
+      on-edit={ handleEdit } />
+
+    <elem-text
+      class="p-tb:20px"
+      max={5000}
+      text={ getValue('routes.palette.meta.description') }
+      cb-extras={ getValue('routes.palette.meta.description', 'id') }
+      on-edit={ handleEdit } />
+
+    <palette if={!opts.SERVER} />
+
+  </section>
+
+  <script>
+    this.mixin('store');
+    if(!!this.opts.SERVER) return;
+
+  </script>
+</page-palette>

@@ -41,7 +41,7 @@
           on-edit={opts.onEdit}
           cb-extras={child && child.id} />
 
-        <span if={childIsImage} class="w:175px fux-boxsh bd:3px-sd-white m-b:5px">
+        <span if={childIsImage} class="w:175px fux-boxsh bd:3px-sd-white m-tb:5px">
           <img class="dp:bk w:100pc" src={child.value} />
         </span>
 
@@ -109,10 +109,7 @@
     self.handleEditField = (value, leaf) =>
       self.opts.onEdit(value, leaf, self.handleDeleteGhost);
 
-    self.handleImageUpload = (e) => {
-      self.opts.onUpload(e.target.files, self.leaf.id);
-      e.target.value = '';
-    }
+    self.handleImageUpload = (e) => self.opts.onUpload(self.leaf.id, e);
 
     self.setChild = () => {
 
