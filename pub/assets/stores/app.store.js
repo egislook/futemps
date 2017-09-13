@@ -73,6 +73,18 @@ class appStore{
       });
   }
 
+  handleDuplicate(id, cb){
+    const self = this;
+    window.fetch('/poinject/'+id, {
+      headers: { 'Content-Type': 'application/json'},
+      method: 'POST'
+    }).then(res => res.json())
+      .then(json => {
+        self.setOpts(json.opts);
+        console.log(json);
+      });
+  }
+
   handleUpload(id, e, cb){
 
     const file = e.target && e.target.files && e.target.files.item(0);

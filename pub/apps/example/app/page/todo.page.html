@@ -1,0 +1,37 @@
+<page-todo>
+
+  <navigation routes={ content.routes } active={ route.name } />
+
+  <section class="mxw:800px p-rl:2pc">
+
+    <elem-text
+      class="fs:140pc fw:600 p-tb:20px"
+      text={ getValue('routes.todo.meta.title') }
+      cb-extras={ getValue('routes.todo.meta.title', 'id') }
+      on-edit={ handleEdit } />
+
+    <elem-text
+      if={false}
+      class="p-tb:20px"
+      max={5000}
+      text={ getValue('routes.todo.meta.description') }
+      cb-extras={ getValue('routes.todo.meta.description', 'id') }
+      on-edit={ handleEdit } />
+
+  </section>
+
+  <comp-upload />
+
+  <elem-text
+    class="ta:l mxw:800px p:10px-2pc"
+    max={5000}
+    text={ getValue('todo') }
+    cb-extras={ getValue('todo', 'id') }
+    on-edit={ handleEdit } />
+
+  <script>
+    this.mixin('store');
+    //console.log( this.getValue('gallery') )
+  </script>
+
+</page-todo>

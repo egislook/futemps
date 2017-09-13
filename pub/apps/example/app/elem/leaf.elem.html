@@ -14,6 +14,7 @@
         autofocus={opts.autofocus} />
 
         <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleAddFieldGhost} />
+        <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-stack-2 fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleDuplicate} />
 
         <a if={leaf && leaf.type === 'field' && !childIsValue && leaf.id !== 'ghost' && !noChildren} class="fu-chevron-small-down p:5px c:grey fs:70pc m-b:4px" />
         <a if={childIsValue || ghostLeaf && ghostLeaf.type === 'value'} class="fu-chevron-small-right p:5px c:grey fs:70pc m-b:4px" />
@@ -60,7 +61,8 @@
         autofocus={true}
         cb-extras={ghostLeaf}
         on-edit={opts.onCreate}
-        on-delete={opts.onDelete} />
+        on-delete={opts.onDelete}
+        on-duplicate={opts.onDuplicate} />
 
       <elem-leaf
         each={leaf in child}
@@ -70,7 +72,8 @@
         on-edit={parent.opts.onEdit}
         on-create={parent.opts.onCreate}
         on-delete={parent.opts.onDelete}
-        on-upload={parent.opts.onUpload} />
+        on-upload={parent.opts.onUpload}
+        on-duplicate={parent.opts.onDuplicate} />
     </div>
   </div>
 
@@ -110,6 +113,7 @@
       self.opts.onEdit(value, leaf, self.handleDeleteGhost);
 
     self.handleImageUpload = (e) => self.opts.onUpload(self.leaf.id, e);
+    self.handleDuplicate = (e) => self.opts.onDuplicate(self.leaf.id);
 
     self.setChild = () => {
 

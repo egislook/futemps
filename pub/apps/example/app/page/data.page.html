@@ -19,29 +19,15 @@
 
   </section>
 
-  <comp-upload />
-
-  <elem-text
-    class="fs:140pc fw:600"
-    text={ getValue('routes.main.meta.description') }
-    cb-extras={ getValue('routes.main.meta.description', 'id') }
-    on-edit={ handleEdit } />
-
-  <elem-text
-    class="ta:l mxw:800px p:10px-2pc"
-    max={5000}
-    text={ getValue('todo') }
-    cb-extras={ getValue('todo', 'id') }
-    on-edit={ handleEdit } />
-
-  <elem-text
-    class="fs:140pc fw:600"
-    text={ getValue('poinoutTitle') }
-    on-edit={ handleEdit }
-    cb-extras={ getValue('poinoutTitle', 'id') }/>
-
   <div class="p-tb:20px ta:l mxw:800px">
-    <elem-leaf poinject={poinject} on-edit={handleEdit} on-create={handleCreate} on-delete={handleDelete} on-upload={handleUpload} mode-edit={false} />
+    <elem-leaf
+      poinject={poinject}
+      on-edit={handleEdit}
+      on-create={handleCreate}
+      on-delete={handleDelete}
+      on-upload={handleUpload}
+      on-duplicate={handleDuplicate}
+      mode-edit={false} />
   </div>
 
   <script>
