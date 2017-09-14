@@ -2,8 +2,8 @@
 
 const express     = global.express = require('express'),
       bodyParser  = require('body-parser'),
-      exrioting   = require('../exrioting'),
-      poinouter   = require('../poinouter'),
+      exriothing  = require('exriothing'),
+      poinject    = require('poinject'),
       cfg         = require('./cfg.js');
 
 
@@ -17,9 +17,9 @@ app.get('/favicon.ico',     (req, res) => res.status(204));
 
 
 
-const appStore  = exrioting.cleantRequire(`${cfg.storesPath}/app.store.js`);
+const appStore  = exriothing.cleantRequire(`${cfg.storesPath}/app.store.js`);
 
-const storeMixin = exrioting.cleantRequire(`${cfg.mixinsPath}/store.mixin.js`);
+const storeMixin = exriothing.cleantRequire(`${cfg.mixinsPath}/store.mixin.js`);
 
 
 const stores = {}, actions = {}, mixins = {};
@@ -33,19 +33,19 @@ actions.initRouter = () => {
   app.use('/upload', require('./func/upload.func.js'));
   app.get('/content', (req, res) => {
     res.json({
-      poinject: poinouter.poinject(),
-      content: poinouter.json()
+      poinject: poinject.poinject(),
+      content: poinject.json()
     });
   });
 
-  exrioting.initMixins(mixins);
-  exrioting.init(cfg);
+  exriothing.initMixins(mixins);
+  exriothing.init(cfg);
   app.get('/:tag?', actions.tagRoute);
 }
 
 actions.tagRoute = (req, res) => {
   let col = req.params.tag;
-  let render = exrioting.render;
+  let render = exriothing.render;
   const store = stores.appStore;
 
   col = col || store.getAllRoutes() && Object.keys(store.getAllRoutes()).shift();
@@ -59,8 +59,8 @@ actions.tagRoute = (req, res) => {
 
 actions.getContent = (cb) => {
   let json = {
-    content:  poinouter.fileToObj(cfg.contentFilePath),
-    poinject: poinouter.poinject()
+    content:  poinject.fileToObj(cfg.contentFilePath),
+    poinject: poinject.poinject()
   }
   return cb && cb(json)
 };
