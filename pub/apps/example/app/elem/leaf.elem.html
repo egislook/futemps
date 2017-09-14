@@ -50,6 +50,15 @@
           class="fu-trash fs:70pc m-b:4px dp:ib c:grey300"
           onclick={childIsValue && handleDeleteValue || handleDeleteGhost} />
 
+        <a if={leaf} class="fu-info fs:70pc p:5px c:grey300 m-b:4px ps:rl {'bg:black c:white-!': showInfo}" onclick={handleInfo}>
+          <div if={showInfo} class="t:0 l:20px fux-boxsh ps:ab bg:prim p:10px z:5 c:white dp:tb dp:tr_div dp:tc_strong,span p-r:5px_strong">
+            <div> <strong>ID: </strong> <span class="mnw:250px">{leaf.id}</span> </div>
+            <div> <strong>PARENT: </strong> <span>{leaf.parent}</span> </div>
+            <div> <strong>PATH: </strong> <span>{leaf.path}</span> </div>
+            <div> <strong>ANCESTORS: </strong> <span>{JSON.stringify(leaf.ancestors, null, 2)}</span> </div>
+          </div>
+        </a>
+
     </div>
 
     <div class="p-l:25px bd-l:1px-ds-grey200" if={!childIsValue}>
@@ -85,6 +94,7 @@
       noChildren: null,
       child: null,
       ghostLeaf: null,
+      showInfo: null,
     });
 
     self.handleAddGhost = (type = 'field') => {
@@ -96,6 +106,8 @@
       };
       self.update({ ghostLeaf });
     }
+
+    self.handleInfo = (e) => self.update({ showInfo: !self.showInfo})
 
     self.handleAddFieldGhost = (e) => self.handleAddGhost();
     self.handleAddValueGhost = (e) => self.handleAddGhost('value');

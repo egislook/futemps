@@ -1,6 +1,6 @@
 const express   = require('express');
 const router    = express.Router();
-const poinouter = require('../../poinouter');
+const poinject = require('../../_packs/poinject');
 
 router.get('/all', getAll);
 router.get('/:path?', get);
@@ -17,11 +17,11 @@ exports.clone = clone;
 exports.delete = deleteFn;
 
 function get(req, res){
-  res.json(poinouter.poinject(req.params.path));
+  res.json(poinject.poinject(req.params.path));
 }
 
 function getAll(req, res){
-  res.json(poinouter.poinjectAll());
+  res.json(poinject.poinjectAll());
 }
 
 
@@ -34,7 +34,7 @@ function patch(req, res){
     return res.status(400)
       .json({ ok: false, msg: 'value is not specified' });
 
-  let opts = poinouter.editPoinjectValueById(req.params.id, req.body.value);
+  let opts = poinject.editPoinjectValueById(req.params.id, req.body.value);
 
   if(!opts)
     return res.status(400)
@@ -49,7 +49,7 @@ function clone(req, res){
     return res.status(400)
       .json({ ok: false, msg: '"id" is not specified' });
 
-  let opts = poinouter.clonePoinjectById(req.params.id);
+  let opts = poinject.clonePoinjectById(req.params.id);
 
   if(!opts)
     return res.status(400)
@@ -66,7 +66,7 @@ function post(req, res){
     return res.status(400)
       .json({ ok: false, msg: 'value is not specified' });
 
-  let opts = poinouter.createPoinjectValueByParent(req.body.value, req.body.parent, req.body.type);
+  let opts = poinject.createPoinjectValueByParent(req.body.value, req.body.parent, req.body.type);
 
   if(!opts)
     return res.status(400)
@@ -82,7 +82,7 @@ function deleteFn(req, res){
     return res.status(400)
       .json({ ok: false, msg: 'id is not specified' });
 
-  let opts = poinouter.deletePoinjectValueById(req.params.id);
+  let opts = poinject.deletePoinjectValueById(req.params.id);
 
   if(!opts)
     return res.status(400)

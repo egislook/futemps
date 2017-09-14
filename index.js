@@ -3,7 +3,7 @@
 const express     = global.express = require('express'),
       bodyParser  = require('body-parser'),
       exriothing  = require('exriothing'),
-      poinject    = require('poinject'),
+      poinject    = require('../_packs/poinject'),
       cfg         = require('./cfg.js');
 
 
