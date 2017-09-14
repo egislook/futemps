@@ -7,7 +7,7 @@
       },
       "description": "Build Flexible and beautiful web applications or sites\nin fashioned and quick way with Poinout.",
       "title": "Meet Poinout,\nFlexible front-end toolkit",
-      "img": "/assets/files/file-1505325649660-11.jpg"
+      "img": "/assets/files/file-1505359831218-01.jpg"
     },
     "album3": {
       "img": "/assets/files/file-1505311277785-06.jpg",
@@ -25,7 +25,7 @@
   "testing": {
     "img": "/assets/files/file-1505032316977-20170906_185251.jpg"
   },
-  "todo": "Feature: duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nRefactor: elem-text to wrap-text. Wrapper works with yield. Editability.\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data \nBug: incorrect ancestors list is generated.\nFeature: move leaf\nFeature: sort leafs\nadd extend colapse feature\nmake experimental todo\n---\nIdea: poinject parent value as variable $ref\n---\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
+  "todo": "Feature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nRefactor: elem-text to wrap-text. Wrapper works with yield. Editability.\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data \nBug: incorrect ancestors list is generated.\nFeature: move leaf\nFeature: sort leafs\nadd extend colapse feature\nmake experimental todo\n---\nIdea: poinject parent value as variable $ref\n---\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
   "experiment": {
     "field4": {},
     "field3": {},
