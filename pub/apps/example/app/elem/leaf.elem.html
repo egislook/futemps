@@ -5,7 +5,10 @@
       <a if={leaf && leaf.id === 'ghost'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={leaf.id === 'ghost' && handleDeleteGhost} />
 
       <a if={leaf && leaf.id !== 'ghost' && (childIsValue || noChildren)} class="fu-grain fs:70pc m-b:4px dp:ib c:grey300 crs:move" />
-      <a if={leaf && leaf.type === 'field' && !childIsValue && leaf.id !== 'ghost' && !noChildren} class="fu-chevron-small-down c:grey fs:70pc m-b:4px" />
+      <a
+        if={leaf && leaf.type === 'field' && !childIsValue && leaf.id !== 'ghost' && !noChildren}
+        class="{'fu-chevron-small-down': isExtended, 'fu-chevron-small-right': !isExtended} c:grey fs:70pc m-b:4px"
+        onclick={opts.onExtend.bind(e, leaf.id)} />
 
       <elem-text
         if={leaf}
@@ -48,7 +51,7 @@
         </span>
 
 
-        <a if={leaf && !ghostLeaf} class="fu-dots-three-horizontal fs:70pc p:5px c:grey400 m-b:4px ps:rl {'bg:prim c:white-!': showMore}" onclick={handleMore} />
+        <a if={leaf && !ghostLeaf && leaf.id !== 'ghost'} class="fu-dots-three-horizontal fs:70pc p:5px c:grey400 m-b:4px ps:rl {'bg:prim c:white-!': showMore}" onclick={handleMore} />
         <a if={ghostLeaf && ghostLeaf.type === 'value'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={handleDeleteGhost} />
 
         <span if={showMore}>
@@ -70,28 +73,32 @@
 
     </div>
 
-    <div class="p-l:25px bd-l:1px-ds-grey200 m-l:5px" if={!childIsValue}>
+    <div class="p-l:25px bd-l:1px-ds-grey200 m-l:5px" if={!childIsValue && isExtended}>
       <a if={!leaf} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px m-l:5px" onclick={handleAddFieldGhost} />
       <elem-leaf
         if={ghostLeaf && ghostLeaf.type === 'field'}
         leaf={ghostLeaf}
         poinject={opts.poinject}
+        extended={opts.extended}
         autofocus={true}
         cb-extras={ghostLeaf}
         on-edit={opts.onCreate}
         on-delete={opts.onDelete}
-        on-duplicate={opts.onDuplicate} />
+        on-duplicate={opts.onDuplicate}
+        on-extend={opts.onExtend} />
 
       <elem-leaf
         each={leaf in child}
         leaf={leaf}
         mode-edit={parent.opts.modeEdit}
         poinject={parent.opts.poinject}
+        extended={parent.opts.extended}
         on-edit={parent.opts.onEdit}
         on-create={parent.opts.onCreate}
         on-delete={parent.opts.onDelete}
         on-upload={parent.opts.onUpload}
-        on-duplicate={parent.opts.onDuplicate} />
+        on-duplicate={parent.opts.onDuplicate}
+        on-extend={parent.opts.onExtend} />
     </div>
   </div>
 
@@ -105,6 +112,7 @@
       ghostLeaf: null,
       showInfo: null,
       showMore: null,
+      isExtended: null,
     });
 
     self.handleAddGhost = (type = 'field') => {
@@ -138,6 +146,10 @@
     self.handleImageUpload = (e) => self.opts.onUpload(self.leaf.id, e);
     self.handleDuplicate = (e) => self.opts.onDuplicate(self.leaf.id);
 
+    self.setExtended = () => {
+      self.isExtended = !self.opts.leaf || self.opts.leaf && self.opts.extended.indexOf(self.opts.leaf.id) >= 0;
+    }
+
     self.setChild = () => {
 
       let child = self.leaf
@@ -161,7 +173,11 @@
     }
 
     self.setChild();
-    this.on('update', () => self.setChild());
+    self.setExtended();
+    this.on('update', () => {
+      self.setChild();
+      self.setExtended();
+    });
 
   </script>
 

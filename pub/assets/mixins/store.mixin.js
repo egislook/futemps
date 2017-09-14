@@ -7,6 +7,8 @@ function storeMixin(stores){
       this.content  = this.appStore.content;
       this.route    = this.appStore.route;
 
+      this.extended = [];
+
       this.getValue         = this.appStore.getValue.bind(this.appStore);
       this.getActiveRoute   = this.appStore.getActiveRoute.bind(this.appStore);
 
@@ -22,6 +24,20 @@ function storeMixin(stores){
           poinject: self.appStore.poinject,
           content: self.appStore.content
         }));
+
+      this.on('extend', (id) => {
+        let index = this.extended.indexOf(id);
+        console.log(id, index, self.extended);
+        if(index < 0){
+          self.extended.push(id);
+          return self.update();
+        }
+
+        self.extended.splice(index, 1);
+        self.update();
+      });
+
+      this.handleExtend = (id, e) => self.trigger('extend', id);
 
       // Unmount modifications for feature animation implementation
       this.on('before-unmount',
