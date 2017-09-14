@@ -2,15 +2,11 @@
   "experiment": {
     "field5": {
       "field53": {},
-      "field52": {
-        "field521": {}
-      },
-      "field51": "1234"
+      "field52": {}
     },
     "field4": {
-      "field43": {},
       "field42": {},
-      "field41": "1234"
+      "field41": {}
     },
     "field3": {
       "field31": {}

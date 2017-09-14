@@ -1,23 +1,22 @@
 <elem-leaf>
   <div>
-    <div class="p-l:10px dp:ib">
+    <div class="dp:ib">
 
-      <a if={leaf} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={leaf.id === 'ghost' && handleDeleteGhost || handleDelete} />
+      <a if={leaf && leaf.id === 'ghost'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={leaf.id === 'ghost' && handleDeleteGhost} />
+
+      <a if={leaf && leaf.id !== 'ghost' && (childIsValue || noChildren)} class="fu-grain fs:70pc m-b:4px dp:ib c:grey300 crs:move" />
+      <a if={leaf && leaf.type === 'field' && !childIsValue && leaf.id !== 'ghost' && !noChildren} class="fu-chevron-small-down c:grey fs:70pc m-b:4px" />
 
       <elem-text
         if={leaf}
-        class="fw:500 p:2px-5px fc-bg:white ps:rl dp:ib mnw:60px"
+        class="fw:500 p:2px-5px-2px-0 fc-bg:white ps:rl dp:ib mnw:60px"
         text={leaf.value}
         placeholder="new field"
         on-edit={handleEditField}
         cb-extras={opts.cbExtras || leaf.id}
         autofocus={opts.autofocus} />
 
-        <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleAddFieldGhost} />
-        <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-stack-2 fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleDuplicate} />
-
-        <a if={leaf && leaf.type === 'field' && !childIsValue && leaf.id !== 'ghost' && !noChildren} class="fu-chevron-small-down p:5px c:grey fs:70pc m-b:4px" />
-        <a if={childIsValue || ghostLeaf && ghostLeaf.type === 'value'} class="fu-chevron-small-right p:5px c:grey fs:70pc m-b:4px" />
+        <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px m-l:5npx" onclick={handleAddFieldGhost} />
 
         <span if={ noChildren && leaf.id !== 'ghost' && !ghostLeaf }>
           <a class="fu-text_fields fs:70pc p:5px c:white bg:grey300 m-b:4px dp:ib m-t:2px" onclick={handleAddValueGhost} />
@@ -26,8 +25,10 @@
           <label for="image" class="fu-camera fs:70pc p:5px c:white bg:grey300 dp:ib m-b:6px" />
         </span>
 
+        <a if={childIsValue || ghostLeaf && ghostLeaf.type === 'value'} class="fu-chevron-small-right p:5px m-l:5npx c:grey fs:70pc m-b:4px" />
+
         <elem-text
-          class="dp:ib va:t p:2px-5px fc-bg:white"
+          class="dp:ib va:t p:2px-5px-2px-0 fc-bg:white"
           if={ghostLeaf && ghostLeaf.type === 'value'}
           autofocus={true}
           placeholder="value"
@@ -36,7 +37,7 @@
 
         <elem-text
           if={childIsValue && !childIsImage}
-          class="dp:ib va:t p:2px-5px fc-bg:white"
+          class="dp:ib va:t p:2px-5px-2px-0 fc-bg:white"
           text={child && child.value}
           placeholder={opts.valuePlaceholder}
           on-edit={opts.onEdit}
@@ -46,22 +47,30 @@
           <img class="dp:bk w:100pc" src={child.value} />
         </span>
 
-        <a if={ghostLeaf && ghostLeaf.type === 'value' || childIsValue}
-          class="fu-trash fs:70pc m-b:4px dp:ib c:grey300"
-          onclick={childIsValue && handleDeleteValue || handleDeleteGhost} />
 
-        <a if={leaf} class="fu-info fs:70pc p:5px c:grey300 m-b:4px ps:rl {'bg:black c:white-!': showInfo}" onclick={handleInfo}>
-          <div if={showInfo} class="t:0 l:20px fux-boxsh ps:ab bg:prim p:10px z:5 c:white dp:tb dp:tr_div dp:tc_strong,span p-r:5px_strong">
-            <div> <strong>ID: </strong> <span class="mnw:250px">{leaf.id}</span> </div>
-            <div> <strong>PARENT: </strong> <span>{leaf.parent}</span> </div>
-            <div> <strong>PATH: </strong> <span>{leaf.path}</span> </div>
-            <div> <strong>ANCESTORS: </strong> <span>{JSON.stringify(leaf.ancestors, null, 2)}</span> </div>
-          </div>
-        </a>
+        <a if={leaf && !ghostLeaf} class="fu-dots-three-horizontal fs:70pc p:5px c:grey400 m-b:4px ps:rl {'bg:prim c:white-!': showMore}" onclick={handleMore} />
+        <a if={ghostLeaf && ghostLeaf.type === 'value'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={handleDeleteGhost} />
+
+        <span if={showMore}>
+          <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-stack-2 fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleDuplicate} />
+
+          <a if={childIsValue} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300 p:5px" onclick={childIsValue && handleDeleteValue} />
+
+          <a if={leaf && (noChildren || !childIsValue)} class="fu-trash fs:70pc m-b:4px dp:ib p:5px c:grey300" onclick={leaf.id === 'ghost' && handleDeleteGhost || handleDelete} />
+
+          <a if={leaf} class="fu-info fs:70pc p:5px c:grey300 m-b:4px ps:rl {'bg:black c:white-!': showInfo}" onclick={handleInfo}>
+            <div if={showInfo} class="t:0 l:20px fux-boxsh ps:ab bg:prim p:10px z:5 c:white dp:tb dp:tr_div dp:tc_strong,span p-r:5px_strong">
+              <div> <strong>ID: </strong> <span class="mnw:250px">{leaf.id}</span> </div>
+              <div> <strong>PARENT: </strong> <span>{leaf.parent}</span> </div>
+              <div> <strong>PATH: </strong> <span>{leaf.path}</span> </div>
+              <div> <strong>ANCESTORS: </strong> <span>{JSON.stringify(leaf.ancestors, null, 2)}</span> </div>
+            </div>
+          </a>
+        </span>
 
     </div>
 
-    <div class="p-l:25px bd-l:1px-ds-grey200" if={!childIsValue}>
+    <div class="p-l:25px bd-l:1px-ds-grey200 m-l:5px" if={!childIsValue}>
       <a if={!leaf} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px m-l:5px" onclick={handleAddFieldGhost} />
       <elem-leaf
         if={ghostLeaf && ghostLeaf.type === 'field'}
@@ -95,6 +104,7 @@
       child: null,
       ghostLeaf: null,
       showInfo: null,
+      showMore: null,
     });
 
     self.handleAddGhost = (type = 'field') => {
@@ -107,7 +117,8 @@
       self.update({ ghostLeaf });
     }
 
-    self.handleInfo = (e) => self.update({ showInfo: !self.showInfo})
+    self.handleInfo = (e) => self.update({ showInfo: !self.showInfo });
+    self.handleMore = (e) => self.update({ showMore: !self.showMore });
 
     self.handleAddFieldGhost = (e) => self.handleAddGhost();
     self.handleAddValueGhost = (e) => self.handleAddGhost('value');
