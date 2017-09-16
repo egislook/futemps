@@ -25,13 +25,17 @@ function storeMixin(stores){
           content: self.appStore.content
         }));
 
-      this.on('extend', (id) => {
+      this.on('extend', (opts = { id: '', onlyOn: false }) => {
+
+        let {id, onlyOn} = opts;
         let index = this.extended.indexOf(id);
-        console.log(id, index, self.extended);
+        //console.log(id, index, self.extended);
         if(index < 0){
           self.extended.push(id);
           return self.update();
         }
+
+        if(onlyOn) return;
 
         self.extended.splice(index, 1);
         self.update();

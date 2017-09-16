@@ -8,7 +8,7 @@
       <a
         if={leaf && leaf.type === 'field' && !childIsValue && leaf.id !== 'ghost' && !noChildren}
         class="{'fu-chevron-small-down': isExtended, 'fu-chevron-small-right': !isExtended} c:grey fs:70pc m-b:4px"
-        onclick={opts.onExtend.bind(e, leaf.id)} />
+        onclick={opts.onExtend.bind(null, { id: leaf.id })} />
 
       <elem-text
         if={leaf}
@@ -80,6 +80,7 @@
         leaf={ghostLeaf}
         poinject={opts.poinject}
         extended={opts.extended}
+        extend-all={opts.extendAll}
         autofocus={true}
         cb-extras={ghostLeaf}
         on-edit={opts.onCreate}
@@ -93,6 +94,7 @@
         mode-edit={parent.opts.modeEdit}
         poinject={parent.opts.poinject}
         extended={parent.opts.extended}
+        extend-all={parent.opts.extendAll}
         on-edit={parent.opts.onEdit}
         on-create={parent.opts.onCreate}
         on-delete={parent.opts.onDelete}
@@ -115,6 +117,10 @@
       isExtended: null,
     });
 
+    self.setExtended = () => {
+      self.isExtended = self.opts.extendAll || !self.opts.leaf || self.opts.leaf && self.opts.extended.indexOf(self.opts.leaf.id) >= 0;
+    }
+
     self.handleAddGhost = (type = 'field') => {
       let ghostLeaf = {
         parent: self.leaf && self.leaf.id,
@@ -122,6 +128,10 @@
         value: '',
         id: 'ghost',
       };
+
+
+      self.leaf && self.opts.onExtend({ id: self.leaf.id, onlyOn: true });
+
       self.update({ ghostLeaf });
     }
 
@@ -145,10 +155,6 @@
 
     self.handleImageUpload = (e) => self.opts.onUpload(self.leaf.id, e);
     self.handleDuplicate = (e) => self.opts.onDuplicate(self.leaf.id);
-
-    self.setExtended = () => {
-      self.isExtended = !self.opts.leaf || self.opts.leaf && self.opts.extended.indexOf(self.opts.leaf.id) >= 0;
-    }
 
     self.setChild = () => {
 
