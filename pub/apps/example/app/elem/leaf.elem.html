@@ -28,7 +28,9 @@
           <label for="image" class="fu-camera fs:70pc p:5px c:white bg:grey300 dp:ib m-b:6px" />
         </span>
 
-        <a if={childIsValue || ghostLeaf && ghostLeaf.type === 'value'} class="fu-chevron-small-right p:5px m-l:5npx c:grey fs:70pc m-b:4px" />
+        <a if={childIsValue || ghostLeaf && ghostLeaf.type === 'value'}
+          class="{'fu-chevron-small-down': valueIsExtended, 'fu-chevron-small-right': !valueIsExtended} p:5px m-l:5npx c:grey fs:70pc m-b:4px"
+          onclick={valueIsExtendable && opts.onExtend.bind(null, { id: child.id })} />
 
         <elem-text
           class="dp:ib va:t p:2px-5px-2px-0 fc-bg:white"
@@ -42,6 +44,7 @@
           if={childIsValue && !childIsImage}
           class="dp:ib va:t p:2px-5px-2px-0 fc-bg:white"
           text={child && child.value}
+          truncate-from={valueIsExtendable && !valueIsExtended && truncateFrom}
           placeholder={opts.valuePlaceholder}
           on-edit={opts.onEdit}
           cb-extras={child && child.id} />
@@ -51,7 +54,7 @@
         </span>
 
 
-        <a if={leaf && !ghostLeaf && leaf.id !== 'ghost'} class="fu-dots-three-horizontal fs:70pc p:5px c:grey400 m-b:4px ps:rl {'bg:prim c:white-!': showMore}" onclick={handleMore} />
+        <a if={leaf && !ghostLeaf && leaf.id !== 'ghost'} class="fu-menu2 fs:70pc p:5px c:grey300 m-b:4px ps:rl {'bg:prim c:white-!': showMore}" onclick={handleMore} />
         <a if={ghostLeaf && ghostLeaf.type === 'value'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={handleDeleteGhost} />
 
         <span if={showMore}>
@@ -115,10 +118,15 @@
       showInfo: null,
       showMore: null,
       isExtended: null,
+      valueIsExtended: null,
+      valueIsExtendable: null,
+      truncateFrom: 80,
     });
 
     self.setExtended = () => {
       self.isExtended = self.opts.extendAll || !self.opts.leaf || self.opts.leaf && self.opts.extended.indexOf(self.opts.leaf.id) >= 0;
+      self.valueIsExtendable = self.childIsValue && self.child.value.length > self.truncateFrom;
+      self.valueIsExtended = self.childIsValue && self.valueIsExtendable && (self.opts.extendAll || self.opts.extended.indexOf(self.child.id) >= 0);
     }
 
     self.handleAddGhost = (type = 'field') => {

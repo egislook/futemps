@@ -10,7 +10,7 @@
     onclick="{ opts.editMode && !contentEditable && handleSetEditable }"
     onblur="{ handleUpdateEditable }"
     onkeyup="{ handleTextLength }"
-    onmouseup="{ opts.editorEnabled && handleDisplayEditor }">{ opts.text }</div>
+    onmouseup="{ opts.editorEnabled && handleDisplayEditor }">{ displayText() }</div>
 
   <div if="{ contentEditable && textLength && !opts.noLength }" class="fs:90pc ps:ab p:5px-8px_span c:white z:10 op:0.8 va:t">
       <span class="{'bg:prim': isValid, 'bg:err': !isValid }">
@@ -55,6 +55,10 @@
     this.handleIsValid = (text) => text.length >= tag.size.min && text.length <= tag.size.max;
 
     this.isValid = this.handleIsValid(this.opts.text);
+
+    this.displayText = () => this.opts.truncateFrom && this.opts.text.length > this.opts.truncateFrom && !this.contentEditable
+      ? `${this.opts.text.substring(0, this.opts.truncateFrom)} ...`
+      : this.opts.text;
 
 
     // Methods ---------
