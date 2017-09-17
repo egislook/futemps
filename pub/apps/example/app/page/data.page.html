@@ -19,22 +19,97 @@
 
   </section>
 
-  <div class="p-tb:20px ta:l mxw:800px">
-    <elem-leaf
-      poinject={poinject}
-      extended={extended}
-      extend-all={false}
-      on-edit={handleEdit}
-      on-create={handleCreate}
-      on-delete={handleDelete}
-      on-upload={handleUpload}
-      on-duplicate={handleDuplicate}
-      on-extend={handleExtend}
-      mode-edit={false} />
+  <div class="p-b:20px ta:l mxw:800px"
+    mousemove={false && handleMouseMove}
+    touchmove={false && handleMouseMove}
+    mouseup={false && handleMouseUp}
+    touchend={false && handleMouseUp}>
+
+      <a class="fu-eye m-l:7npx {'c:grey300': !extendAll, 'bg:prim c:white': extendAll} p:5px" onclick={handleExtendAll} />
+      <elem-leaf
+        poinject={poinject}
+        extended={extended}
+        extend-all={extendAll}
+        on-edit={handleEdit}
+        on-create={handleCreate}
+        on-delete={handleDelete}
+        on-upload={handleUpload}
+        on-duplicate={handleDuplicate}
+        on-extend={handleExtend}
+        on-drag-start={handleDragStart}
+        on-drag-over={handleDragOver}
+        on-drag-leave={handleDragLeave}
+        on-drop={handleDrop}
+        mode-edit={false} />
   </div>
 
   <script>
     this.mixin('store');
+
+    this.extendAll = null;
+    this.handleExtendAll = (e) => this.update({ extendAll: !this.extendAll });
+
+    this.movingLeaf = null;
+    this.siblingLeaf = null;
+
+    this.handleDragStart = (movingLeaf, e) => {
+      console.log('Drag Start', movingLeaf);
+      this.update({ movingLeaf });
+      return true;
+    }
+
+    this.handleDragOver = (siblingLeaf, e) => {
+      e.preventDefault();
+      if(siblingLeaf.id === this.movingLeaf.id || this.siblingLeaf && this.siblingLeaf.id === siblingLeaf.id)
+        return;
+
+      this.handleMove(this.movingLeaf, siblingLeaf, true);
+      this.update({ siblingLeaf });
+      return true;
+    }
+
+    this.handleDragLeave = (e) => {
+      return false;
+      console.log('drag leave');
+    }
+
+    this.handleDrop = (siblingLeaf, e) => {
+      this.handleMove(this.movingLeaf, this.siblingLeaf);
+      this.update({ movingLeaf: null, siblingLeaf: null });
+    }
+
+    // mousedown={onMouseDown}
+    // touchstart={onMouseDown}
+    // mousemove={onMouseMove}
+    // touchmove={onMouseMove}
+    // mouseup={onMouseUp}
+    // touchend={onMouseUp}
+
+    // self.onMouseDown = (e) => {
+    //
+    //   self.dragTimeout = setTimeout(function(){
+    //     //e.stopPropagation();
+    //     //e.dataTransfer.setData('id', self.leaf.id);
+    //     //console.log(self.leaf.id);
+    //     //e.dataTransfer.dropEffect = 'move';
+    //     //console.log('down');
+    //     console.log('start');
+    //     self.update({ dragStarted: true });
+    //   }, 1000);
+    // }
+    // self.onMouseMove = (e) => {
+    //   if(!self.dragStarted) return;
+    //   console.log('move');
+    // }
+    //
+    // self.onMouseUp = (e) => {
+    //   clearTimeout(self.dragTimeout);
+    //   self.dragStarted && self.update({ dragStarted: false });
+    // }
+    // self.onDragOver = (e) => {
+    //   e.dataTransfer.dropEffect = 'move';
+    //   console.log(e.dataTransfer.getData('id'));
+    // }
     //console.log( this.getValue('gallery') )
   </script>
 

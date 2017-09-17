@@ -59,6 +59,32 @@ class appStore{
       });
   }
 
+  handleMove(leaf, sibling, onlyClient){
+    const self = this;
+    if(onlyClient){
+      let leafIndex = self.poinject.findIndex(obj => obj.id === leaf.id);
+      let siblingIndex = self.poinject.findIndex(obj => obj.id === sibling.id);
+      let poinject = self.poinject;
+
+      poinject[leafIndex] = Object.assign(leaf, { parent: sibling.parent });
+      poinject.splice(siblingIndex, 0, poinject.splice(leafIndex, 1)[0]);
+
+      return self.setOpts({ content: self.content , poinject });
+
+    } else {
+      window.fetch('/poinject/'+leaf.id, {
+        headers: { 'Content-Type': 'application/json'},
+        method: 'PUT',
+        body: JSON.stringify({ siblingId: sibling.id })
+      }).then(res => res.json())
+        .then(json => {
+          self.setOpts(json.opts);
+          //cb && cb();
+          console.log(json);
+        });
+    }
+  }
+
   handleCreate(value, leaf, cb){
     const self = this;
     window.fetch('/poinject/', {

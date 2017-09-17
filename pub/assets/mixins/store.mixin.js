@@ -17,6 +17,7 @@ function storeMixin(stores){
       this.handleUpload     = this.appStore.handleUpload.bind(this.appStore);
       this.handleDelete     = this.appStore.handleDelete.bind(this.appStore);
       this.handleDuplicate  = this.appStore.handleDuplicate.bind(this.appStore);
+      this.handleMove       = this.appStore.handleMove.bind(this.appStore);
 
       let self = this;
       this.appStore.on('storeUpdated',

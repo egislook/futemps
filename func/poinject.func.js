@@ -5,6 +5,7 @@ const poinject = require('../../_packs/poinject');
 router.get('/all', getAll);
 router.get('/:path?', get);
 router.patch('/:id', patch);
+router.put('/:id', move);
 router.post('/:id', clone);
 router.post('/', post);
 router.delete('/:id', deleteFn);
@@ -58,6 +59,25 @@ function clone(req, res){
   return res.status(200)
     .json({ ok: true, msg: `Id: ${req.params.id} leaf has been cloned`, opts});
 
+}
+
+function move(req, res){
+  if(!req.params.id)
+    return res.status(400)
+      .json({ ok: false, msg: '"id" is not specified' });
+
+  if(!req.body.siblingId)
+    return res.status(400)
+      .json({ ok: false, msg: '"siblingId" is not specified' });
+
+  let opts = poinject.movePoinjectToSiblingId(req.params.id, req.body.siblingId);
+
+  if(!opts)
+    return res.status(400)
+      .json({ ok: false, msg: `Id: ${req.params.id} can not be moved to ${req.body.siblingId} position. Opts incorrect.` });
+
+  return res.status(200)
+    .json({ ok: true, msg: `Id: ${req.params.id} leaf has been moved`, opts});
 
 }
 

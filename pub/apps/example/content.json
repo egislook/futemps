@@ -1,12 +1,13 @@
 {
+  "movable": {},
   "experiment": {
-    "field5": {
-      "field53": {},
-      "field52": {}
-    },
     "field4": {
       "field42": {},
       "field41": {}
+    },
+    "field5": {
+      "field53": {},
+      "field52": {}
     },
     "field3": {
       "field31": {}
@@ -38,9 +39,9 @@
     }
   },
   "testing": {
-    "img": "/assets/files/file-1505032316977-20170906_185251.jpg"
+    "img": "/assets/files/file-1505602686608-10.jpg"
   },
-  "todo": "Feature: leaf move to another leaf (change parent, ancestors, path of children)\nFeature: leaf changing position / sort\n\nFeature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nRefactor: elem-text to wrap-text. Wrapper works with yield. Editability.\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data \nFeature: make experimental todo\n---\nIdea: poinject parent value as variable $ref\nIdea: check router meta structure possibilities\n---\n(done) Feature: UI leaf extend / collapse\n(done) Bug: incorrect ancestors list is generated\n(done) Bug: leaf delete needs to remove all children by ancestors\n(done) Bug: leaf create ancestors are incorrect (too much)\n(done) Bug: leaf duplicate ancestors are empty\n(done) Bug: leaf duplicate path is incorrect. (undefined. in front)\n(done) Bug: editing leaf children path is not changing\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
+  "todo": "Feature: UI / UX upgrade for leaf movement\nFeature: leaf move to another leaf (change parent, ancestors, path of children)\nFeature: leaf changing position / sort\nFeature: Implement hidden children number\n\nFeature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nRefactor: elem-text to wrap-text. Wrapper works with yield. Editability.\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data \nFeature: make experimental todo\n---\nIdea: poinject parent value as variable $ref\nIdea: check router meta structure possibilities\n---\n(done) Feature: UI leaf extend / collapse\n(done) Bug: incorrect ancestors list is generated\n(done) Bug: leaf delete needs to remove all children by ancestors\n(done) Bug: leaf create ancestors are incorrect (too much)\n(done) Bug: leaf duplicate ancestors are empty\n(done) Bug: leaf duplicate path is incorrect. (undefined. in front)\n(done) Bug: editing leaf children path is not changing\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
   "text": "Note that this will simply add all attributes \nof obj2 to obj1 which might not be what you want if you still want to use the unmodified obj1. If you're using a framework that craps all over your prototypes then you have to get fancier with checks like hasOwnProperty, but that code will work for 99% of casessss.ss ggggssss",
   "text2": "Careful: the variable \"settings\" will be modified, though. jQuery doesn't return a new instance.The reason for this (and for the naming) is that .extend() was developed to extend objects, rather than to munge stuff together. If you want a new object (e.g. settings is defaults you don't want to touch), you can always jQuery.extend({}, settings, options)",
   "poinoutTitle": "Poinout",

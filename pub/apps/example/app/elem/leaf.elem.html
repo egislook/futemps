@@ -1,6 +1,10 @@
 <elem-leaf>
   <div>
-    <div class="dp:ib">
+    <div class="dp:ib" draggable={true}
+      ondragstart={opts.onDragStart.bind(e, leaf)}
+      ondragover={opts.onDragOver.bind(e, leaf)}
+      ondragleave={opts.onDragLeave}
+      ondrop={opts.onDrop.bind(e, leaf)}>
 
       <a if={leaf && leaf.id === 'ghost'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={leaf.id === 'ghost' && handleDeleteGhost} />
 
@@ -103,7 +107,11 @@
         on-delete={parent.opts.onDelete}
         on-upload={parent.opts.onUpload}
         on-duplicate={parent.opts.onDuplicate}
-        on-extend={parent.opts.onExtend} />
+        on-extend={parent.opts.onExtend}
+        on-drag-start={parent.opts.onDragStart}
+        on-drag-over={parent.opts.onDragOver}
+        on-drag-leave={parent.opts.onDragLeave}
+        on-drop={parent.opts.onDrop} />
     </div>
   </div>
 
@@ -121,6 +129,8 @@
       valueIsExtended: null,
       valueIsExtendable: null,
       truncateFrom: 80,
+      dragStarted: null,
+      dragTimeout: null,
     });
 
     self.setExtended = () => {
