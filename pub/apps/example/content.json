@@ -1,7 +1,7 @@
 {
   "testing": {
     "button": {
-      "title": "testing button"
+      "title": "Text there u go"
     },
     "img": "/assets/files/file-1505602686608-10.jpg"
   },
@@ -84,7 +84,7 @@
       "title": "Data",
       "view": "page-data",
       "meta": {
-        "title": "Poinject tree editor testing",
+        "title": "Poinject tree editor",
         "description": "Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)\nEnabling and disabling editor fields"
       }
     },

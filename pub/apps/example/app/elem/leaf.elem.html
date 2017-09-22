@@ -48,6 +48,12 @@
           cb-extras={ghostLeaf}
           on-edit={parent.opts.onCreate} />
 
+        <elem-text2 class="dp:ib" on-done={opts.onEdit} if={false && childIsValue && !childIsImage}>
+          <div data-id={child && child.id} class="p:2px-5px-2px-0">
+            {child && child.value}
+          </div>
+        </elem-text2>
+
         <elem-text
           if={childIsValue && !childIsImage}
           class="dp:ib va:t p:2px-5px-2px-0 fc-bg:white"

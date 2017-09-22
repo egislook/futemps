@@ -10,7 +10,7 @@
     }"
     onclick="{ opts.editMode && !contentEditable && handleSetEditable }"
     onblur="{ handleUpdateEditable }"
-    onkeyup="{ handleTextLength }"
+    onkeyup="{ handletempTextLength }"
     onmouseup="{ opts.editorEnabled && handleDisplayEditor }">Editable</div>
 
   <div ref="container" class={opts.class}>
@@ -20,28 +20,42 @@
   <a
     data-uneditable="true"
     ref="editor"
-    class="fs:90pc ps:ab p:10px_span br:2px_span c:white z:10 op:0.9 fux-trans fux-fadeIn"
+    class="dp:ib ps:ab p:10px br:5px-2px-0-5px c:white z:10 op:0.9 fux-trans fux-fadeIn fux-boxsh {'bg:prim': textIsValid, 'bg:grey200 c:grey': !textIsValid }"
     style={editorPos}>
-      <span if={false} class="m-l:3npx {'bg:prim': isValid, 'bg:err': !isValid }">
-        { textLength }
+      <span class="ps:ab t,l:0 fs:70pc fw:600 p:0-2px-1px-1px br:3px-0-50pc-0 fux-boxsh {'bg:white c:black300': textIsValid, 'bg:err c:white': !textIsValid }">
+        { getValidtempTextLength() }
       </span>
-      <span class="m-l:2npx fu-check dp:ib bg:prim c:white fux-boxsh fs:130pc" />
+      <span class="fs:130pc {'fu-check': textIsValid, 'fu-esc': !textIsValid}" />
   </a>
 
   <script>
-    const defaultEditorPos = { left: '50%', top: '-50%' };
+    const defaultEditorPos  = { left: '50%', top: '-50%' };
+    const defaultTextLimits = { min: 4, max: 520 };
     const self = Object.assign(this, {
-      contentEditable:  opts.contentEditable || true,
-      defaultClass:     opts.defaultClass || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black fux-trans',
-      activeClass:      opts.activeClass  || 'fux-boxsh',
-      tempText:         null,
-      onDone:           opts.onDone || ((value, id) => console.log('onEdit', value, id)),
+      contentEditable:  opts.contentEditable  || true,
+      defaultClass:     opts.defaultClass     || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black fux-trans',
+      activeClass:      opts.activeClass      || 'fux-boxsh',
+      onDone:           opts.onDone           || ((value, id) => console.log('onEdit', value, id)),
       placeholder:      'enter text',
-      textLength:       0,
+      tempText:         null,
+      tempTextLength:   0,
       editorPos:        defaultEditorPos,
       enterEditDone:    null,
       focusTimer:       null,
+      textLimits:       defaultTextLimits,
+      textIsValid:      null,
     });
+
+    this.getValidtempTextLength = () => {
+      if(this.textIsValid)
+        return this.tempTextLength;
+
+      if(this.tempTextLength < this.textLimits.min)
+        return this.textLimits.min - this.tempTextLength;
+
+      if(this.tempTextLength > this.textLimits.max)
+        return this.textLimits.max - this.tempTextLength;
+    }
 
     this.on('mount', () => {
 
@@ -105,10 +119,11 @@
       clearTimeout(this.focusTimer);
       e.target.contentEditable = 'plaintext-only';
       e.target.classList.add(...this.activeClass.split(' '));
-      const tempText = e.target.textContent.trim() || true;
+      const tempText = e.target.textContent.trim() || '';
       //this.editorPos = this.getEditorPosByCaret(e.target);
-      this.tempText = tempText;
-      this.textLength = tempText.length;
+      this.tempText     = tempText;
+      this.tempTextLength   = tempText.length;
+      this.textIsValid  = this.textLimits.min < this.tempTextLength && this.textLimits.max > this.tempTextLength;
   	}
 
     this.handleBeforeEditing = (e) => {
@@ -122,9 +137,11 @@
     }
 
     this.handleEditing = (e) => {
+      const tempTextLength = e.target.textContent.trim().length;
       this.update({
-        editorPos: this.getEditorPosByCaret(e.target),
-        textLength: e.target.textContent.trim().length,
+        tempTextLength,
+        editorPos:    this.getEditorPosByCaret(e.target),
+        textIsValid:  this.textLimits.min <= tempTextLength && this.textLimits.max >= tempTextLength,
       });
   	  // tag.isValid = tag.handleIsValid(text);
     }
@@ -133,12 +150,15 @@
       let text = e.target.innerText.trim();
       e.target.classList.remove(...this.activeClass.split(' '));
 
-      if(text !== this.tempText)
-        this.onDone(text, path);
+      if(!this.textIsValid)
+        e.target.innerText = this.tempText;
+      else{
+        if(text !== this.tempText)
+          this.onDone(text, path);
 
-      e.target.innerText = e.target.innerText;
-      //window.getSelection().removeAllRanges();
-
+        e.target.innerText = e.target.innerText;
+        //window.getSelection().removeAllRanges();
+      }
       this.focusTimer = setTimeout(
         () => this.update({ tempText: null, editorPos: defaultEditorPos }),
         100);
