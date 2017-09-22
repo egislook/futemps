@@ -1,10 +1,11 @@
 <elem-leaf>
   <div>
     <div class="dp:ib" draggable={true}
-      ondragstart={opts.onDragStart.bind(e, leaf)}
-      ondragover={opts.onDragOver.bind(e, leaf)}
+      ondragstart={opts.onDragStart && opts.onDragStart.bind(e, leaf)}
+      touchstart={opts.onDragStart && opts.onDragStart.bind(e, leaf)}
+      ondragover={opts.onDragOver && opts.onDragOver.bind(e, leaf)}
       ondragleave={opts.onDragLeave}
-      ondrop={opts.onDrop.bind(e, leaf)}>
+      ondrop={opts.onDrop && opts.onDrop.bind(e, leaf)}>
 
       <a if={leaf && leaf.id === 'ghost'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={leaf.id === 'ghost' && handleDeleteGhost} />
 
@@ -23,7 +24,10 @@
         cb-extras={opts.cbExtras || leaf.id}
         autofocus={opts.autofocus} />
 
-        <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px m-l:5npx" onclick={handleAddFieldGhost} />
+
+        <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px m-l:5npx ps:rl" onclick={handleAddFieldGhost}>
+          <span if={leaf && !childIsValue && !isExtended && child && child.length} class="ps:ab fs:60pc bg:grey400 fw:500 p:2px-3px t,r:3npx br:3px">{child.length}</span>
+        </a>
 
         <span if={ noChildren && leaf.id !== 'ghost' && !ghostLeaf }>
           <a class="fu-text_fields fs:70pc p:5px c:white bg:grey300 m-b:4px dp:ib m-t:2px" onclick={handleAddValueGhost} />
@@ -81,7 +85,7 @@
     </div>
 
     <div class="p-l:25px bd-l:1px-ds-grey200 m-l:5px" if={!childIsValue && isExtended}>
-      <a if={!leaf} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px m-l:5px" onclick={handleAddFieldGhost} />
+      <a if={!leaf} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px m-l:5npx" onclick={handleAddFieldGhost} />
       <elem-leaf
         if={ghostLeaf && ghostLeaf.type === 'field'}
         leaf={ghostLeaf}

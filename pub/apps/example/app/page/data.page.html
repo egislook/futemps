@@ -7,7 +7,7 @@
     <elem-text
       class="fs:140pc fw:600 p-tb:20px"
       text={ getValue('routes.data.meta.title') }
-      cb-extras={ getValue('routes.data.meta.description', 'id') }
+      cb-extras={ getValue('routes.data.meta.title', 'id') }
       on-edit={ handleEdit } />
 
     <elem-text
@@ -51,11 +51,18 @@
 
     this.movingLeaf = null;
     this.siblingLeaf = null;
+    this.touchTimeout = null;
 
     this.handleDragStart = (movingLeaf, e) => {
-      console.log('Drag Start', movingLeaf);
-      this.update({ movingLeaf });
-      return true;
+      if(e.type !== 'touchstart') dragStart.bind(this)();
+
+      this.touchTimeout = setTimeout(dragStart.bind(this), 1000);
+
+      function dragStart(){
+        this.update({ movingLeaf });
+        console.log('Drag Start', movingLeaf);
+        return true;
+      };
     }
 
     this.handleDragOver = (siblingLeaf, e) => {

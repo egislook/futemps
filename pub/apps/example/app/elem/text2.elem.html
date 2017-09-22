@@ -1,0 +1,153 @@
+<elem-text2>
+
+  <div
+    if={false}
+    placeholder="{ placeholder }"
+    contentEditable="{ opts.contentEditable || contentEditable }"
+    class="{ opts.class } {
+      'ws:pl ww:nm bd-l:sd-1px-ts fc-bd-c:prim fc-p-l:5px fux-trans bd-r-w:1px bd-c:ts fc-bg:white fc-c:black' : !opts.noBasicClass,
+      'c:err fc-bd-c:err' : !isValid,
+    }"
+    onclick="{ opts.editMode && !contentEditable && handleSetEditable }"
+    onblur="{ handleUpdateEditable }"
+    onkeyup="{ handleTextLength }"
+    onmouseup="{ opts.editorEnabled && handleDisplayEditor }">Editable</div>
+
+  <div ref="container" class={opts.class}>
+    <yield />
+  </div>
+
+  <a
+    data-uneditable="true"
+    ref="editor"
+    class="fs:90pc ps:ab p:10px_span br:2px_span c:white z:10 op:0.9 fux-trans fux-fadeIn"
+    style={editorPos}>
+      <span if={false} class="m-l:3npx {'bg:prim': isValid, 'bg:err': !isValid }">
+        { textLength }
+      </span>
+      <span class="m-l:2npx fu-check dp:ib bg:prim c:white fux-boxsh fs:130pc" />
+  </a>
+
+  <script>
+    const defaultEditorPos = { left: '50%', top: '-50%' };
+    const self = Object.assign(this, {
+      contentEditable:  opts.contentEditable || true,
+      defaultClass:     opts.defaultClass || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black fux-trans',
+      activeClass:      opts.activeClass  || 'fux-boxsh',
+      tempText:         null,
+      onDone:           opts.onDone || ((value, id) => console.log('onEdit', value, id)),
+      placeholder:      'enter text',
+      textLength:       0,
+      editorPos:        defaultEditorPos,
+      enterEditDone:    null,
+      focusTimer:       null,
+    });
+
+    this.on('mount', () => {
+
+      const container = this.refs.container;
+
+      for(let i in container.children){
+        let child = container.children[i];
+        if(typeof child !== 'object')
+          break;
+        if(child.dataset['uneditable'])
+          break;
+
+        let classList = this.defaultClass.split(' ');
+        child.classList.add(...classList);
+        child.contentEditable = 'plaintext-only';
+        child.spellcheck = false;
+        //child.onclick   = this.handleForceFocus.bind(this);
+        child.onclick   = this.handleClick.bind(this);
+        child.onfocus   = this.handleStartEditing.bind(this);//this.handleStartEditing.bind(this);
+        child.onkeyup   = this.handleEditing.bind(this);
+        child.onkeydown = this.handleBeforeEditing.bind(this);
+        child.onblur    = this.handleEndEditing.bind(this, child.dataset['path'] || child.dataset['id']);
+        //child.onclick = this.handleClick.bind(this);
+        !child.getAttribute('placeholder') && child.setAttribute('placeholder', this.placeholder);
+        container.children[i] = child;
+      }
+    })
+
+    this.handleForceFocus = (e) => {
+      e.target.contentEditable = 'plaintext-only';
+      e.target.focus();
+    }
+
+    this.getEditorPosByCaret = (elem) => {
+
+      // window.pageYOffset window.scrollY
+      const selection   = document.getSelection();
+      const bound       = elem.getBoundingClientRect();
+      const editorElem  = this.refs.editor;
+
+      let editorPos = {
+        left: (elem.offsetLeft + bound.width - editorElem.offsetWidth) + 'px',
+        //top:  elem.offsetTop + 20 + 'px',
+        top: bound.top + window.scrollY + 'px'
+      }
+
+      // if(!this.tempText)
+      //   return editorPos;
+
+      let oRange = selection.getRangeAt(0);
+      let oRect = oRange.getBoundingClientRect();
+      //console.log(oRange.offsetTop, oRect);
+      //bug of position when line is empty
+      editorPos.top = oRect.top
+        ? (oRect.top + window.scrollY - editorElem.offsetHeight) + 'px'
+        : this.editorPos.top;
+      return editorPos;
+    }
+
+    this.handleStartEditing = (e) => {
+      clearTimeout(this.focusTimer);
+      e.target.contentEditable = 'plaintext-only';
+      e.target.classList.add(...this.activeClass.split(' '));
+      const tempText = e.target.textContent.trim() || true;
+      //this.editorPos = this.getEditorPosByCaret(e.target);
+      this.tempText = tempText;
+      this.textLength = tempText.length;
+  	}
+
+    this.handleBeforeEditing = (e) => {
+      switch(e.keyCode){
+        case 27:
+          e.target.innerText = this.tempText;
+          return e.target.blur();
+        break;
+      }
+
+    }
+
+    this.handleEditing = (e) => {
+      this.update({
+        editorPos: this.getEditorPosByCaret(e.target),
+        textLength: e.target.textContent.trim().length,
+      });
+  	  // tag.isValid = tag.handleIsValid(text);
+    }
+
+    this.handleEndEditing = (path, e) => {
+      let text = e.target.innerText.trim();
+      e.target.classList.remove(...this.activeClass.split(' '));
+
+      if(text !== this.tempText)
+        this.onDone(text, path);
+
+      e.target.innerText = e.target.innerText;
+      //window.getSelection().removeAllRanges();
+
+      this.focusTimer = setTimeout(
+        () => this.update({ tempText: null, editorPos: defaultEditorPos }),
+        100);
+    }
+
+    this.handleClick = (e) => {
+      this.update({ editorPos: this.getEditorPosByCaret(e.target) });
+    }
+
+  </script>
+
+</elem-text2>

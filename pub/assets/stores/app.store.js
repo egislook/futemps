@@ -46,6 +46,7 @@ class appStore{
 
   handleEdit(value, id, cb){
     const self = this;
+    id = id && id.split('-').length !== 5 ? this.getValue(id, 'id') : id;
     console.log(value, id);
     window.fetch('/poinject/'+id, {
       headers: { 'Content-Type': 'application/json'},

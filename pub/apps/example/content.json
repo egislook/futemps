@@ -1,5 +1,12 @@
 {
+  "testing": {
+    "button": {
+      "title": "testing button"
+    },
+    "img": "/assets/files/file-1505602686608-10.jpg"
+  },
   "movable": {},
+  "test": "asdjasdsad",
   "experiment": {
     "field4": {
       "field42": {},
@@ -16,18 +23,18 @@
     "field1": {}
   },
   "gallery": {
+    "album3": {
+      "img": "/assets/files/file-1505600796703-02.jpg",
+      "title": "title for 3rd album"
+    },
     "album5": {
       "button": {
         "route": "data",
         "title": "Edit Data"
       },
       "description": "Build Flexible and beautiful web applications or sites\nin fashioned and quick way with Poinout.",
-      "title": "Meet Poinout,\nFlexible front-end toolkit",
-      "img": "/assets/files/file-1505600790874-01.jpg"
-    },
-    "album3": {
-      "img": "/assets/files/file-1505600796703-02.jpg",
-      "title": "title for 3rd album"
+      "title": "Meet Poinout,\nFlexible front-end toolkit\nasdasdasdsda\nasdasd",
+      "img": "/assets/files/file-1505915560774-egi%20sucks.png"
     },
     "album2": {
       "title": "Flowers here my friend and something a bit more\nSmall title huh? Edit works",
@@ -37,9 +44,6 @@
       "title": "sunset here my friend little bit modified\nnew line.",
       "img": "/assets/files/file-1505600806675-04.jpg"
     }
-  },
-  "testing": {
-    "img": "/assets/files/file-1505602686608-10.jpg"
   },
   "todo": "Feature: UI / UX upgrade for leaf movement\nFeature: leaf move to another leaf (change parent, ancestors, path of children)\nFeature: leaf changing position / sort\nFeature: Implement hidden children number\n\nFeature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nRefactor: elem-text to wrap-text. Wrapper works with yield. Editability.\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data \nFeature: make experimental todo\n---\nIdea: poinject parent value as variable $ref\nIdea: check router meta structure possibilities\n---\n(done) Feature: UI leaf extend / collapse\n(done) Bug: incorrect ancestors list is generated\n(done) Bug: leaf delete needs to remove all children by ancestors\n(done) Bug: leaf create ancestors are incorrect (too much)\n(done) Bug: leaf duplicate ancestors are empty\n(done) Bug: leaf duplicate path is incorrect. (undefined. in front)\n(done) Bug: editing leaf children path is not changing\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
   "text": "Note that this will simply add all attributes \nof obj2 to obj1 which might not be what you want if you still want to use the unmodified obj1. If you're using a framework that craps all over your prototypes then you have to get fancier with checks like hasOwnProperty, but that code will work for 99% of casessss.ss ggggssss",
@@ -80,7 +84,7 @@
       "title": "Data",
       "view": "page-data",
       "meta": {
-        "title": "Poinject tree editor",
+        "title": "Poinject tree editor testing",
         "description": "Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)\nEnabling and disabling editor fields"
       }
     },

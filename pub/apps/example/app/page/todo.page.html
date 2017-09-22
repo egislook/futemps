@@ -2,6 +2,19 @@
 
   <navigation routes={ content.routes } active={ route.name } />
 
+  <elem-text2 class="mxw:500px p-t:40px dp:flx fd:col" on-done={handleEdit}>
+    <a data-path="testing.button.title" class="p:15px-30px bg:prim c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px">
+      { parent.getValue('testing.button.title') }
+    </a>
+    <a data-path="testing.button.title" class="p:15px-30px bg:prim c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px">
+      { parent.getValue('testing.button.title') }
+    </a>
+    <h1 class="p:10px" data-path="routes.data.meta.title">
+      { parent.getValue('routes.data.meta.title') }
+    </h1>
+    <p class="p:10px">{ parent.getValue('routes.data.meta.description') }</p>
+  </elem-text2>
+
   <section class="mxw:800px p-rl:2pc">
 
     <elem-text
