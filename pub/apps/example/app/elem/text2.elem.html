@@ -2,16 +2,7 @@
 
   <div
     if={false}
-    placeholder="{ placeholder }"
-    contentEditable="{ opts.contentEditable || contentEditable }"
-    class="{ opts.class } {
-      'ws:pl ww:nm bd-l:sd-1px-ts fc-bd-c:prim fc-p-l:5px fux-trans bd-r-w:1px bd-c:ts fc-bg:white fc-c:black' : !opts.noBasicClass,
-      'c:err fc-bd-c:err' : !isValid,
-    }"
-    onclick="{ opts.editMode && !contentEditable && handleSetEditable }"
-    onblur="{ handleUpdateEditable }"
-    onkeyup="{ handletempTextLength }"
-    onmouseup="{ opts.editorEnabled && handleDisplayEditor }">Editable</div>
+    class="ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black fux-trans" />
 
   <div ref="container" class={opts.class}>
     <yield />
@@ -20,7 +11,7 @@
   <a
     data-uneditable="true"
     ref="editor"
-    class="dp:ib ps:ab p:10px br:5px-2px-0-5px c:white z:10 op:0.9 fux-trans fux-fadeIn fux-boxsh {'bg:prim': textIsValid, 'bg:grey200 c:grey': !textIsValid }"
+    class="dp:ib ps:ab p:10px br:5px-2px-0-5px c:white z:10 op:0.9 fux-trans m-t:1px fux-boxsh {'bg:prim': textIsValid, 'bg:grey200 c:grey': !textIsValid }"
     style={editorPos}>
       <span class="ps:ab t,l:0 fs:70pc fw:600 p:0-2px-1px-1px br:3px-0-50pc-0 fux-boxsh {'bg:white c:black300': textIsValid, 'bg:err c:white': !textIsValid }">
         { getValidtempTextLength() }
@@ -36,14 +27,16 @@
       defaultClass:     opts.defaultClass     || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black fux-trans',
       activeClass:      opts.activeClass      || 'fux-boxsh',
       onDone:           opts.onDone           || ((value, id) => console.log('onEdit', value, id)),
+      truncateFrom:     opts.truncateFrom     || 0,
       placeholder:      'enter text',
       tempText:         null,
+      tempTextList:     [],
       tempTextLength:   0,
       editorPos:        defaultEditorPos,
       enterEditDone:    null,
       focusTimer:       null,
       textLimits:       defaultTextLimits,
-      textIsValid:      null,
+      textIsValid:      true,
     });
 
     this.getValidtempTextLength = () => {
@@ -57,32 +50,20 @@
         return this.textLimits.max - this.tempTextLength;
     }
 
-    this.on('mount', () => {
+    this.truncateText = (text, truncateFrom) => {
+      text = !!truncateFrom && text.length > truncateFrom
+        ? `${text.substring(0, truncateFrom)} ...`
+        : text;
+      return text;
+    }
 
-      const container = this.refs.container;
+    this.validateText = (tempTextLength) => {
+      if(this.textIsValid)
+        return true;
 
-      for(let i in container.children){
-        let child = container.children[i];
-        if(typeof child !== 'object')
-          break;
-        if(child.dataset['uneditable'])
-          break;
-
-        let classList = this.defaultClass.split(' ');
-        child.classList.add(...classList);
-        child.contentEditable = 'plaintext-only';
-        child.spellcheck = false;
-        //child.onclick   = this.handleForceFocus.bind(this);
-        child.onclick   = this.handleClick.bind(this);
-        child.onfocus   = this.handleStartEditing.bind(this);//this.handleStartEditing.bind(this);
-        child.onkeyup   = this.handleEditing.bind(this);
-        child.onkeydown = this.handleBeforeEditing.bind(this);
-        child.onblur    = this.handleEndEditing.bind(this, child.dataset['path'] || child.dataset['id']);
-        //child.onclick = this.handleClick.bind(this);
-        !child.getAttribute('placeholder') && child.setAttribute('placeholder', this.placeholder);
-        container.children[i] = child;
-      }
-    })
+      tempTextLength = tempTextLength || this.tempTextLength;
+      return this.textLimits.min <= tempTextLength && this.textLimits.max >= tempTextLength
+    }
 
     this.handleForceFocus = (e) => {
       e.target.contentEditable = 'plaintext-only';
@@ -98,16 +79,11 @@
 
       let editorPos = {
         left: (elem.offsetLeft + bound.width - editorElem.offsetWidth) + 'px',
-        //top:  elem.offsetTop + 20 + 'px',
         top: bound.top + window.scrollY + 'px'
       }
 
-      // if(!this.tempText)
-      //   return editorPos;
-
       let oRange = selection.getRangeAt(0);
       let oRect = oRange.getBoundingClientRect();
-      //console.log(oRange.offsetTop, oRect);
       //bug of position when line is empty
       editorPos.top = oRect.top
         ? (oRect.top + window.scrollY - editorElem.offsetHeight) + 'px'
@@ -117,13 +93,15 @@
 
     this.handleStartEditing = (e) => {
       clearTimeout(this.focusTimer);
+      let childIndex = Array.prototype.indexOf.call(this.refs.container.children, e.target);
       e.target.contentEditable = 'plaintext-only';
       e.target.classList.add(...this.activeClass.split(' '));
-      const tempText = e.target.textContent.trim() || '';
-      //this.editorPos = this.getEditorPosByCaret(e.target);
-      this.tempText     = tempText;
+      const tempText = this.tempTextList[childIndex];
+      e.target.textContent = tempText;
+
+      this.tempText         = tempText;
       this.tempTextLength   = tempText.length;
-      this.textIsValid  = this.textLimits.min < this.tempTextLength && this.textLimits.max > this.tempTextLength;
+      this.textIsValid      = this.validateText();
   	}
 
     this.handleBeforeEditing = (e) => {
@@ -133,7 +111,6 @@
           return e.target.blur();
         break;
       }
-
     }
 
     this.handleEditing = (e) => {
@@ -141,9 +118,8 @@
       this.update({
         tempTextLength,
         editorPos:    this.getEditorPosByCaret(e.target),
-        textIsValid:  this.textLimits.min <= tempTextLength && this.textLimits.max >= tempTextLength,
+        textIsValid:  this.validateText(tempTextLength),
       });
-  	  // tag.isValid = tag.handleIsValid(text);
     }
 
     this.handleEndEditing = (path, e) => {
@@ -156,8 +132,8 @@
         if(text !== this.tempText)
           this.onDone(text, path);
 
-        e.target.innerText = e.target.innerText;
-        //window.getSelection().removeAllRanges();
+        e.target.innerText = this.truncateText(e.target.innerText, this.truncateFrom);
+        window.getSelection().removeAllRanges();
       }
       this.focusTimer = setTimeout(
         () => this.update({ tempText: null, editorPos: defaultEditorPos }),
@@ -167,6 +143,53 @@
     this.handleClick = (e) => {
       this.update({ editorPos: this.getEditorPosByCaret(e.target) });
     }
+
+    this.on('mount', () => {
+
+      const container = this.refs.container;
+
+      for(let i in container.children){
+        let child = container.children[i];
+        if(typeof child !== 'object')
+          break;
+        if(child.dataset['uneditable'])
+          break;
+
+        this.tempTextList[i] = child.textContent.trim();
+        child.classList.add(...this.defaultClass.split(' '));
+        child.textContent     = this.truncateText(child.textContent.trim(), this.truncateFrom);
+        child.contentEditable = 'plaintext-only';
+        child.spellcheck      = false;
+
+        child.onclick   = this.handleClick.bind(this);
+        child.onfocus   = this.handleStartEditing.bind(this);//this.handleStartEditing.bind(this);
+        child.onkeyup   = this.handleEditing.bind(this);
+        child.onkeydown = this.handleBeforeEditing.bind(this);
+        child.onblur    = this.handleEndEditing.bind(this, child.dataset['path'] || child.dataset['id']);
+
+        !child.getAttribute('placeholder') && child.setAttribute('placeholder', this.placeholder);
+        container.children[i] = child;
+      }
+    })
+
+    this.on('update', () => {
+      if(this.truncateFrom !== this.opts.truncateFrom){
+        const container = this.refs.container;
+
+        for(let i in container.children){
+          let child = container.children[i];
+          if(typeof child !== 'object')
+            break;
+          if(child.dataset['uneditable'])
+            break;
+
+          child.textContent = this.truncateText(this.tempTextList[i], this.opts.truncateFrom);
+          container.children[i] = child;
+          this.truncateFrom = this.opts.truncateFrom;
+        }
+      }
+
+    })
 
   </script>
 

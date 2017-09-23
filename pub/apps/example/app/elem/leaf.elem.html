@@ -48,14 +48,19 @@
           cb-extras={ghostLeaf}
           on-edit={parent.opts.onCreate} />
 
-        <elem-text2 class="dp:ib" on-done={opts.onEdit} if={false && childIsValue && !childIsImage}>
-          <div data-id={child && child.id} class="p:2px-5px-2px-0">
-            {child && child.value}
-          </div>
+        <elem-text2
+          if={childIsValue && !childIsImage}
+          class="dp:ib va:t mxh:100px of:auto"
+          placeholder={opts.valuePlaceholder}
+          truncate-from={valueIsExtendable && !valueIsExtended && truncateFrom}
+          on-done={opts.onEdit}>
+            <p data-id={parent.child && parent.child.id} class="p:2px-5px-2px-0 fc-p-l:5px">
+              {parent.child && parent.child.value}
+            </p>
         </elem-text2>
 
         <elem-text
-          if={childIsValue && !childIsImage}
+          if={false && childIsValue && !childIsImage}
           class="dp:ib va:t p:2px-5px-2px-0 fc-bg:white"
           text={child && child.value}
           truncate-from={valueIsExtendable && !valueIsExtended && truncateFrom}
@@ -138,7 +143,7 @@
       isExtended: null,
       valueIsExtended: null,
       valueIsExtendable: null,
-      truncateFrom: 80,
+      truncateFrom: 150,
       dragStarted: null,
       dragTimeout: null,
     });
