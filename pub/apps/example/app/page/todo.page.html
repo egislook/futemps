@@ -2,6 +2,8 @@
 
   <navigation routes={ content.routes } active={ route.name } />
 
+  <elem-editor store={appStore} />
+
   <section class="mxw:800px p-rl:2pc">
 
     <elem-text
@@ -20,12 +22,9 @@
 
   </section>
 
-  <elem-text
-    class="ta:l mxw:800px p:10px-2pc"
-    max={5000}
-    text={ getValue('todo') }
-    cb-extras={ getValue('todo', 'id') }
-    on-edit={ handleEdit } />
+  <elem-text3 path="todo" max={5000}>
+    <p class="ta:l mxw:800px p:10px-2pc">{text}</p>
+  </elem-text3>
 
   <script>
     this.mixin('store');

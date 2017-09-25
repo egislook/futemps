@@ -13,8 +13,9 @@ class appStore{
     this.poinject = opts.poinject;
 
     if(this.trigger){
-      updated && updated.path && this.trigger(updated.path);
-      !updated && this.trigger('storeUpdated');
+      if(!updated) return this.trigger('storeUpdated');
+      updated.path && this.trigger(updated.path);
+      updated.id   && this.trigger(updated.id);
     }
   }
 
@@ -52,9 +53,9 @@ class appStore{
 
   handleEdit(value, id, cb){
     const self = this;
-    const path = id && id.split('-').length !== 5 && id;
+    let path = id && id.split('-').length !== 5 && id;
     id = path ? this.getValue(id, 'id') : id;
-    console.log(value, id);
+    path = !path ? this.getLeaf(id) : path;
     window.fetch('/poinject/'+id, {
       headers: { 'Content-Type': 'application/json'},
       method: 'PATCH',

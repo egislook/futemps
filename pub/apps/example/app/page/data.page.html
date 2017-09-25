@@ -2,28 +2,17 @@
 
   <navigation routes={ content.routes } active={ route.name } />
 
+  <elem-editor store={appStore} />
+
   <section class="mxw:800px p-rl:2pc">
 
-    <elem-text
-      class="fs:140pc fw:600 p-tb:20px"
-      text={ getValue('routes.data.meta.title') }
-      cb-extras={ getValue('routes.data.meta.title', 'id') }
-      on-edit={ handleEdit } />
+    <elem-text3 path="routes.data.meta.title">
+      <h1 class="fs:200pc fw:600 p-tb:10px m-t:20px" data-path="routes.data.meta.description">{ text }</h1>
+    </elem-text3>
 
-    <elem-text2
-      class="p-tb:20px"
-      on-done={ handleEdit }>
-        <p data-path="routes.data.meta.description">
-          { parent.getValue('routes.data.meta.description') }
-        </p>
-    </elem-text2>
-
-    <elem-text
-      class="p-tb:20px"
-      max={5000}
-      text={ getValue('routes.data.meta.description') }
-      cb-extras={ getValue('routes.data.meta.description', 'id') }
-      on-edit={ handleEdit } />
+    <elem-text3 path="routes.data.meta.description">
+      <p class="p:20px" data-path="routes.data.meta.description">{ text }</p>
+    </elem-text3>
 
   </section>
 
