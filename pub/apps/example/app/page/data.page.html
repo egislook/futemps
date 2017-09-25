@@ -10,6 +10,14 @@
       cb-extras={ getValue('routes.data.meta.title', 'id') }
       on-edit={ handleEdit } />
 
+    <elem-text2
+      class="p-tb:20px"
+      on-done={ handleEdit }>
+        <p data-path="routes.data.meta.description">
+          { parent.getValue('routes.data.meta.description') }
+        </p>
+    </elem-text2>
+
     <elem-text
       class="p-tb:20px"
       max={5000}

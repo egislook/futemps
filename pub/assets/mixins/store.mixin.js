@@ -7,8 +7,6 @@ function storeMixin(stores){
       this.content  = this.appStore.content;
       this.route    = this.appStore.route;
 
-      this.extended = [];
-
       this.getValue         = this.appStore.getValue.bind(this.appStore);
       this.getActiveRoute   = this.appStore.getActiveRoute.bind(this.appStore);
 
@@ -25,6 +23,8 @@ function storeMixin(stores){
           poinject: self.appStore.poinject,
           content: self.appStore.content
         }));
+
+      this.extended = [];
 
       this.on('extend', (opts = { id: '', onlyOn: false }) => {
 

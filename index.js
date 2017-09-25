@@ -17,14 +17,16 @@ app.get('/favicon.ico',     (req, res) => res.status(204));
 
 
 
-const appStore  = exriothing.cleantRequire(`${cfg.storesPath}/app.store.js`);
+const appStore    = exriothing.cleantRequire(`${cfg.storesPath}/app.store.js`);
 
-const storeMixin = exriothing.cleantRequire(`${cfg.mixinsPath}/store.mixin.js`);
+const storeMixin  = exriothing.cleantRequire(`${cfg.mixinsPath}/store.mixin.js`);
+const tagMixin    = exriothing.cleantRequire(`${cfg.mixinsPath}/tag.mixin.js`);
 
 
 const stores = {}, actions = {}, mixins = {};
 
 mixins.store = storeMixin(stores);
+mixins.tag   = tagMixin(stores);
 
 /** actions */
 actions.initRouter = () => {

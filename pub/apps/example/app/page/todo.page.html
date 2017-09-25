@@ -2,35 +2,6 @@
 
   <navigation routes={ content.routes } active={ route.name } />
 
-  <elem-text2 class="mxw:500px p-t:40px" on-done={handleEdit}>
-    <a data-path="testing.button.title" class="p:15px-30px bg:pink c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px"></a>
-    <a data-path="testing.button.title" class="p:15px-30px bg:teal c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px">
-      { parent.getValue('testing.button.title') }
-    </a>
-    <a data-path="testing.button.title" class="p:15px-30px bg:sec c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px">
-      { parent.getValue('testing.button.title') }
-    </a>
-    <a data-path="testing.button.title" class="p:15px-30px bg:prim c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px">
-      { parent.getValue('testing.button.title') }
-    </a>
-    <h1 class="p:10px" data-path="routes.data.meta.title">
-      { parent.getValue('routes.data.meta.title') }
-    </h1>
-    <p class="p:10px">{ parent.getValue('routes.data.meta.description') }</p>
-  </elem-text2>
-
-  <elem-text2 class="dp:ib" on-done={handleEdit}>
-    <span data-path="testing.text">
-      { parent.getValue('testing.text') }
-    </span>
-  </elem-text2>
-
-  <elem-text2 class="dp:ib" on-done={handleEdit}>
-    <span data-path="testing.text">
-      { parent.getValue('testing.text') }
-    </span>
-  </elem-text2>
-
   <section class="mxw:800px p-rl:2pc">
 
     <elem-text
@@ -48,8 +19,6 @@
       on-edit={ handleEdit } />
 
   </section>
-
-  <comp-upload />
 
   <elem-text
     class="ta:l mxw:800px p:10px-2pc"

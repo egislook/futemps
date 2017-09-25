@@ -49,7 +49,7 @@
           on-edit={parent.opts.onCreate} />
 
         <elem-text2
-          if={childIsValue && !childIsImage}
+          if={false && childIsValue && !childIsImage}
           class="dp:ib va:t mxh:100px of:auto"
           placeholder={opts.valuePlaceholder}
           truncate-from={valueIsExtendable && !valueIsExtended && truncateFrom}
@@ -58,6 +58,13 @@
               {parent.child && parent.child.value}
             </p>
         </elem-text2>
+
+        <elem-text3
+          if={childIsValue && !childIsImage}
+          id={child && child.id}
+          truncate={valueIsExtendable && !valueIsExtended && truncateFrom}>
+            <p class="dp:ib va:t mxh:100px of:auto p:2px-5px-2px-0 fc-p-l:5px">{text}</p>
+        </elem-text3>
 
         <elem-text
           if={false && childIsValue && !childIsImage}

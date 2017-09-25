@@ -11,7 +11,7 @@
       <a each="{ route, name in opts.routes }" if="{ !route.hide && route.name !== 'main' }"
         class={
           'dp:bk smx-m:0 tr:uc fs:80pc fw:600 ls:1px p:15px-20px smx-p-tb:5px smx-bd-b-w:1px bd-c:sec700 flx:1': true,
-          'bg:sec300 c:white': route.name == parent.opts.active
+          'bg:sec c:white': route.name == parent.opts.active
         }
         href="{ route.link }"
         target="{ route.target && '_blank' }">{ route.title }</a>

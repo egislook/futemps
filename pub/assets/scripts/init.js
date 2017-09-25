@@ -1,6 +1,7 @@
 const stores = {}, actions = {}, mixins = {};
 
-mixins.store = storeMixin(stores);
+mixins.store  = storeMixin(stores);
+mixins.tag    = tagMixin(stores);
 
 actions.tagRoute = (col, act, id) => {
   const store = stores.appStore;

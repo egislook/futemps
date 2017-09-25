@@ -20,6 +20,8 @@
   </a>
 
   <script>
+    const test = false;
+    test && console.time('text2 execute');
     const defaultEditorPos  = { left: '50%', top: '-50%' };
     const defaultTextLimits = { min: 4, max: 520 };
     const self = Object.assign(this, {
@@ -28,6 +30,7 @@
       activeClass:      opts.activeClass      || 'fux-boxsh',
       onDone:           opts.onDone           || ((value, id) => console.log('onEdit', value, id)),
       truncateFrom:     opts.truncateFrom     || 0,
+      textIsTruncated:  null,
       placeholder:      'enter text',
       tempText:         null,
       tempTextList:     [],
@@ -51,10 +54,8 @@
     }
 
     this.truncateText = (text, truncateFrom) => {
-      text = !!truncateFrom && text.length > truncateFrom
-        ? `${text.substring(0, truncateFrom)} ...`
-        : text;
-      return text;
+      this.textIsTruncated = !!truncateFrom && text.length > truncateFrom;
+      return this.textIsTruncated ? `${text.substring(0, truncateFrom)} ...` : text;
     }
 
     this.validateText = (tempTextLength) => {
@@ -97,11 +98,12 @@
       e.target.contentEditable = 'plaintext-only';
       e.target.classList.add(...this.activeClass.split(' '));
       const tempText = this.tempTextList[childIndex];
-      e.target.textContent = tempText;
+      e.target.innerText = tempText;
 
       this.tempText         = tempText;
       this.tempTextLength   = tempText.length;
       this.textIsValid      = this.validateText();
+      this.textIsTruncated  = null;
   	}
 
     this.handleBeforeEditing = (e) => {
@@ -114,7 +116,7 @@
     }
 
     this.handleEditing = (e) => {
-      const tempTextLength = e.target.textContent.trim().length;
+      const tempTextLength = e.target.innerText.trim().length;
       this.update({
         tempTextLength,
         editorPos:    this.getEditorPosByCaret(e.target),
@@ -132,11 +134,12 @@
         if(text !== this.tempText)
           this.onDone(text, path);
 
-        e.target.innerText = this.truncateText(e.target.innerText, this.truncateFrom);
+        this.tempText = null;
+        //e.target.innerText = this.truncateText(e.target.innerText, this.truncateFrom);
         window.getSelection().removeAllRanges();
       }
       this.focusTimer = setTimeout(
-        () => this.update({ tempText: null, editorPos: defaultEditorPos }),
+        () => this.update({ editorPos: defaultEditorPos }),
         100);
     }
 
@@ -145,7 +148,7 @@
     }
 
     this.on('mount', () => {
-
+      test && console.time('text2 mount');
       const container = this.refs.container;
 
       for(let i in container.children){
@@ -157,7 +160,7 @@
 
         this.tempTextList[i] = child.textContent.trim();
         child.classList.add(...this.defaultClass.split(' '));
-        child.textContent     = this.truncateText(child.textContent.trim(), this.truncateFrom);
+        child.innerText       = this.truncateText(child.innerText.trim(), this.truncateFrom);
         child.contentEditable = 'plaintext-only';
         child.spellcheck      = false;
 
@@ -170,27 +173,65 @@
         !child.getAttribute('placeholder') && child.setAttribute('placeholder', this.placeholder);
         container.children[i] = child;
       }
+
+      test && console.timeEnd('text2 mount');
     })
 
-    this.on('update', () => {
-      if(this.truncateFrom !== this.opts.truncateFrom){
-        const container = this.refs.container;
+    // this.on('update', (opts) => {
+    //
+    //   const container = this.refs.container;
+    //   for(let i in container.children){
+    //     let child = container.children[i];
+    //     if(typeof child !== 'object')
+    //       break;
+    //     if(child.dataset['uneditable'])
+    //       break;
+    //
+    //     //console.log(this.tempTextList[i] !== child.innerText, child.innerText, this.tempTextList[i])
+    //     if(this.truncateFrom !== this.opts.truncateFrom){
+    //       child.innerText = this.truncateText(this.tempTextList[i], this.opts.truncateFrom);
+    //       this.truncateFrom = this.opts.truncateFrom;
+    //       container.children[i] = child;
+    //     } else if(child.innerText !== this.tempTextList[i]){
+    //
+    //       this.tempTextList[i] = child.innerText;
+    //     }
+    //   }
+    //
+    //   console.log('update', this);
+    //
+    // })
 
-        for(let i in container.children){
-          let child = container.children[i];
-          if(typeof child !== 'object')
-            break;
-          if(child.dataset['uneditable'])
-            break;
 
-          child.textContent = this.truncateText(this.tempTextList[i], this.opts.truncateFrom);
-          container.children[i] = child;
+    this.on('updated', () => {
+      const container = this.refs.container;
+      for(let i in container.children){
+        let child = container.children[i];
+        if(typeof child !== 'object')
+          break;
+        if(child.dataset['uneditable'])
+          break;
+
+
+        if(this.truncateFrom !== this.opts.truncateFrom){
+          child.innerText = this.truncateText(this.tempTextList[i], this.opts.truncateFrom);
           this.truncateFrom = this.opts.truncateFrom;
+          container.children[i] = child;
         }
-      }
 
+        //console.log(this.tempTextList[i] !== child.innerText, child.innerText, this.tempTextList[i])
+        // if(this.truncateFrom !== this.opts.truncateFrom){
+        //   child.innerText = this.truncateText(this.tempTextList[i], this.opts.truncateFrom);
+        //   this.truncateFrom = this.opts.truncateFrom;
+        //   container.children[i] = child;
+        // } else if(child.innerText !== this.tempTextList[i]){
+        //
+        //   this.tempTextList[i] = child.innerText;
+        // }
+      }
     })
 
+    test && console.timeEnd('text2 execute');
   </script>
 
 </elem-text2>

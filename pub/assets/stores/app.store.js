@@ -4,12 +4,18 @@ class appStore{
     this.content = opts.content;
     this.poinject = opts.poinject;
     this.route = null;
+
+    //this.on('editor', this.setEditor);
   }
 
-  setOpts(opts){
+  setOpts(opts, updated){
     this.content = opts.content;
     this.poinject = opts.poinject;
-    this.trigger && this.trigger('storeUpdated');
+
+    if(this.trigger){
+      updated && updated.path && this.trigger(updated.path);
+      !updated && this.trigger('storeUpdated');
+    }
   }
 
   getOpts(){
@@ -46,7 +52,8 @@ class appStore{
 
   handleEdit(value, id, cb){
     const self = this;
-    id = id && id.split('-').length !== 5 ? this.getValue(id, 'id') : id;
+    const path = id && id.split('-').length !== 5 && id;
+    id = path ? this.getValue(id, 'id') : id;
     console.log(value, id);
     window.fetch('/poinject/'+id, {
       headers: { 'Content-Type': 'application/json'},
@@ -54,7 +61,7 @@ class appStore{
       body: JSON.stringify({ value })
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts);
+        self.setOpts(json.opts, { path, id });
         cb && cb();
         console.log(json);
       });

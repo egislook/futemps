@@ -1,0 +1,87 @@
+<elem-editor>
+  <a
+    ref="editor"
+    class="dp:ib ps:ab p:10px br:5px-2px-0-5px c:white z:10 op:0.9 fux-trans m-t:1px fux-boxsh {'bg:prim': textIsValid, 'bg:grey200 c:grey': !textIsValid }"
+    style={editorPos}>
+      <span class="ps:ab t,l:0 fs:70pc fw:600 p:0-2px-1px-1px br:3px-0-50pc-0 fux-boxsh {'bg:white c:black300': textIsValid, 'bg:err c:white': !textIsValid }">
+        { getValidTextLength() }
+      </span>
+      <span class="fs:130pc {'fu-check': textIsValid, 'fu-esc': !textIsValid}" />
+  </a>
+
+  <script>
+    const tag = this;
+    const defaultEditorPos  = { left: '50%', top: '-50%' };
+
+
+    tag.store         = opts.store;
+    tag.editorPos     = opts.editorPos    || defaultEditorPos;
+    tag.textIsValid   = opts.textIsValid  || true;
+    tag.onDone        = opts.onDone       || ((e) => console.log('onDone', e.target));
+    tag.onCancel      = opts.onCancel     || ((e) => console.log('onCancel', e.target));
+    tag.textLength    = opts.textLength   || 100;
+    tag.textLimits    = opts.textLimits   || { min: 2, max: 300 };
+    tag.textIsValid   = opts.textIsValid  || true;
+
+    tag.opts.elemPos      = opts.elemPos      || null;
+    tag._timer            = null;
+
+
+    tag.getValidTextLength = getValidTextLength;
+
+    tag.on('update', () => {
+      tag.editorPos   = opts.elemPos ? getEditorPosByCaret(opts.elemPos) : defaultEditorPos;
+      tag.textIsValid = opts.textIsValid;
+      tag.textLimits  = opts.textLimits;
+      tag.textLength  = opts.textLength;
+      console.log('update editor', opts);
+    })
+
+    tag.store && tag.store.on('editor', setOpts);
+
+    function setOpts(opts = { elemPos: null }){
+      tag.opts = Object.assign(tag.opts, opts);
+
+      if(opts.elemPos){
+        clearTimeout(tag._timer);
+        return tag.update();
+      }
+      //delay for quick position change
+      tag._timer = setTimeout(tag.update, 250);
+    }
+
+    function getValidTextLength(){
+      if(tag.textIsValid)
+        return tag.textLength;
+
+      if(tag.textLength < tag.textLimits.min)
+        return tag.textLimits.min - tag.textLength;
+
+      if(tag.textLength > tag.textLimits.max)
+        return tag.textLimits.max - tag.textLength;
+    }
+
+    function getEditorPosByCaret(elemPos){
+      // window.pageYOffset window.scrollY
+      //const bound       = elem.getBoundingClientRect();
+      const selection   = document.getSelection();
+      const editorElem  = tag.refs.editor;
+
+      let editorPos = {
+        left: (window.scrollX + elemPos.left + elemPos.width - editorElem.offsetWidth) + 'px',
+        top: elemPos.top + window.scrollY + 'px'
+      }
+
+      let oRange = selection.getRangeAt(0);
+      let oRect = oRange.getBoundingClientRect();
+      //bug of position when line is empty
+      editorPos.top = oRect.top
+        ? (oRect.top + window.scrollY - editorElem.offsetHeight) + 'px'
+        : tag.editorPos.top;
+
+      //tag.update({ editorPos });
+      return editorPos;
+    }
+
+  </script>
+</elem-editor>

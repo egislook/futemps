@@ -1,0 +1,147 @@
+<elem-text3>
+
+  <div
+    if={false}
+    class="ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fux-trans bg:white-! c:black-! bd-c:black-! bd-w:1px"></div>
+
+  <yield />
+
+  <script>
+    this.mixin('tag');
+    const debug = false;
+    const tag = this;
+
+    tag._textIsTruncated = null;
+    tag._elemPos         = null;
+    tag.textIsValid      = null;
+    tag.getValue         = opts.getValue        || ((path) => console.log('getValue', path));
+    tag.handleEdit       = opts.handleEdit      || ((value, path) => console.log('handleEdit', value, path));
+    tag.path             = opts.path            || null;
+    tag.id               = opts.id              || null;
+    tag.text             = opts.text            || '';
+    tag.class            = opts.class           || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fux-trans';
+    tag.activeClass      = opts.activeClass     || 'fux-boxsh bg:white-! c:black-! fux-scale';
+    tag.truncate         = opts.truncate        || 200;
+    tag.placeholder      = opts.placeholder     || 'enter text';
+    tag.contenteditable  = opts.contenteditable || 'plaintext-only';
+    tag.textLimits       = opts.textLimits      || { min: 2, max: 500 };
+    tag.validateText     = opts.validateText    || validateText;
+
+    setTextValue(true);
+    tag.on('mount', handleMount);
+    tag.on('update', handleUpdate);
+    tag.store.on(tag.opts.path, setTextValue);
+    tag.truncateText = truncateText;
+
+
+    /** METHODS */
+    function setTextValue(noUpdate){
+      console.log(tag.opts);
+      tag.text = tag.getValue(tag.opts.path || tag.opts.id);
+      if(noUpdate)
+        return;
+
+      tag.update({ text: tag.text });
+
+      const elem = tag.root.lastChild;
+      elem.classList.add(...tag.activeClass.split(' '));
+      setTimeout(
+        () => elem.classList.remove(...tag.activeClass.split(' '))
+        , 300
+      )
+    }
+
+    function validateText(text){
+      if(this.textIsValid)
+        return true;
+
+      return tag.textLimits.min <= text.length && tag.textLimits.max >= text.length
+    }
+
+    function handleMount(){
+      if(!this.root.children) return;
+      const elem = this.root.lastChild;
+
+      elem.classList.add(...tag.class.split(' '));
+      elem.contentEditable = tag.contenteditable;
+      elem.spellcheck      = false;
+
+      elem.onclick    = handleClickAndKeyUp;
+      elem.onfocus    = handleFocus;
+      elem.onkeyup    = handleClickAndKeyUp;
+      elem.onkeydown  = handleKeyDown;
+      elem.onblur     = handleBlur;
+
+      !elem.getAttribute('placeholder') && elem.setAttribute('placeholder', tag.placeholder);
+    }
+
+    function handleUpdate(){
+      const elem = tag.root.lastChild;
+      elem.classList.add('bd-c:black-!');
+      console.log('update text3');
+
+      setTimeout(
+        () => elem.classList.remove('bd-c:black-!'),
+        300)
+    }
+
+    function handleClickAndKeyUp(e){
+      let text = e.target.innerText.trim();
+      tag.store.trigger('editor', {
+        elemPos:      e.target.getBoundingClientRect(),
+        textLength:   text.length,
+        textLimits:   tag.textLimits,
+        textIsValid:  tag.validateText(text)
+      });
+      //tag.update({ _elemPos: e.target.getBoundingClientRect() });
+    }
+
+    function handleFocus(e){
+      e.target.classList.add(...tag.activeClass.split(' '));
+      if(e.target.innerText !== tag.text)
+        e.target.innerText = tag.text;
+    }
+
+    function handleKeyDown(e){
+      switch(e.keyCode){
+        case 27:
+          e.target.innerText = tag.text;
+          return e.target.blur();
+        break;
+      }
+    }
+
+    function handleBlur(e){
+      const text = e.target.innerText.trim();
+      e.target.classList.remove(...tag.activeClass.split(' '));
+
+      if(text !== tag.text && tag.validateText(text))
+        tag.handleEdit(text, tag.path || tag.id);
+
+      if(!tag.validateText(text)){
+        e.target.innerText = tag.text;
+      }
+
+      if(tag._textIsTruncated)
+        e.target.innerText = tag.truncateText() || tag.text;
+
+      tag.store.trigger('editor');
+      //tag.update({ _elemPos: null });
+
+    }
+
+    function truncateText(text, truncate){
+      text      = text     || tag.text;
+      truncate  = truncate || tag.truncate;
+
+      tag._textIsTruncated = !!truncate && text.length > truncate;
+      return tag._textIsTruncated ? `${text.substring(0, truncate)} ...` : text;
+    }
+
+  </script>
+
+  <style>
+    .fux-scale{ transform: scale(1.05) }
+  </style>
+
+</elem-text3>

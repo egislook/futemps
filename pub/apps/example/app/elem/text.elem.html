@@ -29,6 +29,9 @@
   </div>
 
   <script>
+    const test = false;
+    test && console.time('elem-text execute');
+    test && console.time('elem-text mount');
     //if(opts && opts.opts.SERVER) return;
     // opts
     this.opts.editMode = this.opts.editMode || true;
@@ -63,7 +66,10 @@
 
     // Methods ---------
 
-    this.on('mount', () => tag.opts.autofocus && tag.refs.tag.focus() );
+    this.on('mount', () => {
+      tag.opts.autofocus && tag.refs.tag.focus();
+      test && console.timeEnd('elem-text mount');
+    });
 
     this.handleSetEditable = (e) => {
       this.contentEditable = 'plaintext-only';
@@ -124,7 +130,7 @@
       onError:        this.opts.onError || ((text, size, cbExtras) => console.log('onError', text, size, cbExtras)),
       onEdit:         this.opts.onEdit || ((text, cbExtras) => console.log('onEdit', text, cbExtras)),
     };*/
-
+    test && console.timeEnd('elem-text execute')
   </script>
 
   <style>

@@ -1,0 +1,125 @@
+<page-sandbox>
+
+  <navigation routes={ content.routes } active={ route.name } />
+
+  <elem-editor store={appStore} />
+
+  <h1 class="c:grey300 fw:400 m-tb:10px">elem-text3 editable text element experiment</h1>
+  <section class="bd-t:2px-ds-grey200 p:10px m-b:30px">
+
+    <elem-text3 path="testing.button.title">
+      <a
+        class="p:15px-30px bg:teal c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px"
+        contenteditable={ contenteditable }
+        placeholder={ placeholder }>{ text }</a>
+    </elem-text3>
+
+    <elem-text3 path="testing.button.title">
+      <a
+        class="p:15px-30px bg:pink c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px"
+        contenteditable={ contenteditable }
+        placeholder={ placeholder }>{ text }</a>
+    </elem-text3>
+
+    <elem-text3 path="routes.sandbox.meta.description">
+      <p
+        class="p:10px mxw:800px"
+        contenteditable={ contenteditable }
+        placeholder={ placeholder } >{ text }</p>
+    </elem-text3>
+
+    <elem-text3 path="routes.sandbox.meta.description">
+      <p
+        class="p:10px mxw:800px dp:ib"
+        contenteditable={ contenteditable }
+        placeholder={ placeholder } >{ truncateText() }</p>
+    </elem-text3>
+
+  </section>
+
+  <h1 class="c:grey300 fw:400 m-tb:10px">wrap-text editable text wrapper experiment</h1>
+  <section class="bd-t:2px-ds-grey200 p:10px m-b:30px">
+
+    <wrap-text
+      path="routes.sandbox.meta.title"
+      text={getValue('routes.sandbox.meta.title')}>
+        <h1 class="p:10px" onclick={opts.onClick} onfocus={opts.onFocus}>{ opts.truncateText() }</h1>
+    </wrap-text>
+
+    <wrap-text
+      path="routes.sandbox.meta.description"
+      get-value={getValue}
+      on-save={handleEdit}>
+        <p
+          class="p:10px mxw:800px {opts.class}"
+          contenteditable="plaintext-only"
+          onclick={opts.handleClick}
+          onfocus={opts.handleFocus} >
+            { opts.truncateText() }
+        </p>
+    </wrap-text>
+
+    <wrap-text
+      path="routes.sandbox.meta.description"
+      text={getValue('routes.sandbox.meta.description')}
+      on-save={handleEdit}>
+        <p
+          class="p:10px mxw:800px dp:ib {opts.class}"
+          contenteditable="plaintext-only"
+          onclick={opts.handleClick}
+          onfocus={opts.handleFocus}
+          placeholder={opts.placeholder} >{ opts.truncateText() }</p>
+    </wrap-text>
+
+    <wrap-text>
+      <a data-path="testing.button.title" class="p:15px-30px bg:teal c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px">
+        { parent.getValue('testing.button.title') }
+      </a>
+    </wrap-text>
+
+  </section>
+
+  <h1 class="c:grey300 fw:400 m-tb:10px">elem-text2 editable text element experiment</h1>
+  <section class="bd-t:2px-ds-grey200 p:10px m-b:30px">
+
+    <elem-text2 class="mxw:500px p-t:40px" on-done={handleEdit} truncate-from={50}>
+      <a data-path="testing.button.title" class="p:15px-30px bg:pink c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px"></a>
+      <a data-path="testing.button.title" class="p:15px-30px bg:teal c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px">
+        { parent.getValue('testing.button.title') }
+      </a>
+      <a data-path="testing.button.title" class="p:15px-30px bg:sec c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px">
+        { parent.getValue('testing.button.title') }
+      </a>
+      <a data-path="testing.button.title" class="p:15px-30px bg:prim c:white br:3px crs:pt fux-boxsh fw:500 mnw:150px m-tb:5px">
+        { parent.getValue('testing.button.title') }
+      </a>
+      <h1 class="p:10px" data-path="routes.sandbox.meta.title">
+        { parent.getValue('routes.sandbox.meta.title') }
+      </h1>
+      <p class="p:10px" data-path="routes.sandbox.meta.description">{ parent.getValue('routes.sandbox.meta.description') }</p>
+    </elem-text2>
+
+    <elem-text2 class="dp:ib" on-done={handleEdit} truncate-from={50}>
+      <span data-path="testing.text">
+        { parent.getValue('testing.text') }
+      </span>
+    </elem-text2>
+
+    <elem-text2 class="dp:ib" on-done={handleEdit} truncate-from={50}>
+      <span data-path="testing.text">
+        { parent.getValue('testing.text') }
+      </span>
+    </elem-text2>
+  </section>
+
+  <h1 class="c:grey300 fw:400 m-tb:10px">Upload component experiment</h1>
+  <section class="bd-t:2px-ds-grey200 p:10px m-b:30px">
+    <comp-upload />
+  </section>
+
+  <script>
+    this.mixin('store');
+    //console.log( this.getValue('gallery') )
+  </script>
+
+</page-sandbox>

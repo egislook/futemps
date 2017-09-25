@@ -1,10 +1,62 @@
 {
   "testing": {
-    "text": "Some sort of text that no on ecares",
+    "text": "Some sort of text that no on ecaresssss asdas\nkeep it simple oneeeeee eee",
     "button": {
-      "title": "Text there u go"
+      "title": "button"
     },
     "img": "/assets/files/file-1505602686608-10.jpg"
+  },
+  "routes": {
+    "main": {
+      "name": "main",
+      "link": "/",
+      "title": "poinout",
+      "view": "page-main",
+      "meta": {
+        "title": "poinout | main page",
+        "description": "Lets call it TODO"
+      }
+    },
+    "sandbox": {
+      "name": "sandbox",
+      "link": "/sandbox",
+      "title": "Sandbox",
+      "view": "page-sandbox",
+      "meta": {
+        "title": "Lets call it Sandbox",
+        "description": "Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)\nEnabling and disa"
+      }
+    },
+    "todo": {
+      "name": "todo",
+      "link": "/todo",
+      "title": "Todo",
+      "view": "page-todo",
+      "meta": {
+        "title": "Lets call it TODO",
+        "description": "Lets call it TODO"
+      }
+    },
+    "data": {
+      "name": "data",
+      "link": "/data",
+      "title": "Data",
+      "view": "page-data",
+      "meta": {
+        "title": "Poinject tree editor",
+        "description": "Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)\nEnabling and disabling editor fields\ntesting"
+      }
+    },
+    "palette": {
+      "name": "palette",
+      "link": "/palette",
+      "title": "Palette",
+      "view": "page-palette",
+      "meta": {
+        "title": "Poinout color palette",
+        "description": "This color palette comprises primary and accent colors that can be used for illustration or to develop your brand colors. They’ve been designed to work harmoniously with each other. The color palette starts with primary colors and fills in the spectrum to create a complete and usable palette for Android, Web, and iOS. Google suggests using the 500 colors as the primary colors in your app and the other colors as accents colors.\n\nThemes enable consistent app styling through surface shades, shadow depth, and ink opacity."
+      }
+    }
   },
   "movable": "/assets/files/file-1506150272526-06.jpg",
   "test": "asdjasdsad",
@@ -47,7 +99,7 @@
     }
   },
   "todo": "Feature: UI / UX upgrade for leaf movement\nFeature: leaf move to another leaf (change parent, ancestors, path of children)\nFeature: leaf changing position / sort\nFeature: Implement hidden children number\n\nFeature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nRefactor: elem-text to wrap-text. Wrapper works with yield. Editability.\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data \nFeature: make experimental todo\n---\nIdea: poinject parent value as variable $ref\nIdea: check router meta structure possibilities\n---\n(done) Feature: UI leaf extend / collapse\n(done) Bug: incorrect ancestors list is generated\n(done) Bug: leaf delete needs to remove all children by ancestors\n(done) Bug: leaf create ancestors are incorrect (too much)\n(done) Bug: leaf duplicate ancestors are empty\n(done) Bug: leaf duplicate path is incorrect. (undefined. in front)\n(done) Bug: editing leaf children path is not changing\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
-  "text2": "Careful: the variable \"settings\" will be modified, though. jQuery doesn't return a new instance.The reason for this (and for the naming) is that .extend() was developed to extend objects, rather than to munge stuff together. If you want a new object (e.g. settings is defaults you don't want to touch), you can always jQuery.extend({}, settings, options)",
+  "text2": "Careful: the variable \"settings\" will be modified, though. jQuery doesn't return a new instance.The reason for this (and for the naming) is that .extend() was developed to extend objects, rather than to munge stuff together. If you want a new object (e.g. settings is defaults you don't want to touch), you can always jQuery.extend({}, settings, options) testing",
   "text": "Note that this will simply add all attributes \nof obj2 to obj1 which might not be what you want if you still want to use the unmodified obj1. If you're using a framework that craps all over your prototypes then you have to get fancier with checks like hasOwnProperty, but that code will work for 99% of casessss.ss ggggssss",
   "poinoutTitle": "Poinout",
   "meta": {
@@ -57,47 +109,5 @@
     "author": "noneedsystem",
     "favicon": "favicon.png",
     "url": "www.poinout.com"
-  },
-  "routes": {
-    "main": {
-      "name": "main",
-      "link": "/",
-      "title": "poinout",
-      "view": "page-main",
-      "meta": {
-        "title": "poinout | main page",
-        "description": "Lets call it TODO"
-      }
-    },
-    "todo": {
-      "name": "todo",
-      "link": "/todo",
-      "title": "Todo",
-      "view": "page-todo",
-      "meta": {
-        "title": "Lets call it TODO",
-        "description": "Lets call it TODO"
-      }
-    },
-    "data": {
-      "name": "data",
-      "link": "/data",
-      "title": "Data",
-      "view": "page-data",
-      "meta": {
-        "title": "Poinject tree editor",
-        "description": "Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)\nEnabling and disabling editor fields"
-      }
-    },
-    "palette": {
-      "name": "palette",
-      "link": "/palette",
-      "title": "Palette",
-      "view": "page-palette",
-      "meta": {
-        "title": "Poinout color palette",
-        "description": "This color palette comprises primary and accent colors that can be used for illustration or to develop your brand colors. They’ve been designed to work harmoniously with each other. The color palette starts with primary colors and fills in the spectrum to create a complete and usable palette for Android, Web, and iOS. Google suggests using the 500 colors as the primary colors in your app and the other colors as accents colors.\n\nThemes enable consistent app styling through surface shades, shadow depth, and ink opacity."
-      }
-    }
   }
 }
