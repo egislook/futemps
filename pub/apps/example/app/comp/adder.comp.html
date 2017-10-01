@@ -1,0 +1,147 @@
+<comp-adder>
+
+  <i
+    class="
+      {'fu-plus bg:prim c:white': !_adderIsVisable, 'fu-cross bg:white c:black': _adderIsVisable}
+      fs:130pc p:15px br:50pc ps:fx fux-boxsh fux-trans z:2"
+    style={_pos}
+    onclick={_handleClick} />
+
+  <div if={_adderIsVisable} class="t,l:0 w,h:100pc ps:fx bg:blacka8 dp:flx jc:c ai:c fux-fadeIn z:1">
+    <div class="mxh,mxw:100pc md-w:80pc bg:white br:2px fux-boxsh fux-trans ta:l of:auto">
+
+      <div each="{ fields, key in schema }">
+        <div class="p:20px bg:white w:100pc bd-b-w:1px bd-c:grey200">
+          <div class="m:0 br:5px_a bd-c:prim_a bd-w:1px_a m:2px_a">
+
+            <a onclick={ _setActiveTab() }
+              class="p:10px-20px {'bg:prim c:white': !_getActiveTab(), 'c:prim': _getActiveTab()}">
+              {key}
+              <i class="fu-plus fs:70pc m-b:3px" />
+            </a>
+
+            <a
+              each={ tab in parent.tabs }
+              onclick={ _setActiveTab(tab) }
+              class="p:10px-20px fw:400 {'bg:prim c:white': _getActiveTab(tab), 'c:prim bg:ts': !_getActiveTab(tab)}">{tab}</a>
+
+          </div>
+        </div>
+
+        <div class="p-t:20px p-rl:7pc mxh:100pc bg:white600 bd-b-w:1px bd-c:grey200">
+          <elem-form fields={ _activeTabData } on-return-value={ handleReturnValue } />
+        </div>
+
+        <div class="p:15px ta:r p:10px_button mnw:150px_button bg:white w:100pc" onclick={_handleClick}>
+          <button class="bg:ts">Cancel</button>
+          <button class="bg:prim br:2px c:white bd-w:2px bd-c:prim fux-boxsh">Done</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    this.mixin('tag');
+    const tag = this;
+
+    tag._adderIsVisable   = true;
+    tag._activeTab        = 'album0' || null;
+    tag._pos              = !tag._adderIsVisable && { right: '2%', bottom: '2%' } || { bottom: '90%', right: '2%' };
+    tag._handleClick      = _handleClick;
+    tag._stopPropagation  = (e) => e.stopPropagation();
+    tag._getActiveTab     = _getActiveTab;
+    tag._setActiveTab     = _setActiveTab;
+
+    tag.schemaPath   = opts.schemaPath;
+    tag.dataPath     = opts.dataPath;
+    tag.getTree      = opts.getTree || ((path) => console.log('getTree', path));
+    tag.schema       = opts.schema  || tag.getTree(tag.schemaPath) || { album: { title: { min: 2, max: 20, type: 'text' } } };
+    tag.data         = opts.data    || tag.getTree(tag.dataPath);
+    tag.tabs         = opts.tabs    || _getDataTabs(tag.data) || [];
+
+    tag._activeTabData     = _getTabData(tag._activeTab);
+    tag.handleReturnValue  = handleReturnValue;
+
+    tag.on('update', () => {
+      console.log('update adder');
+    })
+
+    function handleReturnValue(value, extras, valid){
+      if(!extras.name || extras.name && !tag._activeTabData[extras.name])
+        return;
+
+      //console.log(tag._activeTabData);
+      tag._activeTabData[extras.name]['value'] = value;
+      tag.update();
+
+      //console.log(value, extras, valid);
+    }
+
+    function _getTabData(tabName){
+      let headKey     = Object.keys(tag.schema).pop();
+      let tempSchema  = JSON.parse(JSON.stringify(tag.schema[headKey]));
+
+      if(!tabName)
+        return tempSchema;
+
+      let dataHeadKey = Object.keys(tag.data).pop();
+      let tempData = JSON.parse(JSON.stringify(tag.data[dataHeadKey][tabName]));
+
+      __setDeepValues(tempSchema, tempData);
+
+      function __setDeepValues(_schema, _tabData){
+        for(let key in _tabData){
+          if(_tabData[key] && _schema[key]){
+            if(typeof _tabData[key] === 'object')
+              _schema[key] = __setDeepValues(_schema[key], _tabData[key]);
+            if(typeof _tabData[key] === 'string')
+              _schema[key]['value'] = _tabData[key];
+          }
+        }
+        return _schema;
+      }
+
+      return tempSchema;
+    }
+
+    function _setActiveTab(tabName = null){
+      return (e) => {
+        let headKey = Object.keys(tag.data).pop();
+
+        tag._activeTab = tabName;
+        tag._activeTabData = _getTabData(tabName);
+        e.preventDefault();
+      }
+    }
+
+    function _getActiveTab(tabName){
+      if(!tabName)
+        return !!tag._activeTab;
+
+      return tag._activeTab === tabName;
+    }
+
+    function _getDataTabs(data){
+      if(typeof data !== 'object')
+        return [];
+
+      let headKey = Object.keys(data).pop();
+      return Object.keys(data[headKey]);
+    }
+
+    function _handleClick(e){
+      const method = tag._adderIsVisable ? 'remove' : 'add';
+      //document.body.classList[method]('fux-clear');
+      //document.body.style['overflow-y'] = 'scroll';
+      //document.body.onmousewheel  = (e) => { tag._adderIsVisable && e.preventDefault() }
+      //document.body.ontouchmove   = (e) => { tag._adderIsVisable && e.preventDefault() }
+      tag.update({
+        _adderIsVisable: !tag._adderIsVisable,
+        _pos: tag._adderIsVisable && { right: '2%', bottom: '2%' } || { bottom: '90%', right: '2%' }
+      })
+    }
+
+  </script>
+</comp-adder>

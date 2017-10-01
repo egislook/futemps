@@ -1,9 +1,11 @@
 class appStore{
   constructor(opts = { poinject: [], content: {} }){
     riot.observable(this);
-    this.content = opts.content;
+    this.content  = opts.content;
     this.poinject = opts.poinject;
-    this.route = null;
+    this.route    = null;
+    this.lang     = 'en';
+    this.def      = '$def.';
 
     //this.on('editor', this.setEditor);
   }
@@ -34,12 +36,27 @@ class appStore{
     let leaf = self.poinject && self.poinject.filter(leaf => leaf.path === path || leaf.id === path);
 
     if(!leaf || leaf && !leaf.length)
-      return `${path}`;
-    if(leaf.length === 1)
-      return leaf.shift()[field];
+      return path;
+    if(leaf.length === 1){
+      let value = leaf.shift()[field];
+
+      if(false && value && value.indexOf(self.def) > -1)
+        return self.getDefinition(value.replace(self.def, ''));
+
+      return value;
+    }
 
     return leaf.map(obj => obj.value);
     //return JSON.stringify(leaf.map(obj => obj.value), 0, 2);
+  }
+
+  getDefinition(path){
+    const self = this;
+    let leaf = this.poinject.filter(leaf => leaf.path === `definitions.${self.lang}.${path}`);
+    if(!leaf || leaf && !leaf.length)
+      return path;
+    if(leaf.length === 1)
+      return leaf.shift()['value'];
   }
 
   getLeaf(id){
@@ -49,6 +66,29 @@ class appStore{
       return `${id}`;
     if(leaf.length === 1)
       return leaf.shift();
+  }
+
+  getTree(path){
+    let key = path.split('.').pop();
+    return { [key] : this._treeDigger(null, path) };
+  }
+
+  _treeDigger(parent, path){
+    let self = this;
+    let children = this.poinject.filter(leaf => (path && leaf.path === path || leaf.parent === parent));
+
+    if(children.length === 1){
+      let child = children[0];
+      if(child.type === 'value')
+        return child.value;
+    }
+
+    let obj = {};
+    children.forEach((child) => {
+      obj[child.value] = self._treeDigger(child.id);
+    });
+
+    return obj;
   }
 
   handleEdit(value, id, cb){
@@ -99,7 +139,7 @@ class appStore{
     window.fetch('/poinject/', {
       headers: { 'Content-Type': 'application/json'},
       method: 'POST',
-      body: JSON.stringify({ value, parent: leaf.parent, type: leaf.type })
+      body: JSON.stringify({ value, parent: leaf.parent, type: leaf.type || 'field' })
     }).then(res => res.json())
       .then(json => {
         self.setOpts(json.opts);

@@ -1,0 +1,48 @@
+<elem-form>
+
+  <virtual each="{field, name in opts.fields}">
+
+    <div class="m-b:10px">
+      <span class="va:t {'c:grey600': !_isFieldType(field), 'c:black fw:600': _isFieldType(field)}">
+        <i if={_isRequired(field)} class="fu-asterisk fs:50pc c:prim"/>
+        <span class="p-tb:10px">{getDef(name)}</span>
+        <i class="m-l:10px fu-chevron-small-right c:grey300" />
+      </span>
+
+      <elem-text3
+        if={ _isFieldType(field, 'text') }
+        min={ field.min }
+        max={ field.max }
+        placeholder-path='fieldTextPlaceholder'
+        on-return-value={ onReturnValue }
+        extras={{ field: field, name: name }}
+        text={ field.value }
+        noautoclass={true}>
+          <p
+            class="dp:ib p:10px-5px fc-p-rl:10px bd-b-w:1px bd-c:grey200 fux-trans fc-bd-c:prim ws:pl ww:nm"
+            placeholder={ placeholder }
+            contenteditable="true">{ text }</p>
+      </elem-text3>
+
+      <form-image
+        if={_isFieldType(field, 'image')}
+        link={ field.value }
+        placeholder={_getPlaceholder(name, field)} />
+
+      <span class="p-l:20px" if={!field.type}>
+        <elem-form fields={field} on-return-value={ onReturnValue } />
+      </span>
+
+    </div>
+
+  </virtual>
+
+  <script>
+    this.mixin('tag');
+    this.getDef            = this.opts.getDef;
+    this.onReturnValue     = this.opts.onReturnValue;
+    this._getPlaceholder   = (name, field)              => `text between ${field.min} and ${field.max} chars`;
+    this._isFieldType      = (field, type = 'schema')   => (field.type && field.type === type || !field.type && type === 'schema');
+    this._isRequired       = (field) => field.required === 'true';
+  </script>
+</elem-form>

@@ -10,8 +10,12 @@
       <h1 class="fs:200pc fw:600 p-tb:10px m-t:20px" data-path="routes.data.meta.description">{ text }</h1>
     </elem-text3>
 
-    <elem-text3 path="routes.data.meta.description">
-      <p class="p:20px" data-path="routes.data.meta.description">{ text }</p>
+    <elem-text3 truncate={200} path="text2">
+      <p class="p:20px">{ truncateText() }</p>
+    </elem-text3>
+
+    <elem-text3 truncate={200} path="routes.data.meta.description">
+      <p class="p:20px">{ truncateText() }</p>
     </elem-text3>
 
   </section>
@@ -22,7 +26,7 @@
     mouseup={false && handleMouseUp}
     touchend={false && handleMouseUp}>
 
-      <a class="fu-eye m-l:7npx {'c:grey300': !extendAll, 'bg:prim c:white': extendAll} p:5px" onclick={handleExtendAll} />
+      <i class="fu-eye m-l:7npx {'c:grey300': !extendAll, 'bg:prim c:white': extendAll} p:5px" onclick={handleExtendAll} />
       <elem-leaf
         poinject={poinject}
         extended={extended}

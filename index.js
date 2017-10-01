@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/',       express.static(cfg.pubPath, { index: false }));
 app.use('/assets', express.static(cfg.assetsPath));
-app.get('/favicon.ico',     (req, res) => res.status(204));
+app.get('/favicon.ico', (req, res) => res.redirect('/assets/ico/favicon.ico'));
 
 
 

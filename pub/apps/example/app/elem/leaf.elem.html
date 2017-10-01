@@ -2,108 +2,90 @@
   <div>
     <div class="dp:ib" draggable={true}
       ondragstart={opts.onDragStart && opts.onDragStart.bind(e, leaf)}
-      touchstart={opts.onDragStart && opts.onDragStart.bind(e, leaf)}
+      touchstart={false && opts.onDragStart && opts.onDragStart.bind(e, leaf)}
       ondragover={opts.onDragOver && opts.onDragOver.bind(e, leaf)}
       ondragleave={opts.onDragLeave}
       ondrop={opts.onDrop && opts.onDrop.bind(e, leaf)}>
 
-      <a if={leaf && leaf.id === 'ghost'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={leaf.id === 'ghost' && handleDeleteGhost} />
+      <i if={leaf && leaf.id === 'ghost'} class="fu-trash fs:70pc m-b:2px dp:ib c:grey300 p-tb:7px" onclick={leaf.id === 'ghost' && handleDeleteGhost} />
 
-      <a if={leaf && leaf.id !== 'ghost' && (childIsValue || noChildren)} class="fu-grain fs:70pc m-b:4px dp:ib c:grey300 crs:move" />
-      <a
+      <i if={leaf && leaf.id !== 'ghost' && (childIsValue || noChildren)} class="fu-grain fs:70pc m-b:4px dp:ib c:grey300 crs:move" />
+      <i
         if={leaf && leaf.type === 'field' && !childIsValue && leaf.id !== 'ghost' && !noChildren}
-        class="{'fu-chevron-small-down': isExtended, 'fu-chevron-small-right': !isExtended} c:grey fs:70pc m-b:4px"
+        class="{'fu-chevron-small-down': isExtended, 'fu-chevron-small-right': !isExtended} c:grey fs:70pc m-b:2px p-tb:7px"
         onclick={opts.onExtend.bind(null, { id: leaf.id })} />
 
-      <elem-text
+      <elem-text3
         if={leaf}
-        class="fw:500 p:2px-5px-2px-0 fc-bg:white ps:rl dp:ib mnw:60px"
-        text={leaf.value}
-        placeholder="new field"
-        on-edit={handleEditField}
-        cb-extras={opts.cbExtras || leaf.id}
-        autofocus={opts.autofocus} />
+        id={!isGhost && leaf.id}
+        extras={isGhost && leaf}
+        one-liner={true}
+        click-to-edit={!isGhost}
+        autofocus={isGhost}>
+          <p
+            placeholder="Enter field value"
+            onblur={parent.handleDeleteGhost}
+            class="fw:500 p:2px-5px-2px-0 fc-bg:white ps:rl dp:ib mnw:60px fc-p-l:5px">{ text }</p>
+      </elem-text3>
 
 
-        <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px m-l:5npx ps:rl" onclick={handleAddFieldGhost}>
-          <span if={leaf && !childIsValue && !isExtended && child && child.length} class="ps:ab fs:60pc bg:grey400 fw:500 p:2px-3px t,r:3npx br:3px">{child.length}</span>
-        </a>
+        <i if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-plus fs:70pc c:white bg:grey300 ps:rl p:7px m-b:2px m-l:4npx" onclick={handleAddFieldGhost}>
+          <span if={leaf && !childIsValue && !isExtended && child && child.length} class="ps:ab fs:60pc bg:white c:black fw:500 p:1px-2px t,r:0 br:1px fux-boxsh">{child.length}</span>
+        </i>
 
         <span if={ noChildren && leaf.id !== 'ghost' && !ghostLeaf }>
-          <a class="fu-text_fields fs:70pc p:5px c:white bg:grey300 m-b:4px dp:ib m-t:2px" onclick={handleAddValueGhost} />
+          <i class="fu-text_fields fs:70pc c:white bg:grey300 dp:ib p:7px m-b:2px" onclick={handleAddValueGhost} />
 
           <input id="image" class="op:0 ps:ab w,h:0 dp:n" type="file" name="files" onchange={handleImageUpload} />
-          <label for="image" class="fu-camera fs:70pc p:5px c:white bg:grey300 dp:ib m-b:6px" />
+          <label for="image" class="fu-camera fs:70pc c:white bg:grey300 dp:ib p:7px m-b:2px" />
         </span>
 
-        <a if={childIsValue || ghostLeaf && ghostLeaf.type === 'value'}
-          class="{'fu-chevron-small-down': valueIsExtended, 'fu-chevron-small-right': !valueIsExtended} p:5px m-l:5npx c:grey fs:70pc m-b:4px"
+        <i if={childIsValue || ghostLeaf && ghostLeaf.type === 'value'}
+          class="{'fu-chevron-small-down': valueIsExtended, 'fu-chevron-small-right': !valueIsExtended} p:5px m-l:5npx c:grey fs:70pc"
           onclick={valueIsExtendable && opts.onExtend.bind(null, { id: child.id })} />
 
-        <elem-text
-          class="dp:ib va:t p:2px-5px-2px-0 fc-bg:white"
-          if={ghostLeaf && ghostLeaf.type === 'value'}
-          autofocus={true}
-          placeholder="value"
-          cb-extras={ghostLeaf}
-          on-edit={parent.opts.onCreate} />
-
-        <elem-text2
-          if={false && childIsValue && !childIsImage}
-          class="dp:ib va:t mxh:100px of:auto"
-          placeholder={opts.valuePlaceholder}
-          truncate-from={valueIsExtendable && !valueIsExtended && truncateFrom}
-          on-done={opts.onEdit}>
-            <p data-id={parent.child && parent.child.id} class="p:2px-5px-2px-0 fc-p-l:5px">
-              {parent.child && parent.child.value}
-            </p>
-        </elem-text2>
 
         <elem-text3
-          if={childIsValue && !childIsImage}
+          if={(childIsValue || ghostLeaf && ghostLeaf.type === 'value')  && !childIsImage}
           id={child && child.id}
-          truncate={valueIsExtendable && !valueIsExtended && truncateFrom}>
-            <p class="dp:ib va:t of:auto p:2px-5px-2px-0 fc-p-l:5px">{ truncateText() }</p>
+          extras={ghostLeaf}
+          truncate={valueIsExtendable && !valueIsExtended && truncateFrom}
+          autofocus={ghostLeaf}>
+            <p
+              placeholder="Enter text value"
+              onblur={parent.handleDeleteGhost}
+              class="dp:ib va:t of:auto p:2px-5px-2px-0 fc-p-l:5px">{ truncateText() }</p>
         </elem-text3>
-
-        <elem-text
-          if={false && childIsValue && !childIsImage}
-          class="dp:ib va:t p:2px-5px-2px-0 fc-bg:white"
-          text={child && child.value}
-          truncate-from={valueIsExtendable && !valueIsExtended && truncateFrom}
-          placeholder={opts.valuePlaceholder}
-          on-edit={opts.onEdit}
-          cb-extras={child && child.id} />
 
         <span if={childIsImage} class="w:175px fux-boxsh bd:3px-sd-white m-tb:5px">
           <img class="dp:bk w:100pc" src={child.value} />
         </span>
 
 
-        <a if={leaf && !ghostLeaf && leaf.id !== 'ghost'} class="fu-menu2 fs:70pc p:5px c:grey300 m-b:4px ps:rl {'bg:prim c:white-!': showMore}" onclick={handleMore} />
-        <a if={ghostLeaf && ghostLeaf.type === 'value'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={handleDeleteGhost} />
+        <i if={leaf && !ghostLeaf && leaf.id !== 'ghost'} class="fu-menu2 fs:70pc c:grey300 ps:rl p:7px m-b:2px {'bg:prim c:white-!': showMore}" onclick={handleMore} />
+        <i if={ghostLeaf && ghostLeaf.type === 'value'} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300" onclick={handleDeleteGhost} />
 
         <span if={showMore}>
-          <a if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-stack-2 fs:70pc p:5px c:white bg:grey300 m-b:4px" onclick={handleDuplicate} />
+          <i if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-stack-2 fs:70pc c:white bg:grey300 p:7px m-b:2px" onclick={handleDuplicate} />
 
-          <a if={childIsValue} class="fu-trash fs:70pc m-b:4px dp:ib c:grey300 p:5px" onclick={childIsValue && handleDeleteValue} />
+          <i if={childIsValue} class="fu-trash fs:70pc dp:ib c:grey300 p:7px m-b:2px" onclick={childIsValue && handleDeleteValue} />
 
-          <a if={leaf && (noChildren || !childIsValue)} class="fu-trash fs:70pc m-b:4px dp:ib p:5px c:grey300" onclick={leaf.id === 'ghost' && handleDeleteGhost || handleDelete} />
+          <i if={leaf && (noChildren || !childIsValue)} class="fu-trash fs:70pc dp:ib c:grey300 p:7px m-b:2px" onclick={leaf.id === 'ghost' && handleDeleteGhost || handleDelete} />
 
-          <a if={leaf} class="fu-info fs:70pc p:5px c:grey300 m-b:4px ps:rl {'bg:black c:white-!': showInfo}" onclick={handleInfo}>
+          <i if={leaf} class="fu-info fs:70pc p:7px c:grey300 m-b:2px ps:rl {'bg:black c:white-!': showInfo}" onclick={handleInfo}>
             <div if={showInfo} class="t:0 l:20px fux-boxsh ps:ab bg:prim p:10px z:5 c:white dp:tb dp:tr_div dp:tc_strong,span p-r:5px_strong">
               <div> <strong>ID: </strong> <span class="mnw:250px">{leaf.id}</span> </div>
               <div> <strong>PARENT: </strong> <span>{leaf.parent}</span> </div>
               <div> <strong>PATH: </strong> <span>{leaf.path}</span> </div>
               <div> <strong>ANCESTORS: </strong> <span>{JSON.stringify(leaf.ancestors, null, 2)}</span> </div>
             </div>
-          </a>
+          </i>
         </span>
 
     </div>
 
     <div class="p-l:25px bd-l:1px-ds-grey200 m-l:5px" if={!childIsValue && isExtended}>
-      <a if={!leaf} class="fu-plus fs:70pc p:5px c:white bg:grey300 m-b:4px m-l:5npx" onclick={handleAddFieldGhost} />
+      <i if={!leaf} class="fu-plus fs:70pc p:7px c:white bg:grey300 m-b:2px m-l:7npx" onclick={handleAddFieldGhost} />
       <elem-leaf
         if={ghostLeaf && ghostLeaf.type === 'field'}
         leaf={ghostLeaf}
@@ -153,6 +135,7 @@
       truncateFrom: 150,
       dragStarted: null,
       dragTimeout: null,
+      isGhost: opts.leaf && opts.leaf.id === 'ghost',
     });
 
     self.setExtended = () => {
@@ -223,6 +206,7 @@
     this.on('update', () => {
       self.setChild();
       self.setExtended();
+      //self.isGhost && self.handleDeleteGhost();
     });
 
   </script>

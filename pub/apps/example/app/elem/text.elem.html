@@ -65,7 +65,9 @@
 
 
     // Methods ---------
-
+    // this.on('update', () => {
+    //   console.log('update', this.contentEditable);
+    // })
     this.on('mount', () => {
       tag.opts.autofocus && tag.refs.tag.focus();
       test && console.timeEnd('elem-text mount');

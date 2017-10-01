@@ -1,0 +1,17 @@
+<form-image>
+  <span>
+    <span class="w:175px fux-boxsh bd-w:3px bd-c:white m-b:5px va:t {'bd-s:ds': !opts.link}">
+
+      <label if={!opts.link} class="w,h:100pc dp:flx ai:c mnh:100px">
+        <input class="op:0 ps:ab w,h:0 dp:n" type="file" name="files" onchange={opts.onChange} />
+        <i class="fu-cloud-upload fs:120pc c:grey" />
+      </label>
+
+      <img if={opts.link} class="dp:bk w:100pc" src={opts.link} />
+    </span>
+    <elem-text3 text={ opts.link }>
+      <p placeholder={ parent.opts.placeholder } contenteditable="true" class="dp:ib p:7px-10px fux-boxsh bg:grey100 va:t">{text}</p>
+    </elem-text3>
+
+  </span>
+</form-image>

@@ -1,8 +1,97 @@
 {
+  "definitions": {
+    "en": {
+      "text": "Note that this will simply add all attributes \nof obj2 to obj1 which might not be what you want if you still want to use the unmodified obj1. If you're using a framework that craps all over your prototypes then you have to get fancier with checks like hasOwnProperty, but that code will work for 99% of casessss.ss ggggssss",
+      "text2": "Careful: the variable \"settings\" will be modified, though. jQuery doesn't return a new instance.The reason for this (and for the naming) is that .extend() was developed to extend objects, rather than to munge stuff together. If you want a new object (e.g. settings is defaults you don't want to touch), you can always jQuery.extend({}, settings, options) testing",
+      "img": "image",
+      "fieldTextPlaceholder": "text between {min} and {max} chars"
+    },
+    "lt": {
+      "img": "nuotrauka",
+      "fieldTextPlaceholder": "teksto ilgis tarp {min} ir {max} symboliu"
+    }
+  },
+  "schemas": {
+    "route": {
+      "meta": {
+        "description": {
+          "max": "500",
+          "min": "10",
+          "type": "text"
+        },
+        "title": {
+          "max": "100",
+          "min": "2",
+          "type": "text"
+        }
+      },
+      "view": {
+        "max": "50",
+        "min": "2",
+        "type": "text"
+      },
+      "title": {
+        "max": "50",
+        "min": "2",
+        "type": "text"
+      },
+      "link": {
+        "max": "100",
+        "min": "1",
+        "type": "url"
+      },
+      "name": {
+        "max": "10",
+        "min": "2",
+        "type": "text"
+      }
+    },
+    "album": {
+      "img": {
+        "required": "true",
+        "height": "300",
+        "width": "300",
+        "type": "image"
+      },
+      "title": {
+        "required": "true",
+        "max": "300",
+        "min": "3",
+        "type": "text"
+      },
+      "description": {
+        "required": "true",
+        "max": "300",
+        "min": "3",
+        "type": "text"
+      },
+      "button": {
+        "route": {
+          "max": "10",
+          "min": "2",
+          "type": "text"
+        },
+        "link": {
+          "type": "url"
+        },
+        "title": {
+          "type": "text",
+          "max": "25",
+          "min": "2"
+        },
+        "icon": {
+          "class": {
+            "type": "text"
+          }
+        }
+      }
+    },
+    "todo": {}
+  },
   "testing": {
     "text": "Some sort of text that no on ecaresssss asdas\nkeep it simple oneeeeee eee",
     "button": {
-      "title": "buttonnnn"
+      "title": "buttonn"
     },
     "img": "/assets/files/file-1505602686608-10.jpg"
   },
@@ -24,7 +113,7 @@
       "view": "page-data",
       "meta": {
         "title": "Poinject tree editor",
-        "description": "Test Test Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)\nEnabling and disabling editor fields"
+        "description": "Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)\nEnabling and disabling editor fields"
       }
     },
     "sandbox": {
@@ -59,7 +148,6 @@
     }
   },
   "movable": "/assets/files/file-1506150272526-06.jpg",
-  "test": "asdjasdsad",
   "experiment": {
     "field4": {
       "field42": {},
@@ -83,11 +171,11 @@
       },
       "description": "Build Flexible and beautiful web applications or sites\nin fashioned and quick way with Poinout.",
       "title": "Meet Poinout,\nFlexible front-end toolkit",
-      "img": "/assets/files/file-1506150308677-06.jpg"
+      "img": "/assets/files/file-1506779818817"
     },
     "album1": {
-      "title": "sunset here my friend little bit modified\nnew line.",
-      "img": "/assets/files/file-1505600806675-04.jpg"
+      "title": "sunset here my friend.",
+      "img": "/assets/files/file-1506839021725"
     },
     "album2": {
       "title": "Flowers here my friend and something a bit more\nSmall title huh? Edit works",
@@ -96,18 +184,22 @@
     "album3": {
       "img": "/assets/files/file-1505600796703-02.jpg",
       "title": "title for 3rd album"
+    },
+    "album4": {
+      "img": "/assets/files/file-1505600796703-02.jpg",
+      "title": {}
     }
   },
-  "todo": "Upgrade: text3 to support on click editable / one line enter save\nRefactor: Page wrapper for global components like editor, modal, toast\nFix: Touchscreen text3 scrolling bug for every tap it calls click\nFeature: UI / UX upgrade for leaf movement\nFeature: leaf move to another leaf (change parent, ancestors, path of children)\nFeature: leaf changing position / sort\n\nFeature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data \nFeature: make experimental todo\n---\nIdea: propriet path for poinject fields\nIdea: poinject parent value as variable $ref\nIdea: check router meta structure possibilities\n---\n(done) Refactor: elem-text to wrap-text. Wrapper works with yield. Editability.\n(done) Fix: text3 duplicated text issue\n(done) Feature: Implement hidden children number\n(done) Feature: UI leaf extend / collapse\n(done) Bug: incorrect ancestors list is generated\n(done) Bug: leaf delete needs to remove all children by ancestors\n(done) Bug: leaf create ancestors are incorrect (too much)\n(done) Bug: leaf duplicate ancestors are empty\n(done) Bug: leaf duplicate path is incorrect. (undefined. in front)\n(done) Bug: editing leaf children path is not changing\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
-  "text2": "Careful: the variable \"settings\" will be modified, though. jQuery doesn't return a new instance.The reason for this (and for the naming) is that .extend() was developed to extend objects, rather than to munge stuff together. If you want a new object (e.g. settings is defaults you don't want to touch), you can always jQuery.extend({}, settings, options) testing",
-  "text": "Note that this will simply add all attributes \nof obj2 to obj1 which might not be what you want if you still want to use the unmodified obj1. If you're using a framework that craps all over your prototypes then you have to get fancier with checks like hasOwnProperty, but that code will work for 99% of casessss.ss ggggssss",
+  "todo": "Feature: poinject value reference (path)\nRefactor: Page wrapper for global components like editor, modal, toast\nFix: Touchscreen text3 scrolling bug for every tap it calls click\nFeature: UI / UX upgrade for leaf movement\nFeature: dnd leaf to empty field\nFeature: leaf move to another leaf (change parent, ancestors, path of children)\nFeature: leaf changing position / sort\n\nFeature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data\nFeature: make experimental todo\nFeature: fucss ability to set prim & sec fonts (by default set most efficient)\n---\nIdea: propriet path for poinject fields\nIdea: poinject parent value as variable $ref\nIdea: check router meta structure possibilities\n---\n(done) Upgrade: text3 to support on click editable / one line enter save\n(done) Refactor: elem-text to wrap-text. Wrapper works with yield. Editability.\n(done) Fix: text3 duplicated text issue\n(done) Feature: Implement hidden children number\n(done) Feature: UI leaf extend / collapse\n(done) Bug: incorrect ancestors list is generated\n(done) Bug: leaf delete needs to remove all children by ancestors\n(done) Bug: leaf create ancestors are incorrect (too much)\n(done) Bug: leaf duplicate ancestors are empty\n(done) Bug: leaf duplicate path is incorrect. (undefined. in front)\n(done) Bug: editing leaf children path is not changing\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
+  "text2": "$def.text2",
+  "text": "$def.text",
   "poinoutTitle": "Poinout",
   "meta": {
     "title": "poinout | main page",
     "description": "small app example",
     "image": "image.png",
     "author": "noneedsystem",
-    "favicon": "favicon.png",
+    "favicon": "/assets/ico/favicon.ico",
     "url": "www.poinout.com"
   }
 }

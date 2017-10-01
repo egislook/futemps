@@ -9,7 +9,7 @@ if(!fs.existsSync(global.cfg.filesPath))
 const cfg = {
   storage: multer.diskStorage({
     destination:  (req, file, cb) => cb(null, global.cfg.filesPath),
-    filename:     (req, file, cb) => cb(null, `${file.fieldname}-${Date.now()}-${escape(file.originalname)}`)
+    filename:     (req, file, cb) => cb(null, `${file.fieldname}-${Date.now()}`) //-${escape(file.originalname)}
   }),
   limits: { fileSize: 4*1024*1024 }
 }

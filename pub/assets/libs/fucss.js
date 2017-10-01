@@ -13,7 +13,7 @@ fucss.seps = {
   'comma': '.',
   'important': '!',
   'and': '+',
-  
+
 };
 
 fucss.media = {
@@ -29,7 +29,7 @@ fucss.states = {
   hov: 'hover',
   act: 'active',
   foc: 'focus',
-  
+
   hv: 'hover',
   ac: 'active',
   fc: 'focus',
@@ -71,9 +71,9 @@ fucss.properties = {
   mxh: 'max-height',
   mnw: 'min-width',
   mnh: 'min-height',
-  
+
   ws: 'white-space',
-  
+
   //version 4
   ff: 'font-family',
   ta: 'text-align',
@@ -100,19 +100,19 @@ fucss.properties = {
   cl: 'clear',
   sh: 'box-shadow',
   tr: 'text-transform',
-  
+
   // version 0.5.3
   ol: 'outline',
-  
+
   // version 0.5.5
   bz: 'box-sizing',
   bs: 'box-shadow',
   tl: 'table-layout',
-  
+
   //version 0.5.7
   lis: 'list-style',
   ls: 'letter-spacing',
-  
+
   //version 0.6.3
   ww: 'word-wrap',
   od: 'order',
@@ -130,10 +130,10 @@ fucss.properties = {
   //version 0.6.6
   jc: 'justify-content',
   cont: 'content',
-  
+
 };
 
-fucss.units = ['px', 'em', 'pc', 'vh', 'vw']; 
+fucss.units = ['px', 'em', 'pc', 'vh', 'vw'];
 
 fucss.groups = ['tb', 'rl'];
 
@@ -190,7 +190,7 @@ fucss.values = {
   ib: 'inline-block',
   blk: 'block',
   cl: 'clear',
-  
+
   //version 4
   hd: 'hidden',
   vs: 'visible',
@@ -207,11 +207,11 @@ fucss.values = {
   uc: 'uppercase',
   rp: 'no-repeat',
   nrp: 'no-repeat',
-  
+
   //version5
   ds: 'dashed',
   dt: 'dotted',
-  
+
   //version 0.6.3
   pl: 'pre-line',
   nm: 'normal',
@@ -229,18 +229,18 @@ fucss.values = {
   fs: 'flex-start',
   fe: 'flex-end',
   stc: 'stretch',
-  
+
 };
 
 fucss.ignore = ['fa', 'fix', 'trans', 'cursor', 'wrap', 'owlServices', 'owl', 'gm'];
 
 //version 4
 fucss.colorazable = [
-  'color', 
-  'background', 
-  'background-color', 
-  'border', 
-  'border-color', 
+  'color',
+  'background',
+  'background-color',
+  'border',
+  'border-color',
   'border-bottom',
   'border-top',,
   'border-left',
@@ -255,7 +255,7 @@ fucss.colors = {
   //version 6 colors
   prim:     '#DE3E3E',  // red
   sec:      '#2F3B50',  // grey dark
-  
+
   red:      '#F44336',
   pink:     '#E91E63',
   purple:   '#9C27B0',
@@ -275,11 +275,11 @@ fucss.colors = {
   brown:    '#795548',
   grey:     '#9E9E9E',
   bgrey:    '#607D8B',
-  
+
   black:    '#111',
   silver:   '#DDD',
   white:    '#fff',
-  
+
   navy:     '#001f3f',
   aqua:     '#7FDBFF',
   teil:     '#39CCCC',
@@ -306,7 +306,7 @@ fucss.colorMods = {
 };
 
 fucss.config = {
-  'prim': 'colors', 
+  'prim': 'colors',
   'sec': 'colors',
   'err': 'colors',
   'warn': 'colors',
@@ -317,7 +317,7 @@ fucss.config = {
 !!window.fucssColors && Object.assign(fucss.colors, window.fucssColors);
 
 window.onload=function(){
-  
+
   //initiating the generator
   fucss.watch && setInterval(fucss.generateStyling, fucss.watch);
   fucss.init && !window.riot && fucss.generateStyling();
@@ -338,7 +338,7 @@ fucss.riotExtractNGenerate = function(){
 }
 
 fucss.generateStyling = function(opts){
-  
+
   console.time('Fucss');
   var cssString = '';
   var cssMediaQueries = {
@@ -347,66 +347,66 @@ fucss.generateStyling = function(opts){
     lg: []
   };
   var cssMissing = [];
-  
-  var classHarvestingMethodName = opts && opts.jsx 
+
+  var classHarvestingMethodName = opts && opts.jsx
     ? 'harvestClassesFromJsx'
     : opts && opts.riot || !!window.riot
       ? 'harvestClassesFromRiot'
       : 'harvestClassesFromHtml';
-  
+
   var htmlString = (opts && (opts.jsx || opts.riot || opts.html)) || document.body.outerHTML;
-      
+
   fucss[classHarvestingMethodName](htmlString)
     .forEach(function(className){
       var target = className.split(fucss.seps.target);
-      
+
       var splitedClassName = target.shift().split(fucss.seps.value);
-      
+
       //props
       var props = splitedClassName.shift().split(fucss.seps.space);
       var mediaQuery = extractMediaQuery(props);
       var state = extractState(props);
-      
+
       //fucss.values
-      
+
       var value = splitedClassName.pop();
       var prop = props.shift();
-      
+
       if(fucss.config[prop]){
         value = fucss[fucss.config[prop]][value] || modifyColor(value) || value;
         fucss[fucss.config[prop]][prop] = value;
         return;
       }
-      
+
       //console.log(prop, props, state, value);
       if(Object.keys(fucss.properties).indexOf(prop) === -1 && prop.indexOf(',') === -1) return;
       //if(fucss.ignore.indexOf(prop) !== -1){return}
       if(!value) return console.warn('No value specified. Use value seperator ' + fucss.seps.value + ' for "' + className + '"');
       if(!prop) return console.warn('No prop specified. Use prop seperator ' + fucss.seps.space + ' for "' + className + '"');
       if(!fucss.properties[prop] && prop.indexOf(',') < 0) cssMissing = cssMissing.concat([prop]);
-      
+
       prop = combineProps(prop, props);
       props = modifyProps(props);
       value = modifyValue(value.split(fucss.seps.space), prop);
-      
+
       var cssRule = generateCssRule(className, prop, props, value, state, target);
-      
+
       mediaQuery
         ? cssMediaQueries[mediaQuery] = cssMediaQueries[mediaQuery] ? (cssMediaQueries[mediaQuery] + cssRule) : cssRule
         : cssString += cssRule;
-      
+
     });
-  
+
   //sets fucss.media queries at the end
-  Object.keys(cssMediaQueries).length 
+  Object.keys(cssMediaQueries).length
     && Object.keys(cssMediaQueries).forEach(function(mediaName){
       var rule = mediaName.indexOf('x') !== -1 ? 'max-width' : 'min-width';
-      
+
       if(cssMediaQueries[mediaName].length){
         cssString += '@media only screen and (' + rule + ': ' + fucss.media[mediaName] + 'px) {\n' + cssMediaQueries[mediaName] + '}\n';
       }
     });
-  
+
   //console.log(cssString);
   if(opts && opts.returnStyle){
     return cssString;
@@ -421,136 +421,136 @@ fucss.generateStyling = function(opts){
       css.appendChild(document.createTextNode(cssString));
       document.getElementsByTagName("head")[0].appendChild(css);
     }else{
-      document.querySelector('style').innerHTML = cssString + document.querySelector('style').innerHTML; 
+      document.querySelector('style').innerHTML = cssString + document.querySelector('style').innerHTML;
     }
-    
+
   }
-  
+
   console.timeEnd('Fucss');
-  
+
   if(cssMissing.length){console.warn('Used as full prop [ ' + cssMissing + ' ]')}
-  
+
   // from class to css rule
-  
+
   function extractMediaQuery(props){
     var mediaValue = props.length && props[0];
     if(Object.keys(fucss.media).indexOf(mediaValue) !== -1){
       return props.shift();
     }
   }
-  
+
   function extractState(props){
     var stateValue = props.length && props[0];
     if(Object.keys(fucss.states).indexOf(stateValue) !== -1){
       return fucss.states[props.shift()];
     }
   }
-  
+
   function modifyColor(value){
     if(fucss.colors[value]) return fucss.colors[value];
-        
-    //checks if there is color and modifier (3 chars length) specified 
+
+    //checks if there is color and modifier (3 chars length) specified
     if(fucss.colors[value.substring(0, value.length-3)]
       && fucss.colorMods[value.substring(value.length-3)]){
-      
+
       return fucss.generateColor(
-        fucss.colors[value.substring(0, value.length-3)], 
+        fucss.colors[value.substring(0, value.length-3)],
         fucss.colorMods[value.substring(value.length-3)]
       );
     }
-    
+
     if(new RegExp(/(a\d\d\b)|(a\d\b)|(l\d\d\b)|(d\d\d\b)/).test(value)){
       var length = value.length;
-      
+
       var modifierPos = new RegExp(/(a\d\b)/).test(value) ? length-2 : length-3;
       var modifier = value.substring(modifierPos);
       modifier = fucss.colorMods[modifier] || modifier;
       value = fucss.colors[value.substring(0, modifierPos)] || value.substring(0, modifierPos);
-      
+
       return fucss.generateColor(value, modifier);
-      
+
     } else if(new RegExp(/(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i).test(value)){
       return '#' + value;
     }
   }
-  
+
   function modifyValue(valueList, prop){
-    
+
     //console.log(valueList, prop, valueList.length);
     valueList = valueList.map(function(value){
-      
+
       if(fucss.values[value]) return fucss.values[value];
-      
+
       if(fucss.colorazable.indexOf(prop) !== -1){
         //console.log(prop, value)
         var modifiedColor = modifyColor(value);
         if(modifiedColor) return modifiedColor;
       }
-      
+
       var unit = value.replace(/\d/g, '');
       if(unit && (unit.length === 3 || unit.length === 2)){
         value = value.replace(unit, '');
-        
+
         if(unit.indexOf('n') !== -1) value = -value;
         if(unit.indexOf('pc') !== -1 ) return value + '%';
         return value + unit.replace('n', '');
       }
-      
+
       if(value === fucss.seps.important){
         return '!important';
       }
-      
+
       if(prop === 'font-family'){
         value = value.replace(fucss.seps.and, ' ');
         return '"'+value+'"';
       }
-      
+
       return value;
     });
-    
+
     //console.log(valueList.join(' '));
     return valueList.join(' ');
   }
-  
+
   function modifyProps(props){
     var combinedProps = [];
     props.forEach(function(prop){
       combinedProps.push(fucss.addons[prop] || prop);
     });
-    
+
     return combinedProps;
   }
-  
+
   function combineProps(prop, props){
     return prop = fucss.properties[prop] || prop;
     prop = [prop].concat(props);
     return prop.join('-');
   }
-  
+
   function generateCssRule(className, prop, props, value, state, target){
-    
+
     className = className.replace(fucss.seps.value, '\\:');
     className = className.replace(fucss.seps.comma, '\\.');
     className = className.replace(fucss.seps.important, '\\!');
     className = className.replace(fucss.seps.and, '\\+');
-    
+
     var firstAddon = props.length && props[0];
     var isGroup = fucss.groups.indexOf(firstAddon) !== -1;
-    
+
     state ? className += (':' + state) : false;
     var rules = '';
-    
+
     className = className.split(',').join('\\,');
-    
+
     //grouped props by comma
     var groupedProps = prop.split(',');
-    
+
     if(groupedProps && groupedProps.length > 1){
       groupedProps.forEach(function(char){
         rules += (fucss.properties[char] || char) + ':' + value + ';';
       });
     } else {
-      
+
       //grouped fucss.addons
       if(!isGroup){
         prop = [prop].concat(props).join('-');
@@ -561,18 +561,18 @@ fucss.generateStyling = function(opts){
         });
       }
     }
-    
+
     if(target && target.length){
       var allIndex = target.indexOf('all');
       if(allIndex !== -1) { target[allIndex] = '*' };
       //className = className.split(',').join('\\,');
       className = className + ' ' + target.join(' ');
     }
-    
+
     return '.' + className + '{' + rules + '}\n';
-    
+
   }
-  
+
   return true;
 }
 
@@ -590,7 +590,7 @@ function hex2rgb(hex, opts){
       if(rgb[i] > 255) rgb[i] = 255;
     }
   }
-  
+
   if(opts.alpha) return 'rgba(' + rgb.join(',') + ',' + opts.alpha + ')';
   if(opts.format === 'hex') return "#" +
     ("0" + parseInt(rgb[0],10).toString(16)).slice(-2) +
@@ -600,14 +600,14 @@ function hex2rgb(hex, opts){
 }
 
 fucss.generateColor = function(hex, modifier){
-  
+
   var c = hex.replace('#', '');
   var mv = modifier.substring(1, modifier.length);
   if(c && c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
   if(c && c.length === 2) c = c[0] + c[1] + c[0] + c[1] + c[0] + c[1];
-  
+
   //console.log('generateColor', c, modifier);
-  
+
   switch(modifier[0]){
     case 'a':
     case 'alpha':
@@ -619,33 +619,33 @@ fucss.generateColor = function(hex, modifier){
     case 'dark':
       return hex2rgb(c, { percent: (mv * -1) * 0.01, format: 'hex' });
   }
-  
+
   return hex;
 }
 
 //---------- color section ENDS
-  
+
 
 fucss.harvestClassesFromHtml = function(html){
   var myRegexp = (/class="(.*?)"/gi);
   var myArray;
   var allHarvestedClassNames = [];
-  
+
   while ((myArray = myRegexp.exec(html)) !== null) {
     var harvestedClassNames = myArray[0].split('"')[1].split(' ');
     allHarvestedClassNames = allHarvestedClassNames.concat(harvestedClassNames);
   }
-  
+
   return allHarvestedClassNames.filter (function (v, i, a) { return a.indexOf (v) == i });
 }
 
 fucss.harvestClassesFromRiot = function(riot){
-  
+
   var myRegexp = (/class="(.*?)"/gi);
   var myRegexp2 = (/\'(.*?)\\'/gi)
   var myArray, myArray2;
   var allHarvestedClassNames = [];
-  
+
   while ((myArray = myRegexp.exec(riot)) !== null) {
     if(myArray[0].indexOf("\'") === -1){
       //myArray[0].split('"')[1].split(' ')
@@ -656,7 +656,7 @@ fucss.harvestClassesFromRiot = function(riot){
       }
     }
   }
-  
+
   return allHarvestedClassNames.filter (function (v, i, a) { return a.indexOf (v) == i });
 }
 
@@ -686,30 +686,32 @@ fucss.harvestClassesFromJsx = function(jsx){
           if(!cl || cl && cl.length < 2) return;
           cl = cl[1] && !!cl[1].length && cl[1].split(' ');
           if(!cl || cl && !cl.length) return;
-          
+
           allHarvestedClassNames = allHarvestedClassNames.concat(cl);
         });
       }
     }
   }
-  
+
   return allHarvestedClassNames.filter (function (v, i, a) { return a.indexOf (v) == i });
 }
 
 fucss.generateGlobalExtras = function(){
   var globalExtras = {
     "body": 'margin: 0; text-align: center; font-family: inherit; border-width: 0;',
-    "*": 'margin: 0 auto; outline: 0; padding: 0; box-sizing: border-box; border-style: solid; border-width: 0; vertical-align: baseline;',
-    "a": 'text-decoration: none; color: inherit;',
+    "*":    'margin: 0 auto; outline: 0; padding: 0; box-sizing: border-box; border-style: solid; border-width: 0; vertical-align: baseline;',
+    "a":    'text-decoration: none; color: inherit;',
     "a, span, img, button, i": 'display: inline-block; vertical-align: middle;',
-    "button, a": 'cursor: pointer',
+    "button, a, i": 'cursor: pointer',
     "input, button, select, option, textarea": 'font-size: 100%; font-family: inherit;',
-    
-    "[contenteditable='plaintext-only']": 'cursor: text',
-    "[contenteditable='plaintext-only']:empty:before" : 'content: attr(placeholder); opacity: 0.5; display: block;',
+    "::-moz-selection": 'background: ' + fucss.colors.prim + '; color: ' + fucss.colors.white + ';',
+    "::selection": 'background: ' + fucss.colors.prim + '; color: ' + fucss.colors.white + ';',
+
+    "[contenteditable]": 'cursor: text',
+    "[contenteditable]:empty:before" : 'content: attr(placeholder); opacity: 0.5; display: block;',
   }
   !!window.fucssGlobalExtras && Object.assign(globalExtras, window.fucssGlobalExtras);
-  
+
   var cssString = '';
   for(var key in globalExtras){
     cssString += (key + '{' + globalExtras[key] + '}\n');
@@ -728,9 +730,10 @@ fucss.generateExtras = function(){
       			          border-radius: 50%; border-top-color: ' + fucss.colors.sec + '; -webkit-animation: spin 0.75s ease-in-out infinite;',
     'fux-boxsh':    'box-shadow: 0 1px 2px rgba(0,0,0,.1)',
     'fux-trans':    'transition: all .3s ease;',
+    'fux-scale':    'transform: scale(1.05);',
   }
   !!window.fucssExtras && Object.assign(extras, window.fucssExtras);
-  
+
   var cssString = '';
   for(var key in extras){
     cssString += ('.' + key + '{' + extras[key] + '}\n');
@@ -743,12 +746,12 @@ fucss.generateAnimations = function(){
   var loader = {};
   loader['@keyframes spin'] = 'to { -webkit-transform: rotate(360deg); }';
   loader['@-webkit-keyframes spin'] = 'to { -webkit-transform: rotate(360deg); }';
-  
+
   loader['@keyframes fadeIn'] = 'from {opacity: 0.3;} to {opacity: 1;}';
   loader['@-webkit-keyframes fadeIn'] = 'from {opacity: 0.3;}to {opacity: 1;}';
-  
+
   loader['@keyframes fadeOut'] = 'from {opacity: 1;} to {opacity: 0.5;}';
-    
+
   var cssString = '';
   for(var key in loader){
     cssString += (key + '{'+ loader[key] +'}\n');
