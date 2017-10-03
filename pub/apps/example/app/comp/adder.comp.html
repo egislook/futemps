@@ -32,9 +32,9 @@
           <elem-form fields={ _activeTabData } on-return-value={ handleReturnValue } />
         </div>
 
-        <div class="p:15px ta:r p:10px_button mnw:150px_button bg:white w:100pc" onclick={_handleClick}>
-          <button class="bg:ts">Cancel</button>
-          <button class="bg:prim br:2px c:white bd-w:2px bd-c:prim fux-boxsh">Done</button>
+        <div class="p:15px ta:r p:10px_button mnw:150px_button bg:white w:100pc">
+          <button class="bg:ts" onclick={_handleClick}>Cancel</button>
+          <button class="bg:prim br:2px c:white bd-w:2px bd-c:prim fux-boxsh" onclick={_handleSubmit}>Done</button>
         </div>
 
       </div>
@@ -46,20 +46,25 @@
     this.mixin('tag');
     const tag = this;
 
-    tag._adderIsVisable   = true;
-    tag._activeTab        = 'album0' || null;
+    tag._adderIsVisable   = opts.visable;
+    tag._activeTab        = null;
     tag._pos              = !tag._adderIsVisable && { right: '2%', bottom: '2%' } || { bottom: '90%', right: '2%' };
     tag._handleClick      = _handleClick;
+    tag._handleSubmit     = _handleSubmit;
     tag._stopPropagation  = (e) => e.stopPropagation();
     tag._getActiveTab     = _getActiveTab;
     tag._setActiveTab     = _setActiveTab;
 
-    tag.schemaPath   = opts.schemaPath;
-    tag.dataPath     = opts.dataPath;
-    tag.getTree      = opts.getTree || ((path) => console.log('getTree', path));
-    tag.schema       = opts.schema  || tag.getTree(tag.schemaPath) || { album: { title: { min: 2, max: 20, type: 'text' } } };
-    tag.data         = opts.data    || tag.getTree(tag.dataPath);
-    tag.tabs         = opts.tabs    || _getDataTabs(tag.data) || [];
+    tag.handleCreateChunk = opts.handleCreateChunk;
+    tag.schemaPath    = opts.schemaPath;
+    tag.dataPath      = opts.dataPath;
+    tag.getTree       = opts.getTree || ((path) => console.log('getTree', path));
+    tag.getParentLeaf = opts.getParentLeaf;
+    tag.schema        = opts.schema  || tag.getTree(tag.schemaPath) || { album: { title: { min: 2, max: 20, type: 'text' } } };
+    tag.data          = opts.data    || tag.getTree(tag.dataPath);
+    tag.dataLeaf      = tag.getParentLeaf(tag.dataPath);
+    tag.schemaLeaf    = tag.getParentLeaf(tag.schemaPath);
+    tag.tabs          = opts.tabs    || _getDataTabs(tag.data) || [];
 
     tag._activeTabData     = _getTabData(tag._activeTab);
     tag.handleReturnValue  = handleReturnValue;
@@ -69,14 +74,14 @@
     })
 
     function handleReturnValue(value, extras, valid){
-      if(!extras.name || extras.name && !tag._activeTabData[extras.name])
+      if(!extras.path || extras.path && !_.get(tag._activeTabData, extras.path))
         return;
 
+      _.set(tag._activeTabData, extras.path + '.value', value);
+      _.set(tag._activeTabData, extras.path + '.valid', valid);
+      //tag._activeTabData[extras.name]['value'] = value;
       //console.log(tag._activeTabData);
-      tag._activeTabData[extras.name]['value'] = value;
       tag.update();
-
-      //console.log(value, extras, valid);
     }
 
     function _getTabData(tabName){
@@ -131,10 +136,34 @@
       return Object.keys(data[headKey]);
     }
 
+    function _handleSubmit(){
+
+      //console.log(tag._activeTabData, tag.dataLeaf, tag.schemaLeaf);
+
+      //console.log(tag._activeTabData, __schemeToData(tag._activeTabData));
+
+      tag.handleCreateChunk(__schemeToData(tag._activeTabData), tag.schemaPath, (err, json) => {
+        console.log(json);
+      });
+
+      function __schemeToData(schemeData){
+        let obj = {};
+
+        for(let key in schemeData){
+          if(!schemeData[key].type)
+            obj[key] = __schemeToData(schemeData[key]);
+          else if(schemeData[key].value)
+            obj[key] = schemeData[key].value;
+        }
+        return Object.keys(obj).length && obj;
+      }
+
+    }
+
     function _handleClick(e){
-      const method = tag._adderIsVisable ? 'remove' : 'add';
-      //document.body.classList[method]('fux-clear');
-      //document.body.style['overflow-y'] = 'scroll';
+      e.preventUpdate = true;
+      // const method = tag._adderIsVisable ? 'remove' : 'add';
+      // document.body.classList[method]('fux-clear');
       //document.body.onmousewheel  = (e) => { tag._adderIsVisable && e.preventDefault() }
       //document.body.ontouchmove   = (e) => { tag._adderIsVisable && e.preventDefault() }
       tag.update({

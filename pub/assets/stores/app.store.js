@@ -11,8 +11,10 @@ class appStore{
   }
 
   setOpts(opts, updated){
-    this.content = opts.content;
-    this.poinject = opts.poinject;
+    if(opts){
+      this.content = opts.content;
+      this.poinject = opts.poinject;
+    }
 
     if(this.trigger){
       if(!updated) return this.trigger('storeUpdated');
@@ -61,14 +63,32 @@ class appStore{
 
   getLeaf(id){
     let self = this;
-    let leaf = self.poinject && self.poinject.filter(leaf => leaf.id === id);
+    let leaf = self.poinject && self.poinject.filter(leaf => leaf.id === id || leaf.path === id);
+    //console.log(leaf);
     if(!leaf || leaf && !leaf.length)
-      return `${id}`;
+      return id;
     if(leaf.length === 1)
       return leaf.shift();
   }
 
+  getParentLeaf(path){
+    let self = this;
+    let leaf = self.poinject && self.poinject.filter(leaf => leaf.id === path || leaf.path === path);
+    if(!leaf || leaf && !leaf.length)
+      return path;
+
+    let parentId = leaf.shift().parent;
+
+    let parent = self.poinject && self.poinject.filter(leaf => leaf.id === parentId);
+    if(!parent || parent && !parent.length)
+      return parentId;
+
+    return parent.shift();
+  }
+
   getTree(path){
+    if(!path)
+      return {};
     let key = path.split('.').pop();
     return { [key] : this._treeDigger(null, path) };
   }
@@ -148,6 +168,21 @@ class appStore{
       });
   }
 
+  handleCreateChunk(data, schema, cb){
+    const self = this;
+
+    window.fetch('/poinject/', {
+      headers: { 'Content-Type': 'application/json'},
+      method: 'POST',
+      body: JSON.stringify({ data, schema })
+    }).then(res => res.json())
+      .then(json => {
+        self.setOpts(json.opts);
+        cb && cb();
+        console.log(json);
+      });
+  }
+
   handleDuplicate(id, cb){
     const self = this;
     window.fetch('/poinject/'+id, {
@@ -171,6 +206,9 @@ class appStore{
     const self = this;
 
     upload(file, (err, json) => {
+      if(!id)
+        return cb(err, json);
+
       self.getLeaf(id).type === 'field'
         ? this.handleCreate(json.src, { parent: id, type: 'value' }, cb)
         : this.handleEdit(json.src, id, cb);

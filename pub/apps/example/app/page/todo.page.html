@@ -1,30 +1,29 @@
 <page-todo>
 
-  <navigation routes={ content.routes } active={ route.name } />
+  <wrap-page
+    routes={ content.routes }
+    route={ route.name }
+    store={ appStore } >
 
-  <elem-editor store={appStore} />
+      <comp-adder schema-path="schemas.todo" data-path="todos" />
 
-  <section class="mxw:800px p-rl:2pc">
+      <section class="mxw:800px p-rl:2pc">
 
-    <elem-text
-      class="fs:140pc fw:600 p-tb:20px"
-      text={ getValue('routes.todo.meta.title') }
-      cb-extras={ getValue('routes.todo.meta.title', 'id') }
-      on-edit={ handleEdit } />
+        <elem-text3 path="routes.todo.meta.title">
+          <h1 class="p:10px-2pc">{text}</h1>
+        </elem-text3>
 
-    <elem-text
-      if={false}
-      class="p-tb:20px"
-      max={5000}
-      text={ getValue('routes.todo.meta.description') }
-      cb-extras={ getValue('routes.todo.meta.description', 'id') }
-      on-edit={ handleEdit } />
+        <elem-text3 path="routes.todo.meta.description" max={5000}>
+          <p class="p:10px-2pc">{text}</p>
+        </elem-text3>
 
-  </section>
+      </section>
 
-  <elem-text3 path="todo" max={5000}>
-    <p class="ta:l mxw:800px p:10px-2pc">{text}</p>
-  </elem-text3>
+      <elem-text3 path="todo" max={5000}>
+        <p class="ta:l mxw:800px p:10px-2pc">{text}</p>
+      </elem-text3>
+
+  </wrap-page>
 
   <script>
     this.mixin('store');

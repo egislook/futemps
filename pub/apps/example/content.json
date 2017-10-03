@@ -1,6 +1,7 @@
 {
   "definitions": {
     "en": {
+      "fieldImagePlaceholder": "image size {width} x {height}",
       "text": "Note that this will simply add all attributes \nof obj2 to obj1 which might not be what you want if you still want to use the unmodified obj1. If you're using a framework that craps all over your prototypes then you have to get fancier with checks like hasOwnProperty, but that code will work for 99% of casessss.ss ggggssss",
       "text2": "Careful: the variable \"settings\" will be modified, though. jQuery doesn't return a new instance.The reason for this (and for the naming) is that .extend() was developed to extend objects, rather than to munge stuff together. If you want a new object (e.g. settings is defaults you don't want to touch), you can always jQuery.extend({}, settings, options) testing",
       "img": "image",
@@ -67,6 +68,7 @@
       },
       "button": {
         "route": {
+          "required": "true",
           "max": "10",
           "min": "2",
           "type": "text"
@@ -86,7 +88,33 @@
         }
       }
     },
-    "todo": {}
+    "todo": {
+      "updated": {
+        "type": "date"
+      },
+      "recorded": {
+        "required": "true",
+        "type": "date"
+      },
+      "done": {
+        "type": "boolean"
+      },
+      "category": {
+        "options": {
+          "refactor": "Refactor",
+          "idea": "Idea",
+          "feature": "Feature",
+          "bug": "Bug"
+        },
+        "type": "option"
+      },
+      "task": {
+        "required": "true",
+        "max": "200",
+        "min": "5",
+        "type": "text"
+      }
+    }
   },
   "testing": {
     "text": "Some sort of text that no on ecaresssss asdas\nkeep it simple oneeeeee eee",
@@ -163,7 +191,7 @@
     "field2": {},
     "field1": {}
   },
-  "gallery": {
+  "albums": {
     "album0": {
       "button": {
         "route": "data",
@@ -190,7 +218,7 @@
       "title": {}
     }
   },
-  "todo": "Feature: poinject value reference (path)\nRefactor: Page wrapper for global components like editor, modal, toast\nFix: Touchscreen text3 scrolling bug for every tap it calls click\nFeature: UI / UX upgrade for leaf movement\nFeature: dnd leaf to empty field\nFeature: leaf move to another leaf (change parent, ancestors, path of children)\nFeature: leaf changing position / sort\n\nFeature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data\nFeature: make experimental todo\nFeature: fucss ability to set prim & sec fonts (by default set most efficient)\n---\nIdea: propriet path for poinject fields\nIdea: poinject parent value as variable $ref\nIdea: check router meta structure possibilities\n---\n(done) Upgrade: text3 to support on click editable / one line enter save\n(done) Refactor: elem-text to wrap-text. Wrapper works with yield. Editability.\n(done) Fix: text3 duplicated text issue\n(done) Feature: Implement hidden children number\n(done) Feature: UI leaf extend / collapse\n(done) Bug: incorrect ancestors list is generated\n(done) Bug: leaf delete needs to remove all children by ancestors\n(done) Bug: leaf create ancestors are incorrect (too much)\n(done) Bug: leaf duplicate ancestors are empty\n(done) Bug: leaf duplicate path is incorrect. (undefined. in front)\n(done) Bug: editing leaf children path is not changing\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
+  "todo": "Feature: schema data to poinject generator and auto container creator & cheker (eg: album -> albums)\nFeature: Toast for messages please\nFeature: UI support for boolean, options & multioptions (filtering) (support for text arrays), timestamp, date, time, range \nFeature: ability to restructurise schema in Adder (eg: renaming field changes children field name too)\nFeature: poinject value reference (path)\nRefactor: Page wrapper for global components like editor, modal, toast\nFix: Touchscreen text3 scrolling bug for every tap it calls click\nFeature: UI / UX upgrade for leaf movement\nFeature: dnd leaf to empty field\nFeature: leaf move to another leaf (change parent, ancestors, path of children)\nFeature: leaf changing position / sort\n\nFeature: express body sanitizer\nFeature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data\nFeature: make experimental todo\nFeature: fucss ability to set prim & sec fonts (by default set most efficient)\n---\nIdea: propriet path for poinject fields\nIdea: poinject parent value as variable $ref\nIdea: check router meta structure possibilities\n---\n(done) Upgrade: text3 to support on click editable / one line enter save\n(done) Refactor: elem-text to wrap-text. Wrapper works with yield. Editability.\n(done) Fix: text3 duplicated text issue\n(done) Feature: Implement hidden children number\n(done) Feature: UI leaf extend / collapse\n(done) Bug: incorrect ancestors list is generated\n(done) Bug: leaf delete needs to remove all children by ancestors\n(done) Bug: leaf create ancestors are incorrect (too much)\n(done) Bug: leaf duplicate ancestors are empty\n(done) Bug: leaf duplicate path is incorrect. (undefined. in front)\n(done) Bug: editing leaf children path is not changing\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
   "text2": "$def.text2",
   "text": "$def.text",
   "poinoutTitle": "Poinout",

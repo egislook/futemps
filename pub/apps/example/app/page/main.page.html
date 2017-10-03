@@ -5,7 +5,7 @@
   <elem-editor store={appStore} />
 
   <elem-intro
-    intros="{ content.gallery }"
+    intros="{ content.albums }"
     edit-mode="{ false }"
     get-value={ getValue }
     on-edit={ handleEdit }
@@ -21,14 +21,14 @@
           <div class="mxw:800px">
             <elem-text3
               active-class="bg:blacka3 p-r:20px"
-              path="{'gallery.' + key + '.title'}"
+              path="{'albums.' + key + '.title'}"
               placeholder-path="fieldTextPlaceholder">
                 <h1 class="fs:400pc fw:100 lh:1 m:10px-0 p:10px">{text}</h1>
             </elem-text3>
 
             <elem-text3
               active-class="bg:blacka3 p-r:20px"
-              path="{'gallery.' + key + '.description'}"
+              path="{'albums.' + key + '.description'}"
               placeholder-path="fieldTextPlaceholder">
                 <p class="fw:500 p:10px">{text}</p>
             </elem-text3>
@@ -36,7 +36,7 @@
             <elem-text3
               if={ album.button }
               one-liner={true}
-              path="{'gallery.' + key + '.button.title'}"
+              path="{'albums.' + key + '.button.title'}"
               placeholder-path="fieldTextPlaceholder">
               <a class="p:17px-40px bg:prim c:white br:1px fw:600 fux-boxsh m-t:40px">{ text }</a>
             </elem-text3>
@@ -51,7 +51,7 @@
                 class="op:0 ps:ab w,h:0 dp:n"
                 type="file"
                 name="files"
-                onchange={parent.opts.onUpload.bind(this, parent.opts.getValue('gallery.' + key + '.img', 'id'))} />
+                onchange={parent.opts.onUpload.bind(this, parent.opts.getValue('albums.' + key + '.img', 'id'))} />
             </label>
           </div>
 
@@ -59,21 +59,21 @@
 
   </elem-intro>
 
-  <comp-adder schema-path="schemas.album" data-path="gallery" />
+  <comp-adder schema-path="schemas.album" data-path="albums" visable={true} />
 
-  <div class="w:100pc ps:rl m-tb:30px" each={album in getValue('gallery')}>
-    <img class="dp:bk w:100pc" src={ getValue('gallery.'+album+'.img') } />
+  <div class="w:100pc ps:rl m-tb:30px" each={album in getValue('albums')}>
+    <img class="dp:bk w:100pc" src={ getValue('albums.'+album+'.img') } />
     <span class="ps:ab b,l:0 w:100pc c:white bg:blacka5 fs:80pc p:20px-30px ta:l">
       <elem-text3
         active-class="p-r:10px"
-        path="{'gallery.' + album + '.title'}"
+        path="{'albums.' + album + '.title'}"
         placeholder-path="fieldTextPlaceholder">
           <h2 class="fs:220pc fw:300 m-b:10px lh:1.1 dp:ib">{text}</h2>
       </elem-text3>
       <br />
       <elem-text3
         active-class="p-r:10px"
-        path="{'gallery.' + album + '.description'}"
+        path="{'albums.' + album + '.description'}"
         placeholder-path="fieldTextPlaceholder">
           <p class="fs:110pc fw:500 dp:ib">{text}</p>
       </elem-text3>
@@ -85,7 +85,7 @@
           class="ps:ab t,l:0 w,h:0 dp:n"
           type="file"
           name="files"
-          onchange={parent.handleUpload.bind(this, getValue('gallery.'+album+'.img', 'id'))} />
+          onchange={parent.handleUpload.bind(this, getValue('albums.'+album+'.img', 'id'))} />
       </label>
     </div>
   </div>

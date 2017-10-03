@@ -10,12 +10,12 @@
       </span>
 
       <elem-text3
-        if={ _isFieldType(field, 'text') }
+        if={ _isFieldType(field, ['text', 'url']) }
         min={ field.min }
         max={ field.max }
         placeholder-path='fieldTextPlaceholder'
         on-return-value={ onReturnValue }
-        extras={{ field: field, name: name }}
+        extras={{ field: field, name: name, path: _getPath(name) }}
         text={ field.value }
         noautoclass={true}>
           <p
@@ -25,12 +25,16 @@
       </elem-text3>
 
       <form-image
+        field={ field }
         if={_isFieldType(field, 'image')}
         link={ field.value }
-        placeholder={_getPlaceholder(name, field)} />
+        placeholder-path='fieldTextPlaceholder'
+        on-return-value={ onReturnValue }
+        extras={{ field: field, name: name, path: _getPath(name) }}
+        on-change={ _uploadAndReturn({ field: field, name: name, path: _getPath(name) }) } />
 
       <span class="p-l:20px" if={!field.type}>
-        <elem-form fields={field} on-return-value={ onReturnValue } />
+        <elem-form fields={field} on-return-value={ onReturnValue } path={_getPath(name)} />
       </span>
 
     </div>
@@ -39,10 +43,15 @@
 
   <script>
     this.mixin('tag');
+    const tag = this;
     this.getDef            = this.opts.getDef;
     this.onReturnValue     = this.opts.onReturnValue;
-    this._getPlaceholder   = (name, field)              => `text between ${field.min} and ${field.max} chars`;
-    this._isFieldType      = (field, type = 'schema')   => (field.type && field.type === type || !field.type && type === 'schema');
+    this._isFieldType      = (field, type = 'schema')   => (field.type && type.indexOf(field.type) >= 0 || !field.type && type === 'schema');
     this._isRequired       = (field) => field.required === 'true';
+    this._getPath          = (name) => opts.path && opts.path + '.' + name || name;
+    this._uploadAndReturn  = (extras) =>
+      (e) => tag.opts.handleUpload(null, e, (err, json) => {
+        tag.onReturnValue(json.src, extras, true);
+      })
   </script>
 </elem-form>

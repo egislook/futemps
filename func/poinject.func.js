@@ -81,8 +81,22 @@ function move(req, res){
 
 }
 
+function postChunk(req, res){
+  let data = poinject.createChunkBySchema(req.body.schema, req.body.data);
+
+  res.json(data || { ok: true, msg: 'new chunk of data has been created', data });
+  //res.json({ ok: true, msg: 'new chunk of data has been created', data });
+}
+
 function post(req, res){
-  if(!req.body || req.body && !req.body.value)
+  if(!req.body)
+    return res.status(400)
+      .json({ ok: false, msg: 'body is not specified' });
+
+  if(req.body.data && req.body.schema)
+    return postChunk(req, res);
+
+  if(!req.body.value)
     return res.status(400)
       .json({ ok: false, msg: 'value is not specified' });
 

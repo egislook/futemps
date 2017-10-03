@@ -31,7 +31,7 @@
     tag.truncate         = opts.truncate        || 200;
     tag.placeholderPath  = opts.placeholderPath || null;
     tag.textLimits       = opts.textLimits      || {min: opts.min || 1, max: opts.max || 550 };
-    tag.placeholder      = opts.placeholder     || opts.placeholderPath && opts.getDef(opts.placeholderPath, tag.textLimits) || 'enter text';
+    tag.placeholder      = opts.placeholder     || opts.placeholderPath && opts.getDef(opts.placeholderPath, opts) || 'enter text';
     tag.validateText     = opts.validateText    || validateText;
     tag.onReturnValue    = opts.onReturnValue;  //pass opts through extras
 
@@ -96,8 +96,8 @@
       if(!tag.id && opts.text !== tag.text){
         tag.text = opts.text || '';
 
-        if(opts.onReturnValue)
-          console.log(tag.id, opts.text, tag.text);
+        // if(opts.onReturnValue)
+        //   console.log(tag.id, opts.text, tag.text);
 
         if(this.root.children){
           const elem = this.root.lastChild;
@@ -148,7 +148,7 @@
       if(tag.clickToEdit)
         e.target.contentEditable = false;
 
-      if(tag.onReturnValue)
+      if(tag.onReturnValue && text !== tag.text)
         tag.onReturnValue(text, tag.extras, tag.validateText(text));
 
       if(!tag.onReturnValue && text !== tag.text && tag.validateText(text)){
