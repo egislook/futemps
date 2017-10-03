@@ -7,9 +7,8 @@ actions.tagRoute = (col, act, id) => {
   const store = stores.appStore;
   col = col || store.getAllRoutes() && Object.keys(store.getAllRoutes()).shift();
 
-  store.setActiveRoute(col);
+  stores.appStore.setActiveRoute(col);
   window.route(store.route.link, store.route.meta.title);
-  window.riot.mount('main#main', store.route.view, { stores });
 }
 
 actions.initMixins = (mixins = {}) => {
@@ -25,6 +24,7 @@ actions.initRouter = () => {
   window.route(actions.tagRoute);
   window.route.base('/');
   window.route.start(1);
+  riot.mount('app');
 };
 
 actions.getContent = (cb) => {

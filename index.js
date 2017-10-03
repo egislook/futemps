@@ -2,7 +2,7 @@
 
 const express     = global.express = require('express'),
       bodyParser  = require('body-parser'),
-      exriothing  = require('exriothing'),
+      exriothing  = require('../_packs/exriothing'),
       poinject    = require('../_packs/poinject'),
       cfg         = require('./cfg.js');
 
@@ -47,16 +47,12 @@ actions.initRouter = () => {
 
 actions.tagRoute = (req, res) => {
   let col = req.params.tag;
-  let render = exriothing.render;
   const store = stores.appStore;
 
   col = col || store.getAllRoutes() && Object.keys(store.getAllRoutes()).shift();
 
-  if(!col)
-    return res.send(render({ store }));
-
   store.setActiveRoute(col);
-  return res.send(render(store.route.view, { stores }))
+  return res.send(exriothing.renderHTML());
 }
 
 actions.getContent = (cb) => {

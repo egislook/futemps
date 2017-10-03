@@ -29,8 +29,12 @@ class appStore{
 
   /** ROUTE DATA */
   getAllRoutes(){ return this.content.routes }
-  setActiveRoute(routeName){ this.route = this.content.routes[routeName] }
+  setActiveRoute(routeName){
+    this.route = this.content.routes[routeName] || this.content.routes.main;
+    this.trigger('routeUpdated');
+  }
   getActiveRoute(key){ return key ? this.route[key] : this.route }
+  getMeta(){ return Object.assign(this.content.meta || {}, this.getActiveRoute('meta') || {})}
 
   /** CONTENT DATA */
   getValue(path, field='value'){

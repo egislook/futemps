@@ -1,0 +1,11 @@
+<app>
+
+  <navigation routes={ content.routes } active={ route.name } />
+  <elem-editor store={ appStore } />
+
+  <main class="{'mxw:800px': !route.fullscreen }" data-is={ route.view } />
+
+  <script>
+    this.mixin('store');
+  </script>
+</app>

@@ -1,8 +1,6 @@
 <page-main>
 
-  <navigation routes={ content.routes } active={ route.name } />
-
-  <elem-editor store={appStore} />
+  <comp-adder schema-path="schemas.album" data-path="albums" visable={true} />
 
   <elem-intro
     intros="{ content.albums }"
@@ -58,8 +56,6 @@
       </div>
 
   </elem-intro>
-
-  <comp-adder schema-path="schemas.album" data-path="albums" visable={true} />
 
   <div class="w:100pc ps:rl m-tb:30px" each={album in getValue('albums')}>
     <img class="dp:bk w:100pc" src={ getValue('albums.'+album+'.img') } />

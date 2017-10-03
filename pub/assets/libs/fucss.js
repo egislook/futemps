@@ -698,7 +698,9 @@ fucss.harvestClassesFromJsx = function(jsx){
 
 fucss.generateGlobalExtras = function(){
   var globalExtras = {
-    "body": 'margin: 0; text-align: center; font-family: inherit; border-width: 0;',
+    "body": 'margin: 0; text-align: center; border-width: 0;\
+              font-family: "Helvetica Neue", "Calibri Light", Roboto, sans-serif;\
+              -webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;letter-spacing: 0.02em;',
     "*":    'margin: 0 auto; outline: 0; padding: 0; box-sizing: border-box; border-style: solid; border-width: 0; vertical-align: baseline;',
     "a":    'text-decoration: none; color: inherit;',
     "a, span, img, button, i": 'display: inline-block; vertical-align: middle;',

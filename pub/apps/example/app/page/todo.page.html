@@ -1,33 +1,21 @@
 <page-todo>
 
-  <wrap-page
-    routes={ content.routes }
-    route={ route.name }
-    store={ appStore } >
+  <comp-adder schema-path="schemas.todo" data-path="todos" />
 
-      <comp-adder schema-path="schemas.todo" data-path="todos" />
+  <elem-text3 path="routes.todo.meta.title">
+    <h1 class="p:10px-2pc">{text}</h1>
+  </elem-text3>
 
-      <section class="mxw:800px p-rl:2pc">
+  <elem-text3 path="routes.todo.meta.description" max={5000}>
+    <p class="p:10px-2pc">{text}</p>
+  </elem-text3>
 
-        <elem-text3 path="routes.todo.meta.title">
-          <h1 class="p:10px-2pc">{text}</h1>
-        </elem-text3>
-
-        <elem-text3 path="routes.todo.meta.description" max={5000}>
-          <p class="p:10px-2pc">{text}</p>
-        </elem-text3>
-
-      </section>
-
-      <elem-text3 path="todo" max={5000}>
-        <p class="ta:l mxw:800px p:10px-2pc">{text}</p>
-      </elem-text3>
-
-  </wrap-page>
+  <elem-text3 path="todo" max={5000}>
+    <p class="ta:l mxw:800px p:10px-2pc">{text}</p>
+  </elem-text3>
 
   <script>
-    this.mixin('store');
-    //console.log( this.getValue('gallery') )
+
   </script>
 
 </page-todo>

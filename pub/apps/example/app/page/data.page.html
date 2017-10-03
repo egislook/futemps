@@ -1,26 +1,19 @@
 <page-data>
 
-  <navigation routes={ content.routes } active={ route.name } />
 
-  <elem-editor store={appStore} />
+  <elem-text3 path="routes.data.meta.title">
+    <h1 class="fs:200pc fw:600 p-tb:10px m-t:20px" data-path="routes.data.meta.description">{ text }</h1>
+  </elem-text3>
 
-  <section class="mxw:800px p-rl:2pc">
+  <elem-text3 truncate={200} path="text2">
+    <p class="p:20px">{ truncateText() }</p>
+  </elem-text3>
 
-    <elem-text3 path="routes.data.meta.title">
-      <h1 class="fs:200pc fw:600 p-tb:10px m-t:20px" data-path="routes.data.meta.description">{ text }</h1>
-    </elem-text3>
+  <elem-text3 truncate={200} path="routes.data.meta.description">
+    <p class="p:20px">{ truncateText() }</p>
+  </elem-text3>
 
-    <elem-text3 truncate={200} path="text2">
-      <p class="p:20px">{ truncateText() }</p>
-    </elem-text3>
-
-    <elem-text3 truncate={200} path="routes.data.meta.description">
-      <p class="p:20px">{ truncateText() }</p>
-    </elem-text3>
-
-  </section>
-
-  <div class="p-b:20px ta:l mxw:800px"
+  <div class="p-b:20px ta:l"
     mousemove={false && handleMouseMove}
     touchmove={false && handleMouseMove}
     mouseup={false && handleMouseUp}

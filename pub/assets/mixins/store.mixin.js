@@ -1,6 +1,7 @@
 function storeMixin(stores){
   return {
     init: function(){
+      this.opts.SERVER = typeof window === 'undefined';
       this.appStore = stores.appStore;
 
       this.poinject = this.appStore.poinject;
@@ -9,6 +10,7 @@ function storeMixin(stores){
 
       this.getValue         = this.appStore.getValue.bind(this.appStore);
       this.getActiveRoute   = this.appStore.getActiveRoute.bind(this.appStore);
+      this.getMeta          = this.appStore.getMeta.bind(this.appStore);
 
       this.handleEdit       = this.appStore.handleEdit.bind(this.appStore);
       this.handleCreate     = this.appStore.handleCreate.bind(this.appStore);
@@ -21,7 +23,12 @@ function storeMixin(stores){
       this.appStore.on('storeUpdated',
         () => self.update({
           poinject: self.appStore.poinject,
-          content: self.appStore.content
+          content:  self.appStore.content,
+        }));
+
+      this.appStore.on('routeUpdated',
+        () => self.update({
+          route: this.getActiveRoute()
         }));
 
       this.extended = [];
@@ -44,11 +51,13 @@ function storeMixin(stores){
 
       this.handleExtend = (id, e) => self.trigger('extend', id);
 
-      // Unmount modifications for feature animation implementation
-      this.on('before-unmount',
-        () => console.log('before unmount', this.opts.dataIs))
+      this.on('updated', () => console.log('StoreMIXIN update'));
 
-      let origUnmount = this.unmount;
+      // Unmount modifications for feature animation implementation
+      // this.on('before-unmount',
+      //   () => console.log('before unmount', this.opts.dataIs))
+
+      // let origUnmount = this.unmount;
 
       // Object.defineProperty(this, 'unmount', { value: function(){
       //   console.log('new unmount', this.opts.dataIs);
