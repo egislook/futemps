@@ -1,4 +1,8 @@
 {
+  "html": {
+    "elem-toast": "<elem-toast />",
+    "elem-text3": "<elem-text3>\n  <p class=\"p:10px-20px bg:white dp:ib\" />\n</elem-text3>"
+  },
   "definitions": {
     "en": {
       "fieldImagePlaceholder": "image size {width} x {height}",
@@ -142,7 +146,7 @@
       "view": "page-data",
       "meta": {
         "title": "Poinject tree editor",
-        "description": "Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)\nEnabling and disabling editor fields"
+        "description": "Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)\nEnabling and disabling editor fieldss"
       }
     },
     "sandbox": {
@@ -153,6 +157,16 @@
       "meta": {
         "title": "Lets call it Sandbox",
         "description": "Test Edit Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)"
+      }
+    },
+    "components": {
+      "name": "components",
+      "link": "/components",
+      "title": "Components",
+      "view": "page-components",
+      "meta": {
+        "title": "Poinject tree editor",
+        "description": "Poinject Editor is a web-based tool to view, edit, and format Poinject. By editing data you are editing content on the website directly.\nThis example demonstrates the following:\n\nLoading external schemas via ajax (using $ref)\nSetting the editor's value from javascript (try the Restore to Default button)\nValidating the editor's contents (try setting name to an empty string)\nMacro templates (try changing the city or state fields and watch the citystate field update automatically)\nEnabling and disabling editor fieldss"
       }
     },
     "todo": {
@@ -219,7 +233,7 @@
       "title": {}
     }
   },
-  "todo": "Fix: data tree update amount (3 updates for every action)\nRefactor: Navigation to make it more suitable for mobile\nRefactor: server side rendering (index.html is a tag with full server render features)\nFeature: schema data to poinject generator and auto container creator & cheker (eg: album -> albums)\nFeature: Toast for messages please\nFeature: UI support for boolean, options & multioptions (filtering) (support for text arrays), timestamp, date, time, range \nFeature: ability to restructurise schema in Adder (eg: renaming field changes children field name too)\nFeature: poinject value reference (path)\nRefactor: Page wrapper for global components like editor, modal, toast\nFix: Touchscreen text3 scrolling bug for every tap it calls click\nFeature: UI / UX upgrade for leaf movement\nFeature: dnd leaf to empty field\nFeature: leaf move to another leaf (change parent, ancestors, path of children)\nFeature: leaf changing position / sort\n\nFeature: express body sanitizer\nFeature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data\nFeature: make experimental todo\nFeature: fucss ability to set prim & sec fonts (by default set most efficient)\n---\nIdea: propriet path for poinject fields\nIdea: poinject parent value as variable $ref\nIdea: check router meta structure possibilities\n---\n(done) Upgrade: text3 to support on click editable / one line enter save\n(done) Refactor: elem-text to wrap-text. Wrapper works with yield. Editability.\n(done) Fix: text3 duplicated text issue\n(done) Feature: Implement hidden children number\n(done) Feature: UI leaf extend / collapse\n(done) Bug: incorrect ancestors list is generated\n(done) Bug: leaf delete needs to remove all children by ancestors\n(done) Bug: leaf create ancestors are incorrect (too much)\n(done) Bug: leaf duplicate ancestors are empty\n(done) Bug: leaf duplicate path is incorrect. (undefined. in front)\n(done) Bug: editing leaf children path is not changing\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
+  "todo": "Feature: Toast for messages please (animate it)\n Refactor: Navigation to make it more suitable for mobile\nRefactor: server side rendering (index.html is a tag with full server render features)\nFeature: schema data to poinject generator and auto container creator & cheker (eg: album -> albums)  \nFeature: UI support for boolean, options & multioptions (filtering) (support for text arrays), timestamp, date, time, range \nFeature: ability to restructurise schema in Adder (eg: renaming field changes children field name too)\nFeature: poinject value reference (path)\nRefactor: Page wrapper for global components like editor, modal, toast\nFix: Touchscreen text3 scrolling bug for every tap it calls click\nFeature: UI / UX upgrade for leaf movement\nFeature: dnd leaf to empty field\nFeature: leaf move to another leaf (change parent, ancestors, path of children)\nFeature: leaf changing position / sort\n\nFeature: express body sanitizer\nFeature: confirm action popup for delete / duplicate leaf\nFeature: button text & link edit\nFeature: Language support (dynamic / structure method)\nFeature: wrap-image. Wrapper works with yield. Editability.\nFeature: smart data structure / dynamic data\nFeature: make experimental todo\nFeature: fucss ability to set prim & sec fonts (by default set most efficient)\n---\nIdea: build SDK (browser / server) for poinject  (Inspiration: lowdb, json server) \nIdea: propriet path for poinject fields\nIdea: poinject parent value as variable $ref\nIdea: check router meta structure possibilities\nIdea: Reminder APP keep reminding the future you something\n ---\n(done) Fix: data tree update amount (3 updates for every action)\n(done) Upgrade: text3 to support on click editable / one line enter save\n(done) Refactor: elem-text to wrap-text. Wrapper works with yield. Editability.\n(done) Fix: text3 duplicated text issue\n(done) Feature: Implement hidden children number\n(done) Feature: UI leaf extend / collapse\n(done) Bug: incorrect ancestors list is generated\n(done) Bug: leaf delete needs to remove all children by ancestors\n(done) Bug: leaf create ancestors are incorrect (too much)\n(done) Bug: leaf duplicate ancestors are empty\n(done) Bug: leaf duplicate path is incorrect. (undefined. in front)\n(done) Bug: editing leaf children path is not changing\n(done) Feature: duplicate leaf\n(done) Feature: Gallery slideshow\n(done) add basic image uploading feature\n(done) fix delete bug. deletes only selected value and parent\n(done) add new field on top lvl\n(done) fix delete fn (value delete)",
   "text2": "$def.text2",
   "text": "$def.text",
   "poinoutTitle": "Poinout",

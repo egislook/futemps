@@ -136,7 +136,8 @@
       return Object.keys(data[headKey]);
     }
 
-    function _handleSubmit(){
+    function _handleSubmit(e){
+      e.preventUpdate = true;
 
       //console.log(tag._activeTabData, tag.dataLeaf, tag.schemaLeaf);
 

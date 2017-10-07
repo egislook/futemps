@@ -1,0 +1,84 @@
+<elem-toast>
+
+	<div
+		class="ps:fx c:white p:15px-20px w:300px m-l:150npx l:50pc br:3px fs:80pc fw:400 fux-boxsh fux-trans z:99 {'bg:black300': ok, 'bg:err': !ok}"
+		style={ _toastPos }
+		onclick="{ handleToastRemove }">{ msg }</div>
+
+	<script>
+		const tag = this;
+
+		tag.pos				= ['top', 'bottom'].indexOf(opts.pos) >= 0 ? opts.pos : 'bottom';
+		tag.msg       = opts.msg 				|| opts.prevent ? false : 'toast message';
+		tag.delay			= opts.delay !== undefined ? opts.delay : 5000;
+		tag.timestamp	= opts.timestamp	|| null;
+		tag.ok				= opts.ok					|| false;
+		tag.onRemove	= opts.onRemove		|| ((e) => !opts.prevent && console.log(`${tag.__.tagName} onRemove(e)`));
+
+		tag._toastPos 		= _getToastPos(tag.msg);
+		tag._timer 				= null;
+		tag._innerUpdate	= null;
+
+		tag.on('mount', mount);
+		tag.on('update', update);
+		tag.on('message', (message) => {
+			tag.update(message);
+		});
+
+		tag.handleToastRemove = handleToastRemove;
+		tag.shouldUpdate = handleShouldUpdate;
+
+
+		function _getToastPos(msg){
+			return msg ? { [tag.pos]: 0 } : { [tag.pos]: '-25%' };
+		}
+
+
+		function handleToastRemove(e){
+			clearTimeout(tag._timer);
+			tag.update({ _toastPos: _getToastPos(), _innerUpdate: true });
+			tag.trigger('toastRemove');
+			tag.onRemove && tag.onRemove(e);
+			if(e) e.preventUpdate = true;
+		}
+
+
+		function mount(){
+			if(!tag.msg)
+				return;
+
+			clearTimeout(tag._timer);
+			if(tag.delay)
+				tag._timer = setTimeout(tag.handleToastRemove, tag.delay);
+		}
+
+
+		function handleShouldUpdate(data = {}, nextOpts){
+			if(data._innerUpdate)
+				return true;
+
+      if(JSON.stringify(opts) !== JSON.stringify(nextOpts)){
+				Object.assign(tag, opts);
+				return true;
+			}
+
+			if(data.msg)
+				return true;
+    }
+
+
+		function update(){
+			if(tag._innerUpdate){
+				tag._innerUpdate = false;
+				return;
+			}
+
+			tag._toastPos = _getToastPos(true);
+
+			clearTimeout(tag._timer);
+			tag._timer = setTimeout(tag.handleToastRemove, tag.delay);
+		}
+
+	</script>
+
+</elem-toast>

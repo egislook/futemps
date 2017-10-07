@@ -6,11 +6,13 @@ class appStore{
     this.route    = null;
     this.lang     = 'en';
     this.def      = '$def.';
+    this.msgs     = [];
 
     //this.on('editor', this.setEditor);
   }
 
   setOpts(opts, updated){
+    console.log('setOpts');
     if(opts){
       this.content = opts.content;
       this.poinject = opts.poinject;
@@ -23,12 +25,10 @@ class appStore{
     }
   }
 
-  getOpts(){
-    return this.content;
-  }
+  getOpts(){ return this.content; }
 
   /** ROUTE DATA */
-  getAllRoutes(){ return this.content.routes }
+  getAllRoutes(){ return this.content.routes; }
   setActiveRoute(routeName){
     this.route = this.content.routes[routeName] || this.content.routes.main;
     this.trigger('routeUpdated');
@@ -115,6 +115,19 @@ class appStore{
     return obj;
   }
 
+  triggerMessage(json, extras){
+    console.log(json);
+    this.trigger('message', {
+      timestamp:  new Date().getTime(),
+      ok:         json.ok,
+      msg:        json.msg
+    });
+
+    if(json.ok)
+      self.setOpts(json.opts, extras);
+
+  }
+
   handleEdit(value, id, cb){
     const self = this;
     let path = id && id.split('-').length !== 5 && id;
@@ -126,9 +139,8 @@ class appStore{
       body: JSON.stringify({ value })
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts, { path, id });
+        this.triggerMessage(json, { path, id });
         cb && cb();
-        console.log(json);
       });
   }
 
@@ -151,9 +163,7 @@ class appStore{
         body: JSON.stringify({ siblingId: sibling.id })
       }).then(res => res.json())
         .then(json => {
-          self.setOpts(json.opts);
-          //cb && cb();
-          console.log(json);
+          this.triggerMessage(json);
         });
     }
   }
@@ -166,9 +176,8 @@ class appStore{
       body: JSON.stringify({ value, parent: leaf.parent, type: leaf.type || 'field' })
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts);
+        this.triggerMessage(json);
         cb && cb();
-        console.log(json);
       });
   }
 
@@ -181,9 +190,8 @@ class appStore{
       body: JSON.stringify({ data, schema })
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts);
+        this.triggerMessage(json);
         cb && cb();
-        console.log(json);
       });
   }
 
@@ -194,8 +202,7 @@ class appStore{
       method: 'POST'
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts);
-        console.log(json);
+        this.triggerMessage(json);
       });
   }
 
@@ -239,8 +246,7 @@ class appStore{
       method: 'DELETE'
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts);
-        console.log(json);
+        this.triggerMessage(json);
       });
   }
 }

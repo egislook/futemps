@@ -104,7 +104,7 @@
     this.switchDelay = 5000;
 
     this.on('mount', () => {
-      let screenWidth = tag.refs.container.offsetWidth;
+      let screenWidth = tag.refs.container && tag.refs.container.offsetWidth;
       tag.update({
         screenWidth,
         introContainerWidth: tag.keysOfIntros.length * screenWidth

@@ -1,11 +1,40 @@
 <app>
 
+
   <navigation routes={ content.routes } active={ route.name } />
   <elem-editor store={ appStore } />
 
   <main class="{'mxw:800px': !route.fullscreen }" data-is={ route.view } />
 
+  <elem-toast
+    ok={ message && message.ok }
+    msg={ message && message.msg }
+    timestamp={ message && message.timestamp }
+    prevent={ true } />
+
+  <elem-modal if={ false } />
+
   <script>
     this.mixin('store');
+
+    this.handleToastRemove = () => {
+      console.log('click remove toast');
+    }
+
+    this.on('update', () => {
+      console.log('app updated');
+    })
+
+
+
+
+    this.appStore.on('message', (message) =>
+      this.tags['elem-toast'].trigger('message', message));
+
+
+
+    // setInterval(() => {
+    //   this.update();
+    // }, 1100);
   </script>
 </app>
