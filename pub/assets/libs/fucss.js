@@ -40,6 +40,9 @@ fucss.states = {
   lc: 'last-child',
   last: 'last-child',
   first: 'first-child',
+  //version 0.6.8
+  rt: 'root',
+  root: 'root',
 };
 
 fucss.properties = {
@@ -54,7 +57,7 @@ fucss.properties = {
   h: 'height',
   w: 'width',
   fnt: 'font',
-  flt: 'float',
+  //flt: 'float',
   vlgn: 'vertical-align',
   hlgn: 'text-align',
   col: 'width',
@@ -131,7 +134,37 @@ fucss.properties = {
   jc: 'justify-content',
   cont: 'content',
 
+  //version 0.6.8
+  tt: 'text-transform',
+  ts: 'transition',
+  ft: 'filter',
+  bft: 'backdrop-filter',
+  tf: 'transform',
 };
+
+//version 0.6.8
+fucss.functional = {
+  //background
+  url: 'url',
+  img: 'img',
+  lg: 'linier-gradient',
+
+  //color
+  rgb: 'rgb',
+  rgba: 'rgba',
+
+  //util
+  clc: 'calc',
+  el: 'element',
+  atr: 'attr',
+
+  //shapes
+  crc: 'circle',
+  rec: 'rect',
+  els: 'ellipse',
+  ins: 'inset',
+  poly: 'polygon'
+}
 
 fucss.units = ['px', 'em', 'pc', 'vh', 'vw'];
 
@@ -159,6 +192,10 @@ fucss.addons = {
   s: 'style',
   rp: 'repeat',
   ps: 'position',
+  //version 0.6.8
+  x: 'X',
+  y: 'Y',
+  z: 'z',
 };
 
 
@@ -230,7 +267,32 @@ fucss.values = {
   fe: 'flex-end',
   stc: 'stretch',
 
+  //version 0.6.8
+  trf: 'transform',
 };
+
+//version 0.6.8
+fucss.transforms = {
+  scl: 'scale',
+  trl: 'translate',
+  rot: 'rotate',
+  skw: 'skew',
+  mtx: 'matrix',
+  prp: 'perspective',
+}
+
+fucss.filters = {
+  bl: 'blur',
+  bh: 'brightness',
+  cn: 'contrast',
+  ds: 'drop-shadow',
+  gs: 'greyscale',
+  hr: 'hue-rotate',
+  iv: 'invert',
+  op: 'opacity',
+  st: 'saturate',
+  sp: 'sepia',
+}
 
 fucss.ignore = ['fa', 'fix', 'trans', 'cursor', 'wrap', 'owlServices', 'owl', 'gm'];
 
@@ -242,7 +304,7 @@ fucss.colorazable = [
   'border',
   'border-color',
   'border-bottom',
-  'border-top',,
+  'border-top',
   'border-left',
   'border-right',
   'border-right-color',
@@ -310,6 +372,7 @@ fucss.config = {
   'sec': 'colors',
   'err': 'colors',
   'warn': 'colors',
+  'sucs': 'colors',
 };
 
 //assigning custom client stuff
@@ -364,6 +427,7 @@ fucss.generateStyling = function(opts){
 
       //props
       var props = splitedClassName.shift().split(fucss.seps.space);
+
       var mediaQuery = extractMediaQuery(props);
       var state = extractState(props);
 
@@ -378,18 +442,31 @@ fucss.generateStyling = function(opts){
         return;
       }
 
-      //console.log(prop, props, state, value);
-      if(Object.keys(fucss.properties).indexOf(prop) === -1 && prop.indexOf(',') === -1) return;
+      var values = [];
+
+      if(fucss.transforms[prop]){
+        values.push(prop);
+        prop = 'tf';
+      }
+
+      if(fucss.filters[prop]){
+        values.push(prop);
+        prop = 'ft'
+      }
+
+      if(prop && Object.keys(fucss.properties).indexOf(prop) === -1 && prop.indexOf(',') === -1) return;
       //if(fucss.ignore.indexOf(prop) !== -1){return}
       if(!value) return console.warn('No value specified. Use value seperator ' + fucss.seps.value + ' for "' + className + '"');
       if(!prop) return console.warn('No prop specified. Use prop seperator ' + fucss.seps.space + ' for "' + className + '"');
       if(!fucss.properties[prop] && prop.indexOf(',') < 0) cssMissing = cssMissing.concat([prop]);
-
       prop = combineProps(prop, props);
       props = modifyProps(props);
-      value = modifyValue(value.split(fucss.seps.space), prop);
+      values = values.concat(value.split(fucss.seps.space));
+      value = modifyValue(values, prop);
+      //if(prop.indexOf('transform') !== -1) console.log(prop, props, value);
 
       var cssRule = generateCssRule(className, prop, props, value, state, target);
+      //if(prop === 'transform') console.log(state, prop, props, value, cssRule);
 
       mediaQuery
         ? cssMediaQueries[mediaQuery] = cssMediaQueries[mediaQuery] ? (cssMediaQueries[mediaQuery] + cssRule) : cssRule
@@ -477,9 +554,21 @@ fucss.generateStyling = function(opts){
   function modifyValue(valueList, prop){
 
     //console.log(valueList, prop, valueList.length);
+    var functions = [];
     valueList = valueList.map(function(value){
 
-      if(fucss.values[value]) return fucss.values[value];
+      if(prop === 'transform' && fucss.transforms[value]){
+        functions.push(fucss.transforms[value]);
+        return fucss.transforms[value];
+      }
+
+      if(['filter', 'backdrop-filter'].indexOf(prop) !== -1 && fucss.filters[value]){
+        functions.push(fucss.filters[value]);
+        return fucss.filters[value];
+      }
+
+      if(fucss.values[value])
+        return fucss.values[value];
 
       if(fucss.colorazable.indexOf(prop) !== -1){
         //console.log(prop, value)
@@ -493,12 +582,12 @@ fucss.generateStyling = function(opts){
 
         if(unit.indexOf('n') !== -1) value = -value;
         if(unit.indexOf('pc') !== -1 ) return value + '%';
+        if(unit.indexOf('dg') !== -1 ) return value + 'deg';
         return value + unit.replace('n', '');
       }
 
-      if(value === fucss.seps.important){
+      if(value === fucss.seps.important)
         return '!important';
-      }
 
       if(prop === 'font-family'){
         value = value.replace(fucss.seps.and, ' ');
@@ -507,9 +596,27 @@ fucss.generateStyling = function(opts){
 
       return value;
     });
+    if(functions.length)
+      return generateFunctionValue(functions, valueList)
 
-    //console.log(valueList.join(' '));
     return valueList.join(' ');
+  }
+
+  function generateFunctionValue(functions, valueList){
+    if(functions.length === 1)
+      return valueList.shift() + '('+ valueList.join(', ') +')';
+
+    //let functionalValue = '';
+    for(var index in functions){
+      index = parseInt(index);
+      var start = valueList.indexOf(functions[index]) + 1;
+      var end = functions[index + 1]
+        ? valueList.indexOf(functions[index + 1])
+        : valueList.length;
+      functions[index] = functions[index] + '(' + valueList.slice(start, end).join(', ') + ')';
+    }
+
+    return functions.join(' ');
   }
 
   function modifyProps(props){

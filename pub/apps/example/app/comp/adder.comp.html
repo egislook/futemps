@@ -2,12 +2,13 @@
 
   <i
     class="
-      {'fu-plus bg:prim c:white': !_adderIsVisable, 'fu-cross bg:white c:black': _adderIsVisable}
-      fs:130pc p:15px br:50pc ps:fx fux-boxsh fux-trans z:2"
-    style={_pos}
+      {'fu-plus bg:prim c:white b:2pc': !_adderIsVisable, 'fu-cross bg:white c:black b:90pc': _adderIsVisable}
+      fs:130pc p:15px br:50pc ps:fx fux-boxsh fux-trans z:2 r:2pc"
     onclick={_handleClick} />
 
-  <div if={_adderIsVisable} class="t,l:0 w,h:100pc ps:fx bg:blacka8 dp:flx jc:c ai:c fux-fadeIn z:1">
+  <div class="t,l:0 w,h:100pc ps:fx bg:blacka8 dp:flx jc:c ai:c z:1 fux-trans {
+    'op:0 tf:trl-150pc-skw-50dg': !_adderIsVisable,
+  }">
     <div class="mxh,mxw:100pc md-w:80pc bg:white br:2px fux-boxsh fux-trans ta:l of:auto">
 
       <div each="{ fields, key in schema }">
@@ -48,7 +49,6 @@
 
     tag._adderIsVisable   = opts.visable;
     tag._activeTab        = null;
-    tag._pos              = !tag._adderIsVisable && { right: '2%', bottom: '2%' } || { bottom: '90%', right: '2%' };
     tag._handleClick      = _handleClick;
     tag._handleSubmit     = _handleSubmit;
     tag._stopPropagation  = (e) => e.stopPropagation();
@@ -114,9 +114,10 @@
     function _setActiveTab(tabName = null){
       return (e) => {
         let headKey = Object.keys(tag.data).pop();
-
-        tag._activeTab = tabName;
-        tag._activeTabData = _getTabData(tabName);
+        tag.update({
+          _activeTab: tabName,
+          _activeTabData: _getTabData(tabName)
+        })
         e.preventDefault();
       }
     }
@@ -167,10 +168,7 @@
       // document.body.classList[method]('fux-clear');
       //document.body.onmousewheel  = (e) => { tag._adderIsVisable && e.preventDefault() }
       //document.body.ontouchmove   = (e) => { tag._adderIsVisable && e.preventDefault() }
-      tag.update({
-        _adderIsVisable: !tag._adderIsVisable,
-        _pos: tag._adderIsVisable && { right: '2%', bottom: '2%' } || { bottom: '90%', right: '2%' }
-      })
+      tag.update({ _adderIsVisable: !tag._adderIsVisable })
     }
 
   </script>

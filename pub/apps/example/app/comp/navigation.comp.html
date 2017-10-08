@@ -1,12 +1,12 @@
 <navigation>
   <div class="fux-boxsh w:100pc c:black200 bg:white dp:flx ai:c jc:sb">
-    <a if={opts.routes.main} href={opts.routes.main.link} class="m:0 p-l:3pc lh:1 m-b:5px">
-      <i class="fu-poinout va:t fs:170pc c:prim600"/>
-      <h4 class="fw:600 ls:2px fs:80pc dp:ib m-t:8px m-l:5px c:black">
+    <a if={opts.routes.main} href={opts.routes.main.link} class="m:0 p-l:3pc lh:1 hv-tf:rot-0ndg_i">
+      <i class="fu-poinout va:b fs:170pc c:prim600 tf:rot-5dg-scl-1.1 fux-trans bg:white fux-boxsh p:7px br:7px-7px-7px-0"/>
+      <h4 if={false} class="fw:600 ls:2px fs:80pc dp:ib m-l:2px c:black">
         {opts.routes.main.title}
       </h4>
     </a>
-    <nav class="dp:flx ai:stc smx-fd:col smx-p:0 m:0">
+    <nav class="dp:flx ai:stc smx-fd:col smx-p:0 m:0 p-r:45px mdx-dp:n">
 
       <a each="{ route, name in opts.routes }" if="{ !route.hide && route.name !== 'main' }"
         class={
@@ -27,4 +27,17 @@
       </div>
     </nav>
   </div>
+  <div class="bg:white ps:fx w:100pc t,r:0">
+    <i class="bg:white p:15px fux-boxsh ps:ab r,t:0 {'fu-menu': !_show, 'fu-cross': _show}" onclick={handleClick} />
+    <div class="fux-trans {'sm-m-t:100npc md-m-t:50npc': !_show, 'm-t:0': _show}">
+      <a href={route.link} class="tr:uc fw:600 dp:bk bg:white p:10px bd-t:1px-sld-white600 fux-boxsh" each="{ route, name in opts.routes }">{name}</a>
+    </div>
+  </div>
+
+  <script>
+    this._show = false;
+
+    this.handleClick = (e) => this.update({_show: !this._show});
+
+  </script>
 </navigation>

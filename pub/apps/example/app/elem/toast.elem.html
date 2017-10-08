@@ -1,83 +1,136 @@
 <elem-toast>
-
 	<div
-		class="ps:fx c:white p:15px-20px w:300px m-l:150npx l:50pc br:3px fs:80pc fw:400 fux-boxsh fux-trans z:99 {'bg:black300': ok, 'bg:err': !ok}"
-		style={ _toastPos }
-		onclick="{ handleToastRemove }">{ msg }</div>
+		class="ps:fx c:white p:15px-20px w:300px m-l:150npx l:50pc fs:80pc fw:400 fux-boxsh fux-trans z:99 crs:pt {
+			'bg:black300': message.ok,
+			'bg:err600': !message.ok,
+			'br:5px-5px-0-0 b:0': posType === 'bottom',
+			'br:0-0-5px-5px t:0': posType === 'top',
+			'trl:0-100pc': posType === 'bottom' && !_show,
+			'trl:0-105npc': posType === 'top' && !_show,
+		}"
+		onclick="{ handleToastRemove }">{ message.msg }</div>
 
 	<script>
-		const tag = this;
 
-		tag.pos				= ['top', 'bottom'].indexOf(opts.pos) >= 0 ? opts.pos : 'bottom';
-		tag.msg       = opts.msg 				|| opts.prevent ? false : 'toast message';
-		tag.delay			= opts.delay !== undefined ? opts.delay : 5000;
-		tag.timestamp	= opts.timestamp	|| null;
-		tag.ok				= opts.ok					|| false;
-		tag.onRemove	= opts.onRemove		|| ((e) => !opts.prevent && console.log(`${tag.__.tagName} onRemove(e)`));
+		this.mixin('tag');
 
-		tag._toastPos 		= _getToastPos(tag.msg);
-		tag._timer 				= null;
-		tag._innerUpdate	= null;
+		const tag = this.setState(opts, {
+			debug: 		false,
+			delay: 		3000,					// opts.delay !== undefined ? opts.delay : 5000;
+			posType: 	'bottom', 		// ['top', 'bottom'].indexOf(opts.pos) >= 0 ? opts.pos : 'bottom';
+			posShowDim: '0%',
+			posHideDim: '-100%',
 
-		tag.on('mount', mount);
-		tag.on('update', update);
-		tag.on('message', (message) => {
-			tag.update(message);
+			message: {
+				msg: 				'Hey there! thats me toast guy! how are you today?',
+				ok: 				true,
+				timestamp: 	null,
+			},
+
+			_posDim:			0,
+			_timer: 			null,
+			_innerUpdate: false,
+			_optsUpdate:  false,
+			_show:     		false,
+
+			onRemove: 		((e) => console.log(`${this.__.tagName} onRemove(e)`)),
 		});
 
-		tag.handleToastRemove = handleToastRemove;
-		tag.shouldUpdate = handleShouldUpdate;
-
-
-		function _getToastPos(msg){
-			return msg ? { [tag.pos]: 0 } : { [tag.pos]: '-25%' };
+		tag._getStyle = () => {
+			return {
+				'transform': `translate(0, ${tag._show ? tag.posShowDim : tag.posHideDim})`,
+			}
+			//[tag.posType]: tag._show ? tag.posShowDim : tag.posHideDim
 		}
 
+		tag.handleToastRemove = handleToastRemove;
+
+		//tag.on('mount', handleMount);
+		tag.on('update', handleUpdate);
+		tag.on('message', handleNewMessage);
+
+		function handleMount(){
+			tag.update({ _show : true });
+		}
+
+		function handleNewMessage(message){
+			tag.update({ _show: true, message: Object.assign({}, tag.default.message, message)});
+		}
 
 		function handleToastRemove(e){
-			clearTimeout(tag._timer);
-			tag.update({ _toastPos: _getToastPos(), _innerUpdate: true });
-			tag.trigger('toastRemove');
-			tag.onRemove && tag.onRemove(e);
+			tag.update({ _show: false });
+			//tag.trigger('toastRemove');
+			//tag.onRemove && tag.onRemove(e);
 			if(e) e.preventUpdate = true;
 		}
 
+		function handleUpdate(data){
+			tag._timer && clearTimeout(tag._timer);
 
-		function mount(){
-			if(!tag.msg)
-				return;
+			if(tag._optsUpdate)
+				tag._show = true;
 
-			clearTimeout(tag._timer);
-			if(tag.delay)
-				tag._timer = setTimeout(tag.handleToastRemove, tag.delay);
+			if(tag.delay && tag._show === true)
+				tag._timer = setTimeout(handleToastRemove, tag.delay);
+
+			tag._optsUpdate = false;
 		}
 
 
-		function handleShouldUpdate(data = {}, nextOpts){
-			if(data._innerUpdate)
-				return true;
-
-      if(JSON.stringify(opts) !== JSON.stringify(nextOpts)){
-				Object.assign(tag, opts);
-				return true;
-			}
-
-			if(data.msg)
-				return true;
-    }
 
 
-		function update(){
-			if(tag._innerUpdate){
-				tag._innerUpdate = false;
-				return;
-			}
 
-			tag._toastPos = _getToastPos(true);
-
-			clearTimeout(tag._timer);
-			tag._timer = setTimeout(tag.handleToastRemove, tag.delay);
-		}
+		// tag.on('mount', mount);
+		// tag.on('update', update);
+		// tag.on('message', (message) => tag.update({ message }));
+		//
+		// tag.handleToastRemove = handleToastRemove;
+		// tag.shouldUpdate = handleShouldUpdate;
+		//
+		// function handleToastRemove(e){
+		// 	clearTimeout(tag._timer);
+		// 	tag.update({ _toastPos: _getToastPos(), _innerUpdate: true });
+		// 	tag.trigger('toastRemove');
+		// 	tag.onRemove && tag.onRemove(e);
+		// 	if(e) e.preventUpdate = true;
+		// }
+		//
+		//
+		// function mount(){
+		// 	if(!tag.message.msg)
+		// 		return;
+		//
+		// 	clearTimeout(tag._timer);
+		// 	if(tag.delay)
+		// 		tag._timer = setTimeout(tag.handleToastRemove, tag.delay);
+		// }
+		//
+		//
+		// function handleShouldUpdate(data = {}, nextOpts){
+		// 	if(data._innerUpdate)
+		// 		return true;
+		//
+    //   if(JSON.stringify(opts) !== JSON.stringify(nextOpts)){
+		// 		Object.assign(tag, opts);
+		// 		return true;
+		// 	}
+		//
+		// 	if(data.msg)
+		// 		return true;
+    // }
+		//
+		//
+		// function update(){
+		// 	if(tag._innerUpdate){
+		// 		tag._innerUpdate = false;
+		// 		return;
+		// 	}
+		//
+		// 	tag._toastPos = _getToastPos(true);
+		//
+		// 	clearTimeout(tag._timer);
+		// 	tag._timer = setTimeout(tag.handleToastRemove, tag.delay);
+		// }
 
 	</script>
 

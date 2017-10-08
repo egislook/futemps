@@ -1,10 +1,10 @@
 <page-components>
 
-  <div class="ta:l
+  <div class="sm-ta:l p-rl:5pc
     m:40px-0-25px-0_h1 c:grey_h1 fw:300_h1 bd-b:2px-ds-grey200_h1
     fw:600_p m:20px-0-10px_p
-    ws:pl_pre ww:nm_pre bg:greya1_pre p:10px_pre dp:ib_pre
-    m:10px-0_button p:10px-20px_button mnw:150px_button bg:prim_button c:white_button tr:uc_button fw:600_button fs:80pc_button br:2px_button">
+    ws:pl_pre ww:nm_pre bg:greya1_pre p:10px_pre dp:ib_pre ta:l_pre
+    m:10px-0_button p:10px-20px_button mnw:150px_button c:white_button tr:uc_button fw:600_button fs:80pc_button br:2px_button">
 
     <h1>elem-text3</h1>
     <p>element which transforms any inner component to editable field</p>
@@ -28,20 +28,29 @@
 
     <p>example</p>
 
-    <elem-toast timestamp={ toast.timestamp } />
+    <elem-toast />
 
-    <button onclick={handleShowToast('bottom')} class="fux-boxsh">
+    <elem-toast pos-type="top" />
+
+    <button onclick={handleShowToast()} class="fux-boxsh bg:black200">
       show toast
+    </button>
+
+    <button onclick={handleShowToast(true)} class="fux-boxsh bg:err">
+      show error toast
     </button>
 
 
   </div>
 
   <script>
-    this.toast = {};
 
-    this.handleShowToast = (pos) => (e) => {
-      this.update({ toast: { timestamp: new Date().getTime(), pos } });
+    this.handleShowToast = (error) => (e) => {
+      let elemToasts = this.tags['elem-toast'];
+      elemToasts = elemToasts.length ? elemToasts : [elemToasts];
+      e.preventUpdate = true;
+      !error && elemToasts[0].trigger('message', { ok: !error });
+      error && elemToasts[1].trigger('message', { ok: !error });
     }
   </script>
 

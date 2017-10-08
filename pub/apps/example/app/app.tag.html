@@ -6,11 +6,11 @@
 
   <main class="{'mxw:800px': !route.fullscreen }" data-is={ route.view } />
 
-  <elem-toast
-    ok={ message && message.ok }
-    msg={ message && message.msg }
-    timestamp={ message && message.timestamp }
-    prevent={ true } />
+  <elem-toast />
+
+  <div if={false} class="p:100px bg:green c:white ps:fx t,r:50pc hv-scl:0.6 br:50pc fux-trans">
+    <i class="fu-poinout" />
+  </div>
 
   <elem-modal if={ false } />
 
@@ -28,13 +28,16 @@
 
 
 
-    this.appStore.on('message', (message) =>
-      this.tags['elem-toast'].trigger('message', message));
-
+    this.appStore.on('message', (message) => {
+      //this.update({ message });
+      this.tags['elem-toast'].trigger('message', message);
+    });
 
 
     // setInterval(() => {
+    //   this.message = { msg: 'tadam'};
     //   this.update();
     // }, 1100);
+
   </script>
 </app>

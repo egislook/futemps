@@ -12,7 +12,6 @@ class appStore{
   }
 
   setOpts(opts, updated){
-    console.log('setOpts');
     if(opts){
       this.content = opts.content;
       this.poinject = opts.poinject;
@@ -124,7 +123,7 @@ class appStore{
     });
 
     if(json.ok)
-      self.setOpts(json.opts, extras);
+      this.setOpts(json.opts, extras);
 
   }
 
