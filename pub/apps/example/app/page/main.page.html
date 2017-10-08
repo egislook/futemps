@@ -1,7 +1,5 @@
 <page-main>
 
-  <comp-adder schema-path="schemas.album" data-path="albums" visable={true} />
-
   <elem-intro
     intros="{ content.albums }"
     edit-mode="{ false }"
@@ -86,8 +84,10 @@
     </div>
   </div>
 
-    <script>
-      this.mixin('store');
-    </script>
+  <comp-adder schema-path="schemas.album" data-path="albums" visable={true} />
+
+  <script>
+    this.mixin('store');
+  </script>
 
 </page-main>
