@@ -6,7 +6,7 @@
     <div
       class="{
         'h:100pc': true,
-        'fux-trans': !isSwiping
+        'ts:all': !isSwiping
       }"
       style="width: { introContainerWidth }px; transform: translate({ moveX }px, 0px);"
       onmouseleave="{ handleLeaveScreen }"
@@ -36,7 +36,7 @@
             	<div class="m-t:50px m-b:20px">
             	  <elem-text
             	    edit-mode="{ parent.opts.editMode }"
-              	  class="mxw:400px c:black100 fs:90pc fr:uc fw:600 ls:2px"
+              	  class="mxw:400px c:black100 fs:90pc tr:uc fw:600 ls:2px"
               	  cb-extras="{ { path: ['route', route && route.name] } }"
               	  on-edit="{ handleDescEdit }"
               	  on-error="{ handleErrorToggle }"
@@ -54,7 +54,7 @@
               	  max="150"/>
             	</div>
               <a if="{ intro.button }"
-                class="bg:sec p:15px-40px c:white tr:uc fs:75pc bd:2px-sld-sec fw:600 ls:1px fux-trans hv-bg:white hv-c:black"
+                class="bg:sec p:15px-40px c:white tr:uc fs:75pc bd:2px-sld-sec fw:600 ls:1px ts:all hv-bg:white hv-c:black"
                 href="{ intro.button.link }">{ intro.button.title }</a>
             </div>
         </div>
@@ -67,7 +67,7 @@
           each="{ intro, key in opts.intros }"
           onclick="{ handleNextIntro.bind(e, key) }">
           <i class="{
-            'bd-tb:2px-sld-whitea7 w:35px m-rl:5px fux-trans': true,
+            'bd-tb:2px-sld-whitea7 w:35px m-rl:5px ts:all': true,
             'bd-c:white': key === showIntro
           }"/>
         </a>

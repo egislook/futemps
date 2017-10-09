@@ -14,8 +14,8 @@ riot.tag('wrap-text', false, (opts) => {
   opts.text             = opts.text         || opts.path && opts.getValue && opts.getValue(opts.path) || '';
   //opts.getValue         = opts.getValue     || (path) => { return path };
   //opts.onSave
-  opts.class            = opts.class        || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black fux-trans';
-  opts.activeClass      = opts.activeClass  || 'fux-boxsh';
+  opts.class            = opts.class        || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black ts:all';
+  opts.activeClass      = opts.activeClass  || 'bs:1';
   opts.truncate         = opts.truncate     || 200;
   opts.placeholder      = opts.placeholder  || 'enter text';
 

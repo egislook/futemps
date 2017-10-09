@@ -1,16 +1,17 @@
 <comp-adder>
 
   <i
-    class="
-      {'fu-plus bg:prim c:white b:2pc': !_adderIsVisable, 'fu-cross bg:white c:black b:90pc': _adderIsVisable}
-      fs:130pc p:15px br:50pc ps:fx fux-boxsh fux-trans z:10 r:2pc"
+    class="fs:130pc p:15px br:50pc ps:fx bs:2 ts:all z:10 r:2pc {
+      'fu-plus bg:lg-prim400-prim600 c:white b:2pc': !_adderIsVisable,
+      'fu-cross bg:white c:black b:90pc': _adderIsVisable
+    }"
     onclick={_handleClick} />
 
-  <div class="ps:fx t,l:0 w,h:100pc bg:blacka9 dp:flx jc:c ai:c fux-trans z:9 {
+  <div class="ps:fx t,l:0 w,h:100pc bg:blacka9 dp:flx jc:c ai:c ts:all z:9 {
     'tf:trl-200pc-skw-50dg z:0': !_adderIsVisable,
     'tf:trl-0-skw-0 z:9': _adderIsVisable,
   }">
-    <div class="mxh,mxw:100pc md-w:80pc bg:white br:2px fux-boxsh fux-trans ta:l of:auto">
+    <div class="mxh,mxw:100pc md-w:80pc bg:white br:2px bs:1 ts:all ta:l of:auto">
 
       <div each="{ fields, key in schema }">
         <div class="p:20px bg:white w:100pc bd-b-w:1px bd-c:grey200">
@@ -36,7 +37,7 @@
 
         <div class="p:15px ta:r p:10px_button mnw:150px_button bg:white w:100pc">
           <button class="bg:ts" onclick={_handleClick}>Cancel</button>
-          <button class="bg:prim br:2px c:white bd-w:2px bd-c:prim fux-boxsh" onclick={_handleSubmit}>Done</button>
+          <button class="bg:prim br:2px c:white bd-w:2px bd-c:prim bs:1" onclick={_handleSubmit}>Done</button>
         </div>
 
       </div>

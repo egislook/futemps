@@ -4,7 +4,7 @@
     placeholder="{ placeholder }"
     contentEditable="{ opts.contentEditable || contentEditable }"
     class="{ opts.class } {
-      'ws:pl ww:nm bd-l:sd-1px-ts fc-bd-c:prim fc-p-l:5px fux-trans' : !opts.noBasicClass,
+      'ws:pl ww:nm bd-l:sd-1px-ts fc-bd-c:prim fc-p-l:5px ts:all' : !opts.noBasicClass,
       'c:err fc-bd-c:err' : !isValid,
     }"
     onclick="{ opts.editMode && !contentEditable && handleSetEditable }"
@@ -20,7 +20,7 @@
   </div>
 
   <div if="{ !!editor }"
-    class="bg:black c:white br:3px p:10px ps:ab m-t:50npx fadeIn fs:120pc m:5px_i fux-arrow"
+    class="bg:black c:white br:3px p:10px ps:ab m-t:50npx fs:120pc m:5px_i fux-arrow"
     style="top: {editor.top}px; left: {editor.left}px">
       <i class="fu-format_bold" />
       <i class="fu-format_italic" />

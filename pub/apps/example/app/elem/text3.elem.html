@@ -2,7 +2,7 @@
 
   <div
     if={false}
-    class="ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fux-trans bg:white-! c:black-! bd-c:black-! bd-w:1px"></div>
+    class="ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim ts:all fc-bs:2 fc-mxh:500px mxh:250px fc-of:auto of:hd"></div>
 
   <yield />
 
@@ -26,8 +26,8 @@
     tag.path             = opts.path            || tag.opts.id   && tag.getValue(tag.opts.id, 'path') || null;
     tag.extras           = opts.extras          || {parent: null, type: 'field'};
     tag.text             = opts.text            || '';
-    tag.class            = opts.class           || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fux-trans';
-    tag.activeClass      = opts.activeClass     || 'fux-boxsh bg:white-! c:black-!'; //fux-scale
+    tag.class            = opts.class           || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim ts:all fc-bs:2 fc-mxh:500px mxh:250px fc-of:auto of:hd';
+    tag.activeClass      = opts.activeClass     || 'bg:white-! c:black-!'; //fux-scale
     tag.truncate         = opts.truncate        || 200;
     tag.placeholderPath  = opts.placeholderPath || null;
     tag.textLimits       = opts.textLimits      || {min: opts.min || 1, max: opts.max || 550 };

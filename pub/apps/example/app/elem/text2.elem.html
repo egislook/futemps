@@ -2,18 +2,18 @@
 
   <div
     if={false}
-    class="ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black fux-trans" />
+    class="ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black ts:all" />
 
-  <div ref="container" class={opts.class}>
+  <div ref="container" class="{ opts.class }">
     <yield />
   </div>
 
   <a
     data-uneditable="true"
     ref="editor"
-    class="dp:ib ps:ab p:10px br:5px-2px-0-5px c:white z:10 op:0.9 fux-trans m-t:1px fux-boxsh {'bg:prim': textIsValid, 'bg:grey200 c:grey': !textIsValid }"
+    class="dp:ib ps:ab p:10px br:5px-2px-0-5px c:white z:10 op:0.9 ts:all m-t:1px bs:1 {'bg:prim': textIsValid, 'bg:grey200 c:grey': !textIsValid }"
     style={editorPos}>
-      <span class="ps:ab t,l:0 fs:70pc fw:600 p:0-2px-1px-1px br:3px-0-50pc-0 fux-boxsh {'bg:white c:black300': textIsValid, 'bg:err c:white': !textIsValid }">
+      <span class="ps:ab t,l:0 fs:70pc fw:600 p:0-2px-1px-1px br:3px-0-50pc-0 bs:1 {'bg:white c:black300': textIsValid, 'bg:err c:white': !textIsValid }">
         { getValidtempTextLength() }
       </span>
       <span class="fs:130pc {'fu-check': textIsValid, 'fu-esc': !textIsValid}" />
@@ -26,8 +26,8 @@
     const defaultTextLimits = { min: 4, max: 520 };
     const self = Object.assign(this, {
       contentEditable:  opts.contentEditable  || true,
-      defaultClass:     opts.defaultClass     || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black fux-trans',
-      activeClass:      opts.activeClass      || 'fux-boxsh',
+      defaultClass:     opts.defaultClass     || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim fc-bg:white fc-c:black ts:all',
+      activeClass:      opts.activeClass      || 'bs:1',
       onDone:           opts.onDone           || ((value, id) => console.log('onEdit', value, id)),
       truncateFrom:     opts.truncateFrom     || 0,
       textIsTruncated:  null,

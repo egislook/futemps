@@ -1,10 +1,10 @@
 <form-image>
   <span>
-    <span class="w:175px fux-boxsh bd-w:3px bd-c:white m-b:5px va:t {'bd-s:ds': !opts.link}">
+    <span class="w:175px bs:1 bd-w:3px bd-c:white m-b:5px va:t {'bd-s:ds': !opts.link}">
 
       <label class="w,h:100pc dp:flx ai:c mnh:100px ps:rl">
         <input class="op:0 ps:ab w,h:0 dp:n" type="file" name="files" onchange={opts.onChange} />
-        <i class="{'ps:ab t,r:0 p-b:6px p-l:6px c:grey300 bg:white fu-camera br:0-0-0-5px fux-boxsh': opts.link, 'fu-cloud-upload c:grey fs:120pc': !opts.link}" />
+        <i class="{'ps:ab t,r:0 p-b:6px p-l:6px c:grey300 bg:white fu-camera br:0-0-0-5px bs:1': opts.link, 'fu-cloud-upload c:grey fs:120pc': !opts.link}" />
         <img if={opts.link} class="dp:bk w:100pc" src={opts.link} />
       </label>
 
@@ -19,7 +19,7 @@
       text={ opts.link }
       one-liner={ true }>
       <p
-        class="p:10px-5px fc-p-rl:10px bd-b-w:1px bd-c:grey200 fux-trans fc-bd-c:prim ws:pl ww:nm"
+        class="p:10px-5px fc-p-rl:10px bd-b-w:1px bd-c:grey200 ts:all fc-bd-c:prim ws:pl ww:nm"
         placeholder={ placeholder }
         contenteditable="true">{ text }</p>
     </elem-text3>
