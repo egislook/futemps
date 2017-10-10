@@ -1,0 +1,49 @@
+<elem-test2>
+  <div class={classes}>
+    {opts.text}
+    <yield />
+  </div>
+  <div class="p:10px-30px_button mnw:150px_button c:white_button bs:2_button ts:all_button">
+    <button class="bg:prim ac-bs:3 ac-trl:0-2npc" onclick={handleChangeText}>click me to change text</button>
+    <button class="bg:sec ac-bs:3 ac-trl:0-2npc" onclick={handleUpdateParent}>update parent</button>
+  </div>
+
+  <script>
+
+    this.classes = {
+      foo: true,
+      bar: false,
+      number: '3 > 2',
+      //animated: 'hasAnimation()', // watch out, methods should be set as strings
+      baz: new Date(),
+      'lh:31px': false,
+      'p:20px bg:white bs:1 lh:33px': true,
+      //zorro: 'a value,'
+    }
+
+    this.default = {
+      text: 'default text',
+    }
+
+    this.prevOpts = this.opts;
+    this.opts = Object.assign(this.default, opts);
+
+    this.handleChangeText = (e) => {
+      this.opts.text = 'text changed';
+      this.opts.show = true;
+    }
+
+    this.handleUpdateParent = (e) => {
+      this.parent.update({ text: 'new parent text' });
+      e.preventUpdate = true;
+    }
+
+    this.shouldUpdate = (data, nextOpts) => {
+      if(JSON.stringify(this.prevOpts) !== JSON.stringify(nextOpts)){
+        this.prevOpts = nextOpts;
+        this.opts = Object.assign(this.default, nextOpts);
+      }
+      return true;
+    }
+  </script>
+</elem-test2>

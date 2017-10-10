@@ -5,6 +5,7 @@ fucss.init = window.fucssInit !== undefined ? window.fucssInit : true;
 fucss.anim = window.fucssAnim !== undefined ? window.fucssAnim : true;
 fucss.glob = window.fucssGlob !== undefined ? window.fucssGlob : true;
 fucss.fux = window.fucssFux !== undefined ? window.fucssFux : true;
+fucss.debug = window.fucssDebug !== undefined ? window.fucssDebug : false;
 
 fucss.seps = {
   'value': ':',
@@ -13,7 +14,8 @@ fucss.seps = {
   'comma': '.',
   'important': '!',
   'and': '+',
-
+  'fStart': '(',
+  'fEnd': ')',
 };
 
 fucss.media = {
@@ -277,6 +279,9 @@ fucss.transforms = {
   skw: 'skew',
   mtx: 'matrix',
   prp: 'perspective',
+  trx: 'translateX',
+  try: 'translateY',
+  trz: 'translateZ',
 }
 
 fucss.filters = {
@@ -417,7 +422,7 @@ fucss.riotExtractNGenerate = function(){
 fucss.generateStyling = function(opts){
 
   console.time('Fucss');
-  var classNumber = 0, classDone = 0, debug = false;
+  var classNumber = 0, classDone = 0;
   var cssString = '';
   var cssMediaQueries = {
     sm: [],
@@ -455,7 +460,7 @@ fucss.generateStyling = function(opts){
 
       var value = splitedClassName.pop();
       if(!value)
-        return debug && console.warn('No value specified. Use value seperator ' + fucss.seps.value + ' for "' + className + '"');
+        return fucss.debug && console.warn('No value specified. Use value seperator ' + fucss.seps.value + ' for "' + className + '"');
 
       var values = value && value.split(fucss.seps.space);
 
@@ -470,9 +475,9 @@ fucss.generateStyling = function(opts){
       values  = setShortcutValues(prop, value, values) || values;
 
       if(Object.keys(fucss.properties).indexOf(prop) === -1 && prop.indexOf(',') === -1)
-        return debug && console.warn('prop name "' + prop + '" is unknown. Check if class "' + className + '" is valid');
+        return fucss.debug && console.warn('prop name "' + prop + '" is unknown. Check if class "' + className + '" is valid');
       if(!prop)
-        return debug && console.warn('No prop specified. Use prop seperator ' + fucss.seps.space + ' for "' + className + '"');
+        return fucss.debug && console.warn('No prop specified. Use prop seperator ' + fucss.seps.space + ' for "' + className + '"');
       if(!fucss.properties[prop] && prop.indexOf(',') < 0)
         cssMissing = cssMissing.concat([prop]);
 
@@ -576,14 +581,14 @@ fucss.generateStyling = function(opts){
     var functions = [];
     valueList = valueList.map(function(value){
 
+      if(fucss.values[value])
+        return fucss.values[value];
+
       let func = fucss.functions[value];
       if(func){
         functions.push(func);
         return func;
       }
-
-      if(fucss.values[value])
-        return fucss.values[value];
 
       if(fucss.propertable.indexOf(prop) !== -1 && fucss.properties[value])
         return fucss.properties[value];
@@ -707,6 +712,8 @@ fucss.generateStyling = function(opts){
     className = className.replace(fucss.seps.comma, '\\.');
     className = className.replace(fucss.seps.important, '\\!');
     className = className.replace(fucss.seps.and, '\\+');
+    className = className.replace(fucss.seps.fStart, '\\(');
+    className = className.replace(fucss.seps.fEnd, '\\)');
 
     var firstAddon = props.length && props[0];
     var isGroup = fucss.groups.indexOf(firstAddon) !== -1;
@@ -878,8 +885,8 @@ fucss.generateGlobalExtras = function(){
     "*":    'margin: 0 auto; outline: 0; padding: 0; box-sizing: border-box; border-style: solid; border-width: 0; vertical-align: baseline;',
     // ".dp\\:flx > *": 'margin: 0;',
     "a":    'text-decoration: none; color: inherit;',
-    "a, span, img, button, i": 'display: inline-block; vertical-align: middle;',
-    "button, a, i": 'cursor: pointer',
+    "a, span, img, button, i, label": 'display: inline-block; vertical-align: middle;',
+    "button, a, i, label": 'cursor: pointer',
     "input, button, select, option, textarea": 'font-size: 100%; font-family: inherit;',
     "::-moz-selection": 'background: ' + fucss.colors.prim + '; color: ' + fucss.colors.white + ';',
     "::selection": 'background: ' + fucss.colors.prim + '; color: ' + fucss.colors.white + ';',

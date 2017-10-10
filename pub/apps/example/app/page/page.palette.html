@@ -13,7 +13,7 @@
     cb-extras={ getValue('routes.palette.meta.description', 'id') }
     on-edit={ handleEdit } />
 
-  <palette if={!opts.SERVER} />
+  <comp-palette if={!opts.SERVER} />
 
   <script>
     this.mixin('store');

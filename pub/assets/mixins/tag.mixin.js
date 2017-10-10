@@ -64,7 +64,9 @@ function tagMixin(stores){
   			return this;
   		}
 
-      this.shouldUpdate = (data, nextOpts) => {
+
+
+      this.tagShouldUpdate = (data, nextOpts) => {
   			if(data)
   				return true;
 

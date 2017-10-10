@@ -1,0 +1,68 @@
+<comp-navigation>
+  <div class="bs:1 w:100pc c:black200 bg:white ps:fx t:0 z:5 ts:mxh-0.4s-ei of:hd {
+    'mdx-mxh:0': !_show,
+    'mdx-mxh:50pc': _show
+  }">
+
+    <nav class="m-r:0 mxw:800px dp:flx mdx-fd:col jc:fe ai:stc md-h:50px mdx-p-r:10pc ta:r smx-ta:l">
+
+      <a each="{ route, name in routes }"
+        onclick={_handleChangeRoute(name) && _show && _handleShowToggle}
+        class={
+          'm:0 tr:uc md-fs:80pc fw:600 mdx-lh:0px lh:1 p-rl:25px p-tb:0 p-tb:17px ls:1px bd-w:1px bd-t-w:0px bd-c:ts ts:all md-hv-bd-b-c:prim mdx-hv-bd-r-c:prim': true,
+          'md-bd-b-c:black bg:silver300 md-bd-r-c:greya1 mdx-bd-r-c:black mdx-bd-b-c:greya1 bd-l-c:greya1': _isRoute(route, active),
+          'dp:n mdx-dp:bk': _isRoute(route, _main)
+        }
+        href="{ route.link }"
+        target="{ route.target && '_blank' }">
+          <i if={_isRoute(route, _main)} class="fu-poinout bs:1 m-l:0 p:10px fs:110pc br:0-0-5px c:prim600"/>
+          { route.title || route.name }
+        </a>
+
+    </nav>
+  </div>
+
+  <a if={_main} href={_getRoute(_main, 'link')} onclick={_handleChangeRoute(_main)} class="mdx-t:50npc m:0 lh:1 hv-tf:rot-0ndg_i ps:fx l,t:3npx z:6 ts:all">
+    <i class="fu-poinout va:b fs:200pc c:prim600 tf:rot-5dg-scl-1.1 ts:all bg:white bs:1 p:10px br:7px-7px-7px-0"/>
+  </a>
+
+  <i class="p:18px bs:1 ps:fx r:2pc t:0 z:6 br:0-0-50pc-50pc dp:n mdx-dp:bk ts:all {
+    'fu-menu bg:white c:black': !_show,
+    'fu-chevron-thin-up bg:black c:white': _show
+  }" onclick={_handleShowToggle} />
+
+  <script>
+    this.default = {
+      active: 'main',
+      routes: {
+        main: { main: true, name: 'main', link: '/', title: 'Main'},
+        sandbox: { name: 'sandbox', link: '/sandbox'},
+        external: { target: true, link: 'http://www.poinout.com', name: 'external'},
+      },
+      _show: false,
+      _main: false,
+    };
+
+    const tag = Object.assign(this, this.default, this.opts);
+
+    this._main = Object.keys(this.routes).filter(name => this.routes[name].main).shift();
+
+    this._isRoute           = (route, name) => route.name === name;
+    this._getRoute          = (name, value) => value ? this.routes[name][value] : this.routes[name];
+
+    this._handleShowToggle  = (e) => this._show = !this._show;
+    this._handleChangeRoute = (route) => (e) => {
+      console.log('change active', route);
+      this.active = route;
+    }
+
+    this.shouldUpdate = (data, nextOpts) => {
+      console.log('data:', data, 'nextOpts:', nextOpts);
+      return true;
+    }
+    this.on('update', () => {
+      Object.assign(this, this.opts);
+      console.log('update')
+    })
+  </script>
+</comp-navigation>

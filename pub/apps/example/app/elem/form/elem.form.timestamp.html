@@ -1,0 +1,92 @@
+<elem-form-timestamp>
+  <span class="p:5px ta:c">
+
+    <span each={val, type in date}
+      class="lh:1_all p:2px-2px
+        c:grey300_button fs:60pc_button p:5px_button bg:ts_button ts:all_button {
+          'm-l:15px': type === 'hours'
+        }">
+        <button class="ac-scl:1.5 ac-fw:600" onmousedown={handleChange(type, true)} onmouseup={handleClearInterval}>{val + 1 }</button>
+        <label class="fw:600 c:black100 dp:bk p:5px-10px mnw:32px mnh,lh:22px bg:white br:10px bs:1">{ val }</label>
+        <button class="ac-scl:1.5 ac-fw:600" onmousedown={handleChange(type)} onmouseup={handleClearInterval}>{val - 1 }</button>
+    </span>
+
+    <label if={false} class="p:5px-10px fw:600 ac-scl:1.5 ac-bg:white ac-bs:1 ts:all">
+      <i>{val - 1 }</i><br />
+      { val }
+      <br /><i>{val + 1 }</i>
+    </label>
+  </span>
+  <script>
+
+    /** default opts */
+    this.default = {
+      date: {
+        year: 2017,
+        month: 09,
+        day: 14,
+
+        hours: 3,
+        minutes: 17
+      },
+      intervalSpeed: 200,
+      timestamp: false,
+      onChange: (picked) => this.update({ picked }),
+    };
+
+    /** Sets opts as this tags values */
+    setup.bind(this)();
+    this.shouldUpdate = setup;
+
+    /**
+      Tag inner methods
+    */
+    this._isPicked  = (key) => this.picked === key;
+
+    this._toTimestamp = (date) =>
+      new Date(date.year, date.month-1, date.day, date.hours, date.minutes).getTime();
+
+    this._toDate = (timestamp) => {
+      const date = new Date(timestamp);
+      return {
+        year:   date.getFullYear(),
+        month:  date.getMonth() + 1,
+        day:    date.getDate(),
+        hours:  date.getHours(),
+        minutes:  date.getMinutes(),
+      }
+    }
+
+    this.timestamp =
+
+    /**
+      Tag event handlers
+    */
+    this.handleChange = (type, add) => (e) => {
+      this.date[type] = add ? this.date[type] + 1 : this.date[type] - 1;
+      this._intervalSpeed = this.default.intervalSpeed;
+      this._interval = setInterval(() => {
+        this.date[type] = add ? this.date[type] + 1 : this.date[type] - 1;
+        this.update({ date: this.date, _intervalSpeed: this._intervalSpeed - 10 });
+      }, this._intervalSpeed);
+      this.update({ date: this.date });
+      //if(key === this.selected)
+        //key = false;
+      //this.onChange(key, this.extras, true);
+    }
+
+    this.handleClearInterval = () => {
+      clearInterval(this._interval);
+      this.onChange(this._toTimestamp(this.date), this.extras, true);
+    }
+
+    function setup(data, nextOpts){
+      if(data)
+        return true;
+
+      if(!nextOpts || JSON.stringify(this.opts) !== JSON.stringify(nextOpts))
+        return Object.assign(this, this.default, nextOpts || this.opts);
+    }
+
+  </script>
+</elem-form-timestamp>

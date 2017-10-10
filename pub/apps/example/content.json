@@ -129,6 +129,7 @@
   },
   "routes": {
     "main": {
+      "main": "true",
       "fullscreen": "true",
       "name": "main",
       "link": "/",
@@ -178,6 +179,14 @@
         "title": "Lets call it TODO",
         "description": "Lets call it TODO"
       }
+    },
+    "experiment": {
+      "fullscreen": "true",
+      "meta": {},
+      "name": "experiment",
+      "link": "/experiment",
+      "title": "Experiment",
+      "view": "page-experiment"
     },
     "palette": {
       "name": "palette",
