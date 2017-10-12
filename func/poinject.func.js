@@ -82,9 +82,9 @@ function move(req, res){
 }
 
 function postChunk(req, res){
-  let data = poinject.createChunkBySchema(req.body.schema, req.body.data);
+  let opts = poinject.createChunkBySchema(req.body.schema, req.body.data);
 
-  res.json(data || { ok: true, msg: 'new chunk of data has been created', data });
+  res.json(opts.msg && opts || { ok: true, msg: 'new chunk of data has been created', opts });
   //res.json({ ok: true, msg: 'new chunk of data has been created', data });
 }
 
@@ -92,6 +92,10 @@ function post(req, res){
   if(!req.body)
     return res.status(400)
       .json({ ok: false, msg: 'body is not specified' });
+
+  if(req.body.schema && !req.body.data)
+    return res.status(400)
+      .json({ ok: false, msg: `required fields of "${req.body.schema}" are not filled` });
 
   if(req.body.data && req.body.schema)
     return postChunk(req, res);

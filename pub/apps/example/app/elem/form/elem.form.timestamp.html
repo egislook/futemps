@@ -1,36 +1,30 @@
 <elem-form-timestamp>
   <span class="p:5px ta:c">
-
-    <span each={val, type in date}
-      class="lh:1_all p:2px-2px
-        c:grey300_button fs:60pc_button p:5px_button bg:ts_button ts:all_button {
+    <span if={timestamp} each={val, type in _date}
+      class="lh:1_all p:1px fux-fadeIn
+        {
           'm-l:15px': type === 'hours'
         }">
-        <button class="ac-scl:1.5 ac-fw:600" onmousedown={handleChange(type, true)} onmouseup={handleClearInterval}>{val + 1 }</button>
-        <label class="fw:600 c:black100 dp:bk p:5px-10px mnw:32px mnh,lh:22px bg:white br:10px bs:1">{ val }</label>
-        <button class="ac-scl:1.5 ac-fw:600" onmousedown={handleChange(type)} onmouseup={handleClearInterval}>{val - 1 }</button>
+        <button class="ac-scl:1.5 ac-c:prim ac-fw:600 bg:ts p:3px-13px fs:70pc c:grey300 ts:all" onmousedown={handleChange(type, true)} onmouseup={handleClearInterval}>{_getNextOrPrev(type, val, true)}</button>
+        <label class="fw:600 c:black100 dp:bk p:5px-10px mnw:32px mnh,lh:22px bs:1 bg:whitea3">{ val }</label>
+        <button class="ac-scl:1.5 ac-c:prim ac-fw:600 bg:ts p:3px-13px fs:70pc c:grey300 ts:all" onmousedown={handleChange(type)} onmouseup={handleClearInterval}>{ _getNextOrPrev(type, val) }</button>
     </span>
-
-    <label if={false} class="p:5px-10px fw:600 ac-scl:1.5 ac-bg:white ac-bs:1 ts:all">
-      <i>{val - 1 }</i><br />
-      { val }
-      <br /><i>{val + 1 }</i>
-    </label>
+    <button
+      onclick={toggleTimestamp}
+      class="bg:ts tt:uc m:23px-0 fw:600 c:black200 bd-w:1px {
+        'bd-c:grey200 p:0-20px': !timestamp,
+        'bd-c:ts p-l:10px': timestamp,
+      }">
+        <span class="fs:80pc">{!timestamp ? 'set timestamp' : 'clear'}</span>
+        <i class="p:10px-0 fs:90pc c:prim {'fu-timer': !timestamp, 'fu-cross': timestamp}" />
+    </button>
   </span>
   <script>
 
     /** default opts */
     this.default = {
-      date: {
-        year: 2017,
-        month: 09,
-        day: 14,
-
-        hours: 3,
-        minutes: 17
-      },
-      intervalSpeed: 200,
-      timestamp: false,
+      intervalSpeed: 300,
+      timestamp: new Date(),
       onChange: (picked) => this.update({ picked }),
     };
 
@@ -38,54 +32,99 @@
     setup.bind(this)();
     this.shouldUpdate = setup;
 
+    this._date = _toDate(this.timestamp);
+
     /**
       Tag inner methods
     */
     this._isPicked  = (key) => this.picked === key;
 
     this._toTimestamp = (date) =>
-      new Date(date.year, date.month-1, date.day, date.hours, date.minutes).getTime();
+      new Date(date.year, date.month-1, date.day, date.hours, date.minutes);
 
-    this._toDate = (timestamp) => {
-      const date = new Date(timestamp);
-      return {
-        year:   date.getFullYear(),
-        month:  date.getMonth() + 1,
-        day:    date.getDate(),
-        hours:  date.getHours(),
-        minutes:  date.getMinutes(),
+    function _zerofy(value){ return (value + '').length === 1 ? '0' + value : value; }
+
+    this._getNextOrPrev = (type, value, add) => {
+
+      let limits = {
+        year:     { min: 2000, max: 2017 },
+        month:    { min: 1, max: 12 },
+        day:      { min: 1, max: 31 },
+        hours:    { min: 0, max: 23 },
+        minutes:  { min: 0, max: 59 }
       }
+
+      value = parseInt(value);
+
+      let newValue = add ? value + 1 : value - 1;
+      if(newValue < limits[type].min)
+        newValue = limits[type].max;
+
+      if(newValue > limits[type].max)
+        newValue = limits[type].min;
+
+      return _zerofy(newValue);
     }
 
-    this.timestamp =
+    function _toDate(timestamp){
+      const date = new Date(timestamp);
+      return {
+        year:     date.getFullYear(),
+        month:    _zerofy(date.getMonth() + 1),
+        day:      _zerofy(date.getDate()),
+        hours:    _zerofy(date.getHours()),
+        minutes:  _zerofy(date.getMinutes()),
+      }
+    }
 
     /**
       Tag event handlers
     */
     this.handleChange = (type, add) => (e) => {
-      this.date[type] = add ? this.date[type] + 1 : this.date[type] - 1;
-      this._intervalSpeed = this.default.intervalSpeed;
-      this._interval = setInterval(() => {
-        this.date[type] = add ? this.date[type] + 1 : this.date[type] - 1;
-        this.update({ date: this.date, _intervalSpeed: this._intervalSpeed - 10 });
-      }, this._intervalSpeed);
-      this.update({ date: this.date });
-      //if(key === this.selected)
-        //key = false;
-      //this.onChange(key, this.extras, true);
+      e.preventUpdate = true;
+      let timestamp = this.timestamp;
+      value = this._date[type];
+
+      value = this._getNextOrPrev(type, value, add);
+
+      function loopByType(speed){
+        this._timer = setTimeout(() => {
+          speed = speed / 2 > 50 ? speed / 2 : speed;
+          this._date[type] = this._getNextOrPrev(type, this._date[type], add);
+          loopByType.bind(this)(speed);
+          this.update({ _date: this._date });
+        }, speed);
+      }
+
+      loopByType.bind(this)(this.intervalSpeed);
+
+
+      if(this._date[type] !== value && this._toTimestamp(this._date)){
+        this._date[type] = value;
+        this.update({ _date: this._date });
+      }
+    }
+
+    this.toggleTimestamp = () => {
+      let timestamp = !this.timestamp ? new Date() : false;
+      this.onChange(timestamp, this.extras, true);
+      this.update({ timestamp, _date: timestamp && _toDate(timestamp) });
     }
 
     this.handleClearInterval = () => {
-      clearInterval(this._interval);
-      this.onChange(this._toTimestamp(this.date), this.extras, true);
+      clearInterval(this._timer);
+      this.onChange(this._toTimestamp(this._date), this.extras, true);
     }
 
     function setup(data, nextOpts){
       if(data)
         return true;
 
-      if(!nextOpts || JSON.stringify(this.opts) !== JSON.stringify(nextOpts))
+      if(!nextOpts || JSON.stringify(this.opts) !== JSON.stringify(nextOpts)){
+        if(nextOpts)
+          this._date = _toDate(nextOpts.timestamp);
         return Object.assign(this, this.default, nextOpts || this.opts);
+      }
     }
 
   </script>

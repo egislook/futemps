@@ -71,13 +71,17 @@
     tag._activeTabData     = _getTabData(tag._activeTab);
     tag.handleReturnValue  = handleReturnValue;
 
-    tag.on('update', () => console.log('update adder'));
+    tag.on('update', () => {
+      tag.data          = tag.getTree(tag.dataPath);
+      tag.tabs          = _getDataTabs(tag.data) || [];
+      console.log('update adder');
+    });
 
     function handleReturnValue(value, extras, valid){
       if(!extras.path || extras.path && !_.get(tag._activeTabData, extras.path))
         return;
 
-      _.set(tag._activeTabData, extras.path + '.value', value);
+      _.set(tag._activeTabData, extras.path + '.value', value + '');
       _.set(tag._activeTabData, extras.path + '.valid', valid);
 
       console.log(tag._activeTabData);

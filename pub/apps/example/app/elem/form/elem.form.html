@@ -2,8 +2,8 @@
 
   <virtual each="{field, name in opts.fields}">
 
-    <div class="m-b:10px dp:flx jc:sb ai:c ">
-      <span class="m:0 {'c:grey600': !_isFieldType(field), 'c:black fw:600 va:t': _isFieldType(field)}">
+    <div class="m-b:10px ai:c ta:l">
+      <span class="{'c:grey600 mnw:200px': !_isFieldType(field), 'c:black fw:600 va:t': _isFieldType(field)}">
         <i if={_isRequired(field)} class="fu-asterisk fs:50pc c:prim"/>
         <span class="p-tb:10px">{getDef(name)}</span>
         <i class="m-l:10px fu-chevron-small-right c:grey300" />
@@ -52,7 +52,7 @@
         timestamp={ field.value }
         on-change={ onReturnValue } />
 
-      <span if={false}>{field.type}</span>
+      <span if={false}>{field.type} {field.value}</span>
 
       <span class="p-l:20px" if={!field.type}>
         <elem-form fields={field} on-return-value={ onReturnValue } path={_getPath(name)} />

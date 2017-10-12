@@ -18,9 +18,13 @@ class appStore{
     }
 
     if(this.trigger){
-      if(!updated) return this.trigger('storeUpdated');
-      updated.path && this.trigger(updated.path);
-      updated.id   && this.trigger(updated.id);
+      if(updated && updated.path || updated && updated.id){
+        updated.path && this.trigger(updated.path);
+        updated.id   && this.trigger(updated.id);
+        return;
+      }
+
+      return this.trigger('storeUpdated');
     }
   }
 
