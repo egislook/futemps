@@ -1,5 +1,5 @@
 <elem-form-timestamp>
-  <span class="p:5px ta:c">
+  <span class="ta:c">
     <span if={timestamp} each={val, type in _date}
       class="lh:1_all p:1px fux-fadeIn
         {
@@ -11,12 +11,12 @@
     </span>
     <button
       onclick={toggleTimestamp}
-      class="bg:ts tt:uc m:23px-0 fw:600 c:black200 bd-w:1px {
-        'bd-c:grey200 p:0-20px': !timestamp,
-        'bd-c:ts p-l:10px': timestamp,
+      class="tr:cap fw:600 c:black100 {
+        'bg:whitea4 m-t:5px bs:1': !timestamp,
+        'bg:ts': timestamp,
       }">
-        <span class="fs:80pc">{!timestamp ? 'set timestamp' : 'clear'}</span>
-        <i class="p:10px-0 fs:90pc c:prim {'fu-timer': !timestamp, 'fu-cross': timestamp}" />
+        <span class="fs:90pc p-l:15px">{!timestamp ? 'set the timestamp' : 'clear'}</span>
+        <i class="p-tb:10px fs:90pc {'fu-timer bg:sec c:white p-rl:10px m-l:10px': !timestamp, 'fu-cross c:err': timestamp}" />
     </button>
   </span>
   <script>
@@ -107,7 +107,7 @@
 
     this.toggleTimestamp = () => {
       let timestamp = !this.timestamp ? new Date() : false;
-      this.onChange(timestamp, this.extras, true);
+      this.onChange(timestamp, this.extras, !!timestamp);
       this.update({ timestamp, _date: timestamp && _toDate(timestamp) });
     }
 

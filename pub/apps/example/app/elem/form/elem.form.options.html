@@ -1,9 +1,9 @@
 <elem-form-options>
-  <span class="p:1px">
+  <span class="">
     <label each={option, key in options}
       onclick={handleSelect(key)}
-      class="p:8px-15px m:2px br:10px fs:90pc fw:600 bs:1 ts:all {
-        'c:white bg:prim': _isPicked(key),
+      class="p:8px-15px m:2px-5px-2px-2npx br:5px fs:90pc fw:600 bs:1 ts:all {
+        'c:white bg:sec': _isPicked(key),
         'c:black100 bg:whitea6': !_isPicked(key),
       }" >
       { option }

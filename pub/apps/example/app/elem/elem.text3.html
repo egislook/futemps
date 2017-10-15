@@ -29,6 +29,7 @@
     tag.class            = opts.class           || 'ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim ts:all fc-bs:2 fc-mxh:500px mxh:250px fc-of:auto of:hd';
     tag.activeClass      = opts.activeClass     || 'bg:white-! c:black-!'; //fux-scale
     tag.truncate         = opts.truncate        || 200;
+    tag.noPlaceholder    = opts.noPlaceholder   || false;
     tag.placeholderPath  = opts.placeholderPath || null;
     tag.textLimits       = opts.textLimits      || {min: opts.min || 1, max: opts.max || 550 };
     tag.placeholder      = opts.placeholder     || opts.placeholderPath && opts.getDef(opts.placeholderPath, opts) || 'enter text';
@@ -84,7 +85,8 @@
       elem.onkeydown  = handleKeyDown;
       elem.onblur     = handleBlur;
 
-      !elem.getAttribute('placeholder') && elem.setAttribute('placeholder', tag.placeholder);
+      if(!tag.noPlaceholder)
+        !elem.getAttribute('placeholder') && elem.setAttribute('placeholder', tag.placeholder);
 
       tag.autofocus && elem.focus();
     }

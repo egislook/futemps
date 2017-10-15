@@ -251,6 +251,9 @@ fucss.values = {
   trf: 'transform',
   eo: 'ease-out',
   ei: 'ease-in',
+  ul: 'underline',
+  lc: 'lowercase',
+  cap: 'capitalize',
 };
 
 //version 0.6.8
@@ -389,9 +392,10 @@ fucss.colorMods = {
 fucss.config = {
   'prim': 'colors',
   'sec': 'colors',
+  'txt': 'colors',
   'err': 'colors',
   'warn': 'colors',
-  'sucs': 'colors',
+  'ok': 'colors',
 };
 
 //assigning custom client stuff

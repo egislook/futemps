@@ -52,17 +52,17 @@
 
     this._handleShowToggle  = (e) => this._show = !this._show;
     this._handleChangeRoute = (route) => (e) => {
-      console.log('change active', route);
+      //console.log('change active', route);
       this.active = route;
     }
 
     this.shouldUpdate = (data, nextOpts) => {
-      console.log('data:', data, 'nextOpts:', nextOpts);
+      //console.log('data:', data, 'nextOpts:', nextOpts);
       return true;
     }
     this.on('update', () => {
       Object.assign(this, this.opts);
-      console.log('update')
+      //console.log('update')
     })
   </script>
 </comp-navigation>

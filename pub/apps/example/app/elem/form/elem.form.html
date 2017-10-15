@@ -2,26 +2,39 @@
 
   <virtual each="{field, name in opts.fields}">
 
-    <div class="m-b:10px ai:c ta:l">
-      <span class="{'c:grey600 mnw:200px': !_isFieldType(field), 'c:black fw:600 va:t': _isFieldType(field)}">
+    <span class="m:0 m-b:20px ta:l dp:bk">
+      <span if={false} class="{'c:grey600 mnw:200px': !_isFieldType(field), 'c:black fw:600 td:ul': _isFieldType(field)}">
         <i if={_isRequired(field)} class="fu-asterisk fs:50pc c:prim"/>
         <span class="p-tb:10px">{getDef(name)}</span>
         <i class="m-l:10px fu-chevron-small-right c:grey300" />
       </span>
 
+      <div class="lh:1 m-b:3px">
+        <span class="fw:600 fs:75pc m:0 {
+          'c:prim': _isRequired(field) && !_isValid(field),
+          'c:ok': _isRequired(field) && _isValid(field),
+          'c:silver600': !_isFieldType(field) && !_isRequired(field),
+          'c:black100 m-b:10px': _isFieldType(field)
+        }">{getDef(name)}</span>
+      </div>
+
       <elem-text3
         if={ _isFieldType(field, ['text', 'url']) }
         min={ field.min }
         max={ field.max }
-        placeholder-path='fieldTextPlaceholder'
+        field={ field }
+        placeholder={ name }
         on-return-value={ onReturnValue }
         extras={ _getExtras(field, name) }
         text={ field.value }
         noautoclass={true}>
-          <p
-            class="dp:ib p:10px-5px fc-p-rl:10px bd-b-w:1px bd-c:grey200 ts:all fc-bd-c:prim ws:pl ww:nm"
+          <h2
+            class="c:black100 ta:l md-mnw:50pc w:100pc fs:120pc dp:ib p:0px fc-p:5px-10px bd-b-w:1px bd-c:grey200 ts:all ws:pl ww:nm fc-bs:2 {
+              'fc-bd-c:prim': !parent._isValid(opts.field),
+              'fc-bd-c:ok': parent._isValid(opts.field)
+            }"
             placeholder={ placeholder }
-            contenteditable="true">{ text }</p>
+            contenteditable="true">{ text }</h2>
       </elem-text3>
 
       <elem-form-image
@@ -54,11 +67,11 @@
 
       <span if={false}>{field.type} {field.value}</span>
 
-      <span class="p-l:20px" if={!field.type}>
+      <div class="p-l:15px" if={!field.type}>
         <elem-form fields={field} on-return-value={ onReturnValue } path={_getPath(name)} />
-      </span>
+      </div>
 
-    </div>
+    </span>
 
   </virtual>
 
@@ -69,6 +82,7 @@
     this.onReturnValue     = this.opts.onReturnValue;
     this._isFieldType      = (field, type = 'schema')   => (field.type && type.indexOf(field.type) >= 0 || !field.type && type === 'schema');
     this._isRequired       = (field) => field.required === 'true';
+    this._isValid          = (field) => field.valid;
     this._isChecked        = (field) => field.value === 'true' || field.value;
     this._getPath          = (name) => opts.path && opts.path + '.' + name || name;
     this._getExtras        = (field, name) => ({ field, name, path: this._getPath(name) })
