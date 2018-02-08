@@ -1,6 +1,6 @@
 const express   = require('express');
 const router    = express.Router();
-const poinject = require('../../_packs/poinject');
+const poinject = require('poinject');
 
 router.get('/all', getAll);
 router.get('/:path?', get);
