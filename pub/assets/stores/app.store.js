@@ -6,6 +6,7 @@ class appStore{
     this.route    = null;
     this.lang     = 'en';
     this.def      = '$def.';
+    this.msgs     = [];
 
     //this.on('editor', this.setEditor);
   }
@@ -17,18 +18,20 @@ class appStore{
     }
 
     if(this.trigger){
-      if(!updated) return this.trigger('storeUpdated');
-      updated.path && this.trigger(updated.path);
-      updated.id   && this.trigger(updated.id);
+      if(updated && updated.path || updated && updated.id){
+        updated.path && this.trigger(updated.path);
+        updated.id   && this.trigger(updated.id);
+        return;
+      }
+
+      return this.trigger('storeUpdated');
     }
   }
 
-  getOpts(){
-    return this.content;
-  }
+  getOpts(){ return this.content; }
 
   /** ROUTE DATA */
-  getAllRoutes(){ return this.content.routes }
+  getAllRoutes(){ return this.content.routes; }
   setActiveRoute(routeName){
     this.route = this.content.routes[routeName] || this.content.routes.main;
     this.trigger('routeUpdated');
@@ -115,6 +118,19 @@ class appStore{
     return obj;
   }
 
+  triggerMessage(json, extras){
+    console.log(json);
+    this.trigger('message', {
+      timestamp:  new Date().getTime(),
+      ok:         json.ok,
+      msg:        json.msg
+    });
+
+    if(json.ok)
+      this.setOpts(json.opts, extras);
+
+  }
+
   handleEdit(value, id, cb){
     const self = this;
     let path = id && id.split('-').length !== 5 && id;
@@ -126,10 +142,10 @@ class appStore{
       body: JSON.stringify({ value })
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts, { path, id });
+        this.triggerMessage(json, { path, id });
         cb && cb();
-        console.log(json);
-      });
+      })
+      .catch(e => console.log(e));
   }
 
   handleMove(leaf, sibling, onlyClient){
@@ -151,9 +167,7 @@ class appStore{
         body: JSON.stringify({ siblingId: sibling.id })
       }).then(res => res.json())
         .then(json => {
-          self.setOpts(json.opts);
-          //cb && cb();
-          console.log(json);
+          this.triggerMessage(json);
         });
     }
   }
@@ -166,9 +180,8 @@ class appStore{
       body: JSON.stringify({ value, parent: leaf.parent, type: leaf.type || 'field' })
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts);
+        this.triggerMessage(json);
         cb && cb();
-        console.log(json);
       });
   }
 
@@ -181,9 +194,8 @@ class appStore{
       body: JSON.stringify({ data, schema })
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts);
+        this.triggerMessage(json);
         cb && cb();
-        console.log(json);
       });
   }
 
@@ -194,8 +206,7 @@ class appStore{
       method: 'POST'
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts);
-        console.log(json);
+        this.triggerMessage(json);
       });
   }
 
@@ -239,8 +250,7 @@ class appStore{
       method: 'DELETE'
     }).then(res => res.json())
       .then(json => {
-        self.setOpts(json.opts);
-        console.log(json);
+        this.triggerMessage(json);
       });
   }
 }

@@ -1,0 +1,104 @@
+<elem-form>
+
+  <virtual each="{field, name in opts.fields}">
+
+    <span class="m:0 m-b:25px ta:l dp:bk">
+      <span if={false} class="{
+        'c:grey600 mnw:200px': !_isFieldType(field),
+        'c:black fw:600 td:ul': _isFieldType(field)
+      }">
+        <i if={_isRequired(field)} class="fu-asterisk fs:50pc c:prim"/>
+        <span class="p-tb:10px">{getDef(name)}</span>
+        <i class="m-l:10px fu-chevron-small-right c:grey300" />
+      </span>
+
+      <div if={dp:n} class="lh:1 m-b:3px">
+        <span class="fw:600 fs:75pc m:0 {
+          'c:prim': _isRequired(field) && !_isValid(field),
+          'c:ok': _isRequired(field) && _isValid(field),
+          'c:silver600': !_isFieldType(field) && !_isRequired(field),
+          'c:black100 m-b:10px': _isFieldType(field)
+        }">{getDef(name)}</span>
+      </div>
+
+      <elem-text3
+        if={ _isFieldType(field, ['text', 'url']) }
+        min={ field.min }
+        max={ field.max }
+        field={ field }
+        placeholder={ name }
+        on-return-value={ onReturnValue }
+        extras={ _getExtras(field, name) }
+        text={ field.value }
+        no-placeholder={true}
+        noautoclass={true}
+        label-on={true}>
+          <h2
+            class="ps:rl z:1 c:black100 ta:l md-mnw:50pc w:100pc fs:120pc dp:ib p:0px bd-b-w:1px bd-c:grey200 ws:pl ww:nm
+              ts:all fc-p:5px-10px fc-bs:2
+              fc-m-t:0_~label fc-fs:75pc_~label fc-c:prim_~label
+              {
+                'fc-bd-c:prim': !parent._isValid(opts.field),
+                'fc-bd-c:ok': parent._isValid(opts.field)
+              }"
+            placeholder="&nbsp;"
+            contenteditable="true">{ text }</h2>
+      </elem-text3>
+
+      <elem-form-image
+        field={ field }
+        if={_isFieldType(field, 'image')}
+        link={ field.value }
+        placeholder-path='fieldTextPlaceholder'
+        on-return-value={ onReturnValue }
+        extras={ _getExtras(field, name) }
+        on-change={ _uploadAndReturn(_getExtras(field, name)) } />
+
+      <elem-form-toggle
+        if={_isFieldType(field, 'boolean')}
+        on-change={ onReturnValue }
+        extras={ _getExtras(field, name) }
+        checked={ _isChecked(field) } />
+
+      <elem-form-options
+        if={_isFieldType(field, 'option')}
+        options={field.options}
+        extras={ _getExtras(field, name) }
+        picked={ field.value }
+        on-change={ onReturnValue } />
+
+      <elem-form-timestamp
+        if={_isFieldType(field, ['date', 'timestamp'])}
+        extras={ _getExtras(field, name) }
+        timestamp={ field.value }
+        on-change={ onReturnValue } />
+
+      <span if={false}>{field.type} {field.value}</span>
+
+      <div class="p-l:15px" if={!field.type}>
+        <elem-form fields={field} on-return-value={ onReturnValue } path={_getPath(name)} />
+      </div>
+
+    </span>
+
+  </virtual>
+
+  <script>
+    this.mixin('tag');
+    const tag = this;
+    this.getDef            = this.opts.getDef;
+    this.onReturnValue     = this.opts.onReturnValue;
+    this._isFieldType      = (field, type = 'schema')   => (field.type && type.indexOf(field.type) >= 0 || !field.type && type === 'schema');
+    this._isRequired       = (field) => field.required === 'true';
+    this._isValid          = (field) => field.valid;
+    this._isChecked        = (field) => field.value === 'true' || field.value;
+    this._getPath          = (name) => opts.path && opts.path + '.' + name || name;
+    this._getExtras        = (field, name) => ({ field, name, path: this._getPath(name) })
+    this._uploadAndReturn  = (extras) =>
+      (e) => tag.opts.handleUpload(null, e, (err, json) => {
+        tag.onReturnValue(json.src, extras, true);
+      })
+
+    //this.on('update', () => console.log('elem-form updated', opts));
+  </script>
+</elem-form>

@@ -1,0 +1,47 @@
+<elem-form-options>
+  <span class="">
+    <label each={option, key in options}
+      onclick={handleSelect(key)}
+      class="p:8px-15px m:2px-5px-2px-2npx br:5px fs:90pc fw:600 bs:1 ts:all {
+        'c:white bg:sec': _isPicked(key),
+        'c:black100 bg:whitea6': !_isPicked(key),
+      }" >
+      { option }
+    </label>
+  </span>
+  <script>
+
+    /** default opts */
+    this.default = {
+      options: { opt1: 'Option1', opt2: 'Option2' },
+      picked: 'opt2',
+      onChange: (picked) => this.update({ picked }),
+    };
+
+    /** Sets opts as this tags values */
+    setup.bind(this)();
+    this.shouldUpdate = setup;
+
+    /** Tag inner methods */
+    this._isPicked  = (key) => this.picked === key;
+
+    /**
+      Tag event handlers
+    */
+    this.handleSelect = (key) => (e) => {
+      e.preventUpdate = true;
+      if(key === this.selected)
+        key = false;
+      this.onChange(key, this.extras, true);
+    }
+
+    function setup(data, nextOpts){
+      if(data)
+        return true;
+
+      if(!nextOpts || JSON.stringify(this.opts) !== JSON.stringify(nextOpts))
+        return Object.assign(this, this.default, nextOpts || this.opts);
+    }
+
+  </script>
+</elem-form-options>

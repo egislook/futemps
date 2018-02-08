@@ -5,6 +5,7 @@ fucss.init = window.fucssInit !== undefined ? window.fucssInit : true;
 fucss.anim = window.fucssAnim !== undefined ? window.fucssAnim : true;
 fucss.glob = window.fucssGlob !== undefined ? window.fucssGlob : true;
 fucss.fux = window.fucssFux !== undefined ? window.fucssFux : true;
+fucss.debug = window.fucssDebug !== undefined ? window.fucssDebug : false;
 
 fucss.seps = {
   'value': ':',
@@ -13,7 +14,9 @@ fucss.seps = {
   'comma': '.',
   'important': '!',
   'and': '+',
-
+  'fStart': '(',
+  'fEnd': ')',
+  'next': '~',
 };
 
 fucss.media = {
@@ -40,6 +43,9 @@ fucss.states = {
   lc: 'last-child',
   last: 'last-child',
   first: 'first-child',
+  //version 0.6.8
+  rt: 'root',
+  root: 'root',
 };
 
 fucss.properties = {
@@ -54,7 +60,7 @@ fucss.properties = {
   h: 'height',
   w: 'width',
   fnt: 'font',
-  flt: 'float',
+  //flt: 'float',
   vlgn: 'vertical-align',
   hlgn: 'text-align',
   col: 'width',
@@ -127,13 +133,22 @@ fucss.properties = {
   ai: 'align-items',
   ac: 'align-content',
   flxf: 'flex-flow',
+
   //version 0.6.6
   jc: 'justify-content',
   cont: 'content',
 
+  //version 0.6.8
+  tt: 'text-transform',
+  ts: 'transition',
+  ft: 'filter',
+  bft: 'backdrop-filter',
+  tf: 'transform',
+  sp: 'shape-outside',
+  wc: 'will-change',
 };
 
-fucss.units = ['px', 'em', 'pc', 'vh', 'vw'];
+fucss.units = ['px', 'em', 'pc', 'vh', 'vw', 'dg', 's'];
 
 fucss.groups = ['tb', 'rl'];
 
@@ -159,8 +174,11 @@ fucss.addons = {
   s: 'style',
   rp: 'repeat',
   ps: 'position',
+  //version 0.6.8
+  x: 'X',
+  y: 'Y',
+  z: 'z',
 };
-
 
 fucss.values = {
   bb: 'border-box',
@@ -230,9 +248,70 @@ fucss.values = {
   fe: 'flex-end',
   stc: 'stretch',
 
+  //version 0.6.8
+  trf: 'transform',
+  eo: 'ease-out',
+  ei: 'ease-in',
+  ul: 'underline',
+  lc: 'lowercase',
+  cap: 'capitalize',
 };
 
-fucss.ignore = ['fa', 'fix', 'trans', 'cursor', 'wrap', 'owlServices', 'owl', 'gm'];
+//version 0.6.8
+fucss.functions = {
+  //background
+  lg: 'linear-gradient',
+  rg: 'radial-gradient',
+
+  //color
+  rgb: 'rgb',
+  rgba: 'rgba',
+  //transition
+  cb: 'cubic-bezier',
+  // url: 'url',
+  // img: 'img',
+  //util
+  //clc: 'calc',
+  //el: 'element',
+  //atr: 'attr',
+}
+
+fucss.transforms = {
+  scl: 'scale',
+  trl: 'translate',
+  rot: 'rotate',
+  skw: 'skew',
+  mtx: 'matrix',
+  prp: 'perspective',
+  trx: 'translateX',
+  try: 'translateY',
+  trz: 'translateZ',
+}
+
+fucss.filters = {
+  bl: 'blur',
+  bh: 'brightness',
+  cn: 'contrast',
+  ds: 'drop-shadow',
+  gs: 'greyscale',
+  hr: 'hue-rotate',
+  iv: 'invert',
+  op: 'opacity',
+  st: 'saturate',
+  sp: 'sepia',
+}
+
+fucss['shape-outside'] = {
+  crc: 'circle',
+  rec: 'rect',
+  els: 'ellipse',
+  ins: 'inset',
+  poly: 'polygon',
+}
+//combines all functions
+Object.assign(fucss.functions, fucss.transforms, fucss.filters, fucss['shape-outside']);
+
+fucss.ignore = ['fa', 'fix', 'trans', 'cursor', 'wrap', 'owlServices', 'owl', 'gm', 'fux', 'fu'];
 
 //version 4
 fucss.colorazable = [
@@ -242,13 +321,19 @@ fucss.colorazable = [
   'border',
   'border-color',
   'border-bottom',
-  'border-top',,
+  'border-top',
   'border-left',
   'border-right',
   'border-right-color',
   'border-left-color',
   'border-top-color',
   'border-bottom-color',
+  'box-shadow',
+];
+
+fucss.propertable = [
+  'transition',
+  'will-change',
 ];
 
 fucss.colors = {
@@ -308,8 +393,10 @@ fucss.colorMods = {
 fucss.config = {
   'prim': 'colors',
   'sec': 'colors',
+  'txt': 'colors',
   'err': 'colors',
   'warn': 'colors',
+  'ok': 'colors',
 };
 
 //assigning custom client stuff
@@ -340,6 +427,7 @@ fucss.riotExtractNGenerate = function(){
 fucss.generateStyling = function(opts){
 
   console.time('Fucss');
+  var classNumber = 0, classDone = 0;
   var cssString = '';
   var cssMediaQueries = {
     sm: [],
@@ -358,19 +446,28 @@ fucss.generateStyling = function(opts){
 
   fucss[classHarvestingMethodName](htmlString)
     .forEach(function(className){
+      classNumber++;
       var target = className.split(fucss.seps.target);
 
       var splitedClassName = target.shift().split(fucss.seps.value);
 
       //props
       var props = splitedClassName.shift().split(fucss.seps.space);
+
       var mediaQuery = extractMediaQuery(props);
       var state = extractState(props);
 
       //fucss.values
+      var prop = props.shift();
+      //ignore props
+      if(fucss.ignore.indexOf(prop) !== -1)
+        return;
 
       var value = splitedClassName.pop();
-      var prop = props.shift();
+      if(!value)
+        return fucss.debug && console.warn('No value specified. Use value seperator ' + fucss.seps.value + ' for "' + className + '"');
+
+      var values = value && value.split(fucss.seps.space);
 
       if(fucss.config[prop]){
         value = fucss[fucss.config[prop]][value] || modifyColor(value) || value;
@@ -378,18 +475,25 @@ fucss.generateStyling = function(opts){
         return;
       }
 
-      //console.log(prop, props, state, value);
-      if(Object.keys(fucss.properties).indexOf(prop) === -1 && prop.indexOf(',') === -1) return;
-      //if(fucss.ignore.indexOf(prop) !== -1){return}
-      if(!value) return console.warn('No value specified. Use value seperator ' + fucss.seps.value + ' for "' + className + '"');
-      if(!prop) return console.warn('No prop specified. Use prop seperator ' + fucss.seps.space + ' for "' + className + '"');
-      if(!fucss.properties[prop] && prop.indexOf(',') < 0) cssMissing = cssMissing.concat([prop]);
+      //shorthand functions
+      prop    = setShortcutProp(prop, value, values) || prop;
+      values  = setShortcutValues(prop, value, values) || values;
+
+      if(Object.keys(fucss.properties).indexOf(prop) === -1 && prop.indexOf(',') === -1)
+        return fucss.debug && console.warn('prop name "' + prop + '" is unknown. Check if class "' + className + '" is valid');
+      if(!prop)
+        return fucss.debug && console.warn('No prop specified. Use prop seperator ' + fucss.seps.space + ' for "' + className + '"');
+      if(!fucss.properties[prop] && prop.indexOf(',') < 0)
+        cssMissing = cssMissing.concat([prop]);
 
       prop = combineProps(prop, props);
       props = modifyProps(props);
-      value = modifyValue(value.split(fucss.seps.space), prop);
+      value = modifyValue(values, prop);
+      //if(prop.indexOf('transform') !== -1) console.log(prop, props, value);
 
       var cssRule = generateCssRule(className, prop, props, value, state, target);
+      classDone++;
+      //if(prop === 'transform') console.log(state, prop, props, value, cssRule);
 
       mediaQuery
         ? cssMediaQueries[mediaQuery] = cssMediaQueries[mediaQuery] ? (cssMediaQueries[mediaQuery] + cssRule) : cssRule
@@ -426,9 +530,11 @@ fucss.generateStyling = function(opts){
 
   }
 
+  console.log('Classes: ' + classDone + ' / ' + classNumber);
   console.timeEnd('Fucss');
 
-  if(cssMissing.length){console.warn('Used as full prop [ ' + cssMissing + ' ]')}
+  if(cssMissing.length)
+    console.warn('Used as full prop [ ' + cssMissing + ' ]');
 
   // from class to css rule
 
@@ -477,9 +583,20 @@ fucss.generateStyling = function(opts){
   function modifyValue(valueList, prop){
 
     //console.log(valueList, prop, valueList.length);
+    var functions = [];
     valueList = valueList.map(function(value){
 
-      if(fucss.values[value]) return fucss.values[value];
+      if(fucss.values[value])
+        return fucss.values[value];
+
+      let func = fucss.functions[value];
+      if(func){
+        functions.push(func);
+        return func;
+      }
+
+      if(fucss.propertable.indexOf(prop) !== -1 && fucss.properties[value])
+        return fucss.properties[value];
 
       if(fucss.colorazable.indexOf(prop) !== -1){
         //console.log(prop, value)
@@ -487,18 +604,18 @@ fucss.generateStyling = function(opts){
         if(modifiedColor) return modifiedColor;
       }
 
-      var unit = value.replace(/\d/g, '');
+      var unit = value.replace(/\d*\.?\d*/g, '');
       if(unit && (unit.length === 3 || unit.length === 2)){
         value = value.replace(unit, '');
 
         if(unit.indexOf('n') !== -1) value = -value;
         if(unit.indexOf('pc') !== -1 ) return value + '%';
+        if(unit.indexOf('dg') !== -1 ) return value + 'deg';
         return value + unit.replace('n', '');
       }
 
-      if(value === fucss.seps.important){
+      if(value === fucss.seps.important)
         return '!important';
-      }
 
       if(prop === 'font-family'){
         value = value.replace(fucss.seps.and, ' ');
@@ -507,9 +624,76 @@ fucss.generateStyling = function(opts){
 
       return value;
     });
+    if(functions.length)
+      return generateFunctionValue(functions, valueList);
 
-    //console.log(valueList.join(' '));
     return valueList.join(' ');
+  }
+
+  function generateFunctionValue(functions, valueList){
+    var firstFunctionIndex = valueList.indexOf(functions[0]);
+    var values = [];
+    if(firstFunctionIndex !== 0)
+      values = valueList.slice(0, firstFunctionIndex);
+
+    for(var index in functions){
+      index = parseInt(index);
+      var start = valueList.indexOf(functions[index]) + 1;
+      var end = functions[index + 1]
+        ? valueList.indexOf(functions[index + 1])
+        : valueList.length;
+      functions[index] = functions[index] + '(' + valueList.slice(start, end).join(', ') + ')';
+    }
+    valueList = values.concat(functions);
+    return valueList.join(' ');
+  }
+
+  function setShortcutProp(prop, value, values){
+    if(fucss.transforms[prop]){
+      values.unshift(prop);
+      return 'tf';
+    }
+
+    if(fucss.filters[prop]){
+      values.unshift(prop);
+      return 'ft';
+    }
+
+    if(fucss['shape-outside'][prop]){
+      values.unshift(prop);
+      return 'so';
+    }
+  }
+
+  function setShortcutValues(prop, value, values){
+    if(prop === 'bs'){
+      if(values.length !== 1) return;
+      var index = parseInt(values.shift());
+
+      values.push(
+        0 + 'px',
+        1 * index + 'px',
+        2 * index + 'px',
+        '000a' + (8 + (index * 2))
+      )
+
+      index > 2 && values.push(
+        ',',
+        0 + 'px',
+        1 * (index * 3) + 'px',
+        2 * (index * 3) + 'px',
+        '000a' + (6 + ((index-1) * 2))
+      )
+
+      return values;
+    }
+
+    if(prop === 'ts'){
+      if(values.length > 2) return;
+      values[1] = values[1] || '.45s';
+      values[2] = values[2] || 'cubic-bezier(0.23, 1, 0.32, 1)'; //cb-.26-.11-.78-.35
+      return values;
+    }
   }
 
   function modifyProps(props){
@@ -533,6 +717,9 @@ fucss.generateStyling = function(opts){
     className = className.replace(fucss.seps.comma, '\\.');
     className = className.replace(fucss.seps.important, '\\!');
     className = className.replace(fucss.seps.and, '\\+');
+    className = className.replace(fucss.seps.fStart, '\\(');
+    className = className.replace(fucss.seps.fEnd, '\\)');
+    className = className.replace(fucss.seps.next, '\\~');
 
     var firstAddon = props.length && props[0];
     var isGroup = fucss.groups.indexOf(firstAddon) !== -1;
@@ -564,8 +751,9 @@ fucss.generateStyling = function(opts){
 
     if(target && target.length){
       var allIndex = target.indexOf('all');
-      if(allIndex !== -1) { target[allIndex] = '*' };
-      //className = className.split(',').join('\\,');
+      if(allIndex !== -1)
+        target[allIndex] = '*';
+
       className = className + ' ' + target.join(' ');
     }
 
@@ -702,9 +890,10 @@ fucss.generateGlobalExtras = function(){
               font-family: "Helvetica Neue", "Calibri Light", Roboto, sans-serif;\
               -webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;letter-spacing: 0.02em;',
     "*":    'margin: 0 auto; outline: 0; padding: 0; box-sizing: border-box; border-style: solid; border-width: 0; vertical-align: baseline;',
+    // ".dp\\:flx > *": 'margin: 0;',
     "a":    'text-decoration: none; color: inherit;',
-    "a, span, img, button, i": 'display: inline-block; vertical-align: middle;',
-    "button, a, i": 'cursor: pointer',
+    "a, span, img, button, i, label": 'display: inline-block; vertical-align: middle;',
+    "button, a, i, label": 'cursor: pointer; font-style: normal;',
     "input, button, select, option, textarea": 'font-size: 100%; font-family: inherit;',
     "::-moz-selection": 'background: ' + fucss.colors.prim + '; color: ' + fucss.colors.white + ';',
     "::selection": 'background: ' + fucss.colors.prim + '; color: ' + fucss.colors.white + ';',

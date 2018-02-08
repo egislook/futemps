@@ -1,0 +1,39 @@
+<elem-form-toggle>
+  <span class="" onclick={handleToggle}>
+    <span class="crs:pt br:10px w:35px p:4px m-t:1px ts:bg ps:rl bd-w:5px bd-c:ts {
+      'bg:sec': checked,
+      'bg:grey200': !checked,
+    }">
+
+      <label class="ps:ab w,h:20px br:50pc bg:white bs:2 l:5npx t:6npx ts:tf {
+        'trx:16px': checked,
+        'trx:0': !checked,
+      }" />
+
+    </span>
+  </span>
+  <script>
+    this.default = {
+      checked:  true,
+    };
+
+    this.onChange = (checked) => this.update({ checked });
+
+    setup.bind(this)();
+    this.shouldUpdate = setup;
+
+    this.handleToggle = (e) => {
+      e.preventUpdate = true;
+      this.onChange(!this.checked, this.extras, true);
+    }
+
+    function setup(data, nextOpts){
+      if(data)
+        return true;
+
+      if(!nextOpts || JSON.stringify(this.opts) !== JSON.stringify(nextOpts))
+        return Object.assign(this, this.default, nextOpts || this.opts);
+    }
+
+  </script>
+</elem-form-toggle>

@@ -1,7 +1,5 @@
 <page-main>
 
-  <comp-adder schema-path="schemas.album" data-path="albums" visable={true} />
-
   <elem-intro
     intros="{ content.albums }"
     edit-mode="{ false }"
@@ -13,8 +11,8 @@
 
       <div
         each="{ album, key in opts.intros }"
-        style="background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('{ album.img }'); width: { screenWidth }px;"
-        class="dp:flx ai:c h:100pc bg-sz:cv bg-ps:50pc fux-fadeIn fux-fadeOut fl:l ps:rl">
+        class="dp:flx ai:c h:100pc bg-sz:cv-! bg-rp:nrp-! bg-ps:50pc-! fux-fadeIn fux-fadeOut fl:l ps:rl"
+        style="background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), url('{ album.img }'); width: { screenWidth }px;">
 
           <div class="mxw:800px">
             <elem-text3
@@ -36,7 +34,7 @@
               one-liner={true}
               path="{'albums.' + key + '.button.title'}"
               placeholder-path="fieldTextPlaceholder">
-              <a class="p:17px-40px bg:prim c:white br:1px fw:600 fux-boxsh m-t:40px">{ text }</a>
+              <a class="p:17px-40px bg:prim c:white br:1px fw:600 bs:1 m-t:40px">{ text }</a>
             </elem-text3>
 
 
@@ -86,8 +84,10 @@
     </div>
   </div>
 
-    <script>
-      this.mixin('store');
-    </script>
+  <comp-adder schema-path="schemas.album" data-path="albums" visable={true} />
+
+  <script>
+    this.mixin('store');
+  </script>
 
 </page-main>

@@ -19,17 +19,16 @@ function storeMixin(stores){
       this.handleDuplicate  = this.appStore.handleDuplicate.bind(this.appStore);
       this.handleMove       = this.appStore.handleMove.bind(this.appStore);
 
+      this.refresh          = () => self.update({ poinject: self.appStore.poinject, content:  self.appStore.content })
+
       let self = this;
-      this.appStore.on('storeUpdated',
-        () => self.update({
-          poinject: self.appStore.poinject,
-          content:  self.appStore.content,
-        }));
 
       this.appStore.on('routeUpdated',
         () => self.update({
           route: this.getActiveRoute()
         }));
+
+      this.appStore.on('storeUpdated', this.refresh);
 
       this.extended = [];
 
@@ -51,7 +50,7 @@ function storeMixin(stores){
 
       this.handleExtend = (id, e) => self.trigger('extend', id);
 
-      this.on('updated', () => console.log('StoreMIXIN update'));
+      this.on('updated', () => console.log('StoreMIXIN', this.opts.dataIs));
 
       // Unmount modifications for feature animation implementation
       // this.on('before-unmount',

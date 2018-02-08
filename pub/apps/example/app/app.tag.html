@@ -1,11 +1,38 @@
 <app>
 
-  <navigation routes={ content.routes } active={ route.name } />
+  <comp-navigation routes={ content.routes } active={ route.name } />
   <elem-editor store={ appStore } />
 
-  <main class="{'mxw:800px': !route.fullscreen }" data-is={ route.view } />
+  <main class="md-p-t:50px {'mxw:800px p-t:15px': !route.fullscreen }" data-is={ route.view } />
+
+  <elem-toast />
+
+  <elem-modal if={ false } />
 
   <script>
     this.mixin('store');
+
+    this.handleToastRemove = () => {
+      console.log('click remove toast');
+    }
+
+    this.on('update', () => {
+      console.log('app updated');
+    })
+
+
+
+
+    this.appStore.on('message', (message) => {
+      //this.update({ message });
+      this.tags['elem-toast'].trigger('message', message);
+    });
+
+
+    // setInterval(() => {
+    //   this.message = { msg: 'tadam'};
+    //   this.update();
+    // }, 1100);
+
   </script>
 </app>

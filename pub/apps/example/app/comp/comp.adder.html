@@ -1,40 +1,76 @@
 <comp-adder>
 
   <i
-    class="
-      {'fu-plus bg:prim c:white': !_adderIsVisable, 'fu-cross bg:white c:black': _adderIsVisable}
-      fs:130pc p:15px br:50pc ps:fx fux-boxsh fux-trans z:2"
-    style={_pos}
+    class="fs:130pc p:15px br:50pc ps:fx bs:2 ts:all z:10 r:2pc {
+      'fu-feather bg:lg-prim400-prim600 c:white b:2pc': !_adderIsVisable,
+      'fu-cross bg:white c:black b:90pc': _adderIsVisable
+    }"
     onclick={_handleClick} />
 
-  <div if={_adderIsVisable} class="t,l:0 w,h:100pc ps:fx bg:blacka8 dp:flx jc:c ai:c fux-fadeIn z:1">
-    <div class="mxh,mxw:100pc md-w:80pc bg:white br:2px fux-boxsh fux-trans ta:l of:auto">
+  <div class="ps:fx t,l:0 w,h:100pc bg:blacka9 dp:flx jc:c ai:c ts:all z:9 {
+    'tf:trl-200pc-skw-50dg z:0': !_adderIsVisable,
+    'tf:trl-0-skw-0 z:9': _adderIsVisable,
+  }">
+    <div class="mxh,mxw:100pc w:100pc md-w:80pc bg:white br:2px bs:1 ts:all ta:l of:auto ps:rl">
 
-      <div each="{ fields, key in schema }">
-        <div class="p:20px bg:white w:100pc bd-b-w:1px bd-c:grey200">
-          <div class="m:0 br:5px_a bd-c:prim_a bd-w:1px_a m:2px_a">
+      <div class="dp:flx ai:stc" each="{ fields, key in schema }">
+
+        <div class="w:100pc p:5pc mxh:100pc bg:white600 bd-b-w:1px bd-c:grey200">
+          <elem-form class="" fields={ _activeTabData } on-return-value={ handleReturnValue } />
+
+          <div class="ta:r p-b:20px p:7px_button mnw:100px_button">
+            <button class="bg:ts c:black200" onclick={_handleClick}>Cancel</button>
+            <button class="bg:sec br:3px c:white bd-w:2px bd-c:sec bs:1" onclick={_handleSubmit}>Done</button>
+          </div>
+        </div>
+
+        <div onclick={_toggleShowTabs} class="ps:rl mxw:300px mxh:100pc">
+          <i class="md-dp:n fu-unread p:10px ps:ab r:1px t:40pc bg:white bs:1" />
+          <div class="m:0 bs:2 bg:white of-x:hd of-y:auto ts:all mdx-ps:ab mdx-r,t:0 h:100pc {
+            'mdx-w:1px': !_showTabs,
+            'mdx-w:200px': _showTabs
+          }">
+
+            <div class="p:30px c:grey200 ta:c">
+              <i class="fu-pencil2 fs:200pc p:10px" />
+              <h3 class="mxh:40px">
+                Edit or create schematic data
+              </h3>
+            </div>
 
             <a onclick={ _setActiveTab() }
-              class="p:10px-20px {'bg:prim c:white': !_getActiveTab(), 'c:prim': _getActiveTab()}">
+              class="dp:bk p:10px-20px bd-b:1px-sld-grey200 ts:bg ws:np {
+                'bg:prim c:white': !_getActiveTab(),
+                'c:grey bg:ts': _getActiveTab()
+              }">
               {key}
               <i class="fu-plus fs:70pc m-b:3px" />
             </a>
 
-            <a
-              each={ tab in parent.tabs }
+            <a each={ tab in parent.tabs }
               onclick={ _setActiveTab(tab) }
-              class="p:10px-20px fw:400 {'bg:prim c:white': _getActiveTab(tab), 'c:prim bg:ts': !_getActiveTab(tab)}">{tab}</a>
-
+              class="dp:bk p:10px-20px bd-b:1px-sld-grey200 ts:bg ws:np {
+                'bg:prim c:white': _getActiveTab(tab),
+                'c:grey bg:ts': !_getActiveTab(tab)
+              }">{tab}</a>
           </div>
         </div>
 
-        <div class="p-t:20px p-rl:7pc mxh:100pc bg:white600 bd-b-w:1px bd-c:grey200">
-          <elem-form fields={ _activeTabData } on-return-value={ handleReturnValue } />
-        </div>
 
-        <div class="p:15px ta:r p:10px_button mnw:150px_button bg:white w:100pc">
-          <button class="bg:ts" onclick={_handleClick}>Cancel</button>
-          <button class="bg:prim br:2px c:white bd-w:2px bd-c:prim fux-boxsh" onclick={_handleSubmit}>Done</button>
+        <div if={false} class="p:20px bs:2 bg:white mxw:25pc bd-b-w:1px bd-c:grey200 of:hd">
+          <div class="m:0 br:5px_a bd-c:prim_a bd-w:1px_a m:2px_a">
+
+            <a onclick={ _setActiveTab() }
+              class="p:10px-20px ts:bg {'bg:prim c:white': !_getActiveTab(), 'c:prim': _getActiveTab()}">
+              {key}
+              <i class="fu-plus fs:70pc m-b:3px" />
+            </a>
+
+            <a each={ tab in parent.tabs }
+              onclick={ _setActiveTab(tab) }
+              class="p:10px-20px ts:bg {'bg:prim c:white': _getActiveTab(tab), 'c:prim bg:ts': !_getActiveTab(tab)}">{tab}</a>
+
+          </div>
         </div>
 
       </div>
@@ -48,12 +84,12 @@
 
     tag._adderIsVisable   = opts.visable;
     tag._activeTab        = null;
-    tag._pos              = !tag._adderIsVisable && { right: '2%', bottom: '2%' } || { bottom: '90%', right: '2%' };
     tag._handleClick      = _handleClick;
     tag._handleSubmit     = _handleSubmit;
     tag._stopPropagation  = (e) => e.stopPropagation();
     tag._getActiveTab     = _getActiveTab;
     tag._setActiveTab     = _setActiveTab;
+    tag._showTabs         = false;
 
     tag.handleCreateChunk = opts.handleCreateChunk;
     tag.schemaPath    = opts.schemaPath;
@@ -67,21 +103,29 @@
     tag.tabs          = opts.tabs    || _getDataTabs(tag.data) || [];
 
     tag._activeTabData     = _getTabData(tag._activeTab);
+    tag._toggleShowTabs    = (e) => { e.preventUpdate = true; tag.update({ _showTabs: !tag._showTabs}); };
     tag.handleReturnValue  = handleReturnValue;
 
-    tag.on('update', () => {
+    tag.on('update', (data) => {
+      if(!data){
+        tag.data          = tag.getTree(tag.dataPath);
+        tag.tabs          = _getDataTabs(tag.data) || [];
+      }
+      console.log(data);
       console.log('update adder');
-    })
+    });
 
     function handleReturnValue(value, extras, valid){
       if(!extras.path || extras.path && !_.get(tag._activeTabData, extras.path))
         return;
 
-      _.set(tag._activeTabData, extras.path + '.value', value);
+      _.set(tag._activeTabData, extras.path + '.value', value + '');
       _.set(tag._activeTabData, extras.path + '.valid', valid);
+
+      console.log(tag._activeTabData);
       //tag._activeTabData[extras.name]['value'] = value;
       //console.log(tag._activeTabData);
-      tag.update();
+      tag.update({ _innerUpdate: true });
     }
 
     function _getTabData(tabName){
@@ -101,8 +145,10 @@
           if(_tabData[key] && _schema[key]){
             if(typeof _tabData[key] === 'object')
               _schema[key] = __setDeepValues(_schema[key], _tabData[key]);
-            if(typeof _tabData[key] === 'string')
+            if(typeof _tabData[key] === 'string'){
               _schema[key]['value'] = _tabData[key];
+              _schema[key]['valid'] = true;
+            }
           }
         }
         return _schema;
@@ -114,9 +160,10 @@
     function _setActiveTab(tabName = null){
       return (e) => {
         let headKey = Object.keys(tag.data).pop();
-
-        tag._activeTab = tabName;
-        tag._activeTabData = _getTabData(tabName);
+        tag.update({
+          _activeTab: tabName,
+          _activeTabData: _getTabData(tabName)
+        })
         e.preventDefault();
       }
     }
@@ -136,7 +183,8 @@
       return Object.keys(data[headKey]);
     }
 
-    function _handleSubmit(){
+    function _handleSubmit(e){
+      e.preventUpdate = true;
 
       //console.log(tag._activeTabData, tag.dataLeaf, tag.schemaLeaf);
 
@@ -162,14 +210,11 @@
 
     function _handleClick(e){
       e.preventUpdate = true;
-      // const method = tag._adderIsVisable ? 'remove' : 'add';
-      // document.body.classList[method]('fux-clear');
+      const method = tag._adderIsVisable ? 'remove' : 'add';
+      document.body.classList[method]('fux-clear');
       //document.body.onmousewheel  = (e) => { tag._adderIsVisable && e.preventDefault() }
       //document.body.ontouchmove   = (e) => { tag._adderIsVisable && e.preventDefault() }
-      tag.update({
-        _adderIsVisable: !tag._adderIsVisable,
-        _pos: tag._adderIsVisable && { right: '2%', bottom: '2%' } || { bottom: '90%', right: '2%' }
-      })
+      tag.update({ _adderIsVisable: !tag._adderIsVisable })
     }
 
   </script>

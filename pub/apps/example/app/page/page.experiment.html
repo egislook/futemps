@@ -1,0 +1,155 @@
+<exp-color>
+  <span style={{'background-color': color.c }}>
+    {color.i}
+  </span>
+</exp-color>
+
+<exp-leaf>
+  <span class={'bd-c:black-!': _updated} style={_getStyle(opts.leaf)}>
+    {new Date().getTime() - opts.start.getTime()}
+  </span>
+  <div>
+    <exp-leaf each={l in opts.leaf.child} key={l.i} leaf={l} start={parent.opts.start} />
+  </div>
+
+  <script>
+    this._updated = null;
+
+    this._getStyle = (leaf) => ({
+      'background-color': opts.leaf.c,
+      'width':            (100 / opts.leaf.parent) + 'px',
+      'height':           (100 / opts.leaf.parent) + 'px',
+      'line-height':      (100 / opts.leaf.parent) + 'px',
+    });
+
+    this.shouldUpdate = (data, nextOpts) => {
+      return true;
+    }
+
+    this.on('update', () => {
+      this._updated = !this._updated;
+      //this.root.children[0].classList.add('bd-c:black-!');
+      //setTimeout(() =>   this.root.children[0].classList.remove('bd-c:black-!'), 300);
+    })
+  </script>
+</exp-leaf>
+
+<page-experiment>
+
+  <div class="p-rl:2pc bd-c:black-!
+    m:40px-0-25px-0_h1 c:grey_h1 fw:300_h1 bd-b:2px-ds-grey200_h1 ta:l_h1
+    fw:600_p m:20px-0-10px_p
+    ws:pl_pre ww:nm_pre bg:greya1_pre p:10px_pre dp:ib_pre ta:l_pre
+    m:10px-0_button p:10px-20px_button mnw:150px_button c:white_button tr:uc_button fw:600_button fs:80pc_button br:2px_button
+    w,h,lh:25px_span m:1px_span va:b_span fs:10px_span bd-w:2px_span bd-c:grey200_span
+    dp:flx_div p-rl:1px_div
+    fs:15px_i p:12px_i c:white_i br:50pc_i bs:1_i ts:all_i
+    ta:l_section">
+
+    <h1>Component tree experiment</h1>
+    <section>
+      <i class="fu-reload bg:prima7 ac-bg:prim ac-rot:90dg" onclick={handleTreeRefresh} />
+      <i class="{
+        'fu-repeat bg:grey300 ac-rot:90dg': !_treeInterval,
+        'fu-cross bg:red rot:1080dg': _treeInterval
+      }" onclick={toggleTreeInterval} />
+    </section>
+    <div>
+      <exp-leaf each={leaf in tree} key={leaf.i} leaf={leaf} start={parent.start} />
+    </div>
+
+    <h1>Component linier experiment</h1>
+    <section class="m-b:20px">
+      <i class="fu-reload bg:prima7 ac-bg:prim ac-rot:90dg" onclick={handleLinearRefresh} />
+      <i class="{
+        'fu-repeat bg:grey300 ac-rot:90dg': !_linearInterval,
+        'fu-cross bg:red rot:1080dg': _linearInterval
+      }" onclick={toggleLiniearInterval} />
+    </section>
+
+    <exp-color if={true} each={color, index in colors} key={color.i} color={color} />
+
+  </div>
+
+  <script>
+    this.amount = 200;
+    this.deep   = 10;
+    this.delay  = 1000;
+    this.start  = new Date();
+    this.colors = generateColorObj(this.amount);
+    this.tree   = generateColorTree(0, this.deep);
+    this._treeInterval    = null;
+    this._linearInterval  = null;
+    this.leafGenerated = 0;
+    //console.log(this.tree);
+
+    this.handleTreeRefresh    = (e) => {
+      this.tree = generateColorTree(0, this.deep);
+      this.start = new Date();
+    }
+    this.handleLinearRefresh  = (e) => {
+      this.colors = generateColorObj(this.amount);
+      this.start = new Date();
+    }
+
+    this.toggleTreeInterval     = toggleTreeInterval;
+    this.toggleLiniearInterval  = toggleLiniearInterval;
+
+    function generateNewColor(){
+      return "#"+((1<<24)*Math.random()|0).toString(16);
+    }
+
+    function generateColorObj(amount){
+      const obj = {};
+      const c   = generateNewColor();
+
+      for(let i=0; i<amount; i++){
+        obj[i] = { c, i }
+      }
+      return obj;
+    }
+
+    function generateColorTree(parent, amount, c){
+      c = c || generateNewColor();
+      parent = parent + 1;
+      let obj = {};
+      let wide = parent === 0 ? 1 : 2;
+      if(parent < amount){
+        for(let i = 0; i<wide; i++){
+          obj[i] = {
+            i: parent+'-'+i,
+            c,
+            child: generateColorTree(parent, amount, c),
+            parent,
+          }
+        }
+      }
+      return obj
+    }
+
+    function toggleLiniearInterval(e){
+      if(this._linearInterval){
+        clearInterval(this._linearInterval);
+        this._linearInterval = null;
+        return;
+      }
+
+      this.colors = generateColorObj(this.amount)
+      this._linearInterval = setInterval(() => this.update({ colors: generateColorObj(this.amount), start: new Date() }), this.delay);
+    }
+
+    function toggleTreeInterval(e){
+      if(this._treeInterval){
+        clearInterval(this._treeInterval);
+        this._treeInterval = null;
+        return;
+      }
+
+      this.tree = generateColorTree(0, this.deep);
+      this._treeInterval = setInterval(() => this.update({ tree: generateColorTree(0, this.deep), start: new Date() }), this.delay);
+    }
+
+
+  </script>
+
+</page-experiment>

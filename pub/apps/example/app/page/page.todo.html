@@ -1,6 +1,6 @@
 <page-todo>
 
-  <comp-adder schema-path="schemas.todo" data-path="todos" />
+  <comp-adder visable={true} schema-path="schemas.todo" data-path="todos" />
 
   <elem-text3 path="routes.todo.meta.title">
     <h1 class="p:10px-2pc">{text}</h1>
@@ -10,7 +10,9 @@
     <p class="p:10px-2pc">{text}</p>
   </elem-text3>
 
-  <elem-text3 path="todo" max={5000}>
+  <comp-todo text="test text"/>
+
+  <elem-text3 if={false} path="todo" max={5000}>
     <p class="ta:l mxw:800px p:10px-2pc">{text}</p>
   </elem-text3>
 

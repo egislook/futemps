@@ -1,0 +1,131 @@
+<elem-form-timestamp>
+  <span class="ta:c">
+    <span if={timestamp} each={val, type in _date}
+      class="lh:1_all p:1px fux-fadeIn
+        {
+          'm-l:15px': type === 'hours'
+        }">
+        <button class="ac-scl:1.5 ac-c:prim ac-fw:600 bg:ts p:3px-13px fs:70pc c:grey300 ts:all" onmousedown={handleChange(type, true)} onmouseup={handleClearInterval}>{_getNextOrPrev(type, val, true)}</button>
+        <label class="fw:600 c:black100 dp:bk p:5px-10px mnw:32px mnh,lh:22px bs:1 bg:whitea3">{ val }</label>
+        <button class="ac-scl:1.5 ac-c:prim ac-fw:600 bg:ts p:3px-13px fs:70pc c:grey300 ts:all" onmousedown={handleChange(type)} onmouseup={handleClearInterval}>{ _getNextOrPrev(type, val) }</button>
+    </span>
+    <button
+      onclick={toggleTimestamp}
+      class="tr:cap fw:600 c:black100 {
+        'bg:whitea4 m-t:5px bs:1': !timestamp,
+        'bg:ts': timestamp,
+      }">
+        <span class="fs:90pc p-l:15px">{!timestamp ? 'set the timestamp' : 'clear'}</span>
+        <i class="p-tb:10px fs:90pc {'fu-timer bg:sec c:white p-rl:10px m-l:10px': !timestamp, 'fu-cross c:err': timestamp}" />
+    </button>
+  </span>
+  <script>
+
+    /** default opts */
+    this.default = {
+      intervalSpeed: 300,
+      timestamp: new Date(),
+      onChange: (picked) => this.update({ picked }),
+    };
+
+    /** Sets opts as this tags values */
+    setup.bind(this)();
+    this.shouldUpdate = setup;
+
+    this._date = _toDate(this.timestamp);
+
+    /**
+      Tag inner methods
+    */
+    this._isPicked  = (key) => this.picked === key;
+
+    this._toTimestamp = (date) =>
+      new Date(date.year, date.month-1, date.day, date.hours, date.minutes);
+
+    function _zerofy(value){ return (value + '').length === 1 ? '0' + value : value; }
+
+    this._getNextOrPrev = (type, value, add) => {
+
+      let limits = {
+        year:     { min: 2000, max: 2017 },
+        month:    { min: 1, max: 12 },
+        day:      { min: 1, max: 31 },
+        hours:    { min: 0, max: 23 },
+        minutes:  { min: 0, max: 59 }
+      }
+
+      value = parseInt(value);
+
+      let newValue = add ? value + 1 : value - 1;
+      if(newValue < limits[type].min)
+        newValue = limits[type].max;
+
+      if(newValue > limits[type].max)
+        newValue = limits[type].min;
+
+      return _zerofy(newValue);
+    }
+
+    function _toDate(timestamp){
+      const date = new Date(timestamp);
+      return {
+        year:     date.getFullYear(),
+        month:    _zerofy(date.getMonth() + 1),
+        day:      _zerofy(date.getDate()),
+        hours:    _zerofy(date.getHours()),
+        minutes:  _zerofy(date.getMinutes()),
+      }
+    }
+
+    /**
+      Tag event handlers
+    */
+    this.handleChange = (type, add) => (e) => {
+      e.preventUpdate = true;
+      let timestamp = this.timestamp;
+      value = this._date[type];
+
+      value = this._getNextOrPrev(type, value, add);
+
+      function loopByType(speed){
+        this._timer = setTimeout(() => {
+          speed = speed / 2 > 50 ? speed / 2 : speed;
+          this._date[type] = this._getNextOrPrev(type, this._date[type], add);
+          loopByType.bind(this)(speed);
+          this.update({ _date: this._date });
+        }, speed);
+      }
+
+      loopByType.bind(this)(this.intervalSpeed);
+
+
+      if(this._date[type] !== value && this._toTimestamp(this._date)){
+        this._date[type] = value;
+        this.update({ _date: this._date });
+      }
+    }
+
+    this.toggleTimestamp = () => {
+      let timestamp = !this.timestamp ? new Date() : false;
+      this.onChange(timestamp, this.extras, !!timestamp);
+      this.update({ timestamp, _date: timestamp && _toDate(timestamp) });
+    }
+
+    this.handleClearInterval = () => {
+      clearInterval(this._timer);
+      this.onChange(this._toTimestamp(this._date), this.extras, true);
+    }
+
+    function setup(data, nextOpts){
+      if(data)
+        return true;
+
+      if(!nextOpts || JSON.stringify(this.opts) !== JSON.stringify(nextOpts)){
+        if(nextOpts)
+          this._date = _toDate(nextOpts.timestamp);
+        return Object.assign(this, this.default, nextOpts || this.opts);
+      }
+    }
+
+  </script>
+</elem-form-timestamp>

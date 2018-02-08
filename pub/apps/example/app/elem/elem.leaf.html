@@ -30,7 +30,7 @@
 
 
         <i if={leaf && !childIsValue && !ghostLeaf && leaf.id !== 'ghost'} class="fu-plus fs:70pc c:white bg:grey300 ps:rl p:7px m-b:2px m-l:4npx" onclick={handleAddFieldGhost}>
-          <span if={leaf && !childIsValue && !isExtended && child && child.length} class="ps:ab fs:60pc bg:white c:black fw:500 p:1px-2px t,r:0 br:1px fux-boxsh">{child.length}</span>
+          <span if={leaf && !childIsValue && !isExtended && child && child.length} class="ps:ab fs:60pc bg:white c:black fw:500 p:1px-2px t,r:0 br:1px bs:1">{child.length}</span>
         </i>
 
         <span if={ noChildren && leaf.id !== 'ghost' && !ghostLeaf }>
@@ -57,7 +57,7 @@
               class="dp:ib va:t of:auto p:2px-5px-2px-0 fc-p-l:5px">{ truncateText() }</p>
         </elem-text3>
 
-        <span if={childIsImage} class="w:175px fux-boxsh bd:3px-sd-white m-tb:5px">
+        <span if={childIsImage} class="w:175px bs:1 bd:3px-sd-white m-tb:5px">
           <img class="dp:bk w:100pc" src={child.value} />
         </span>
 
@@ -73,7 +73,7 @@
           <i if={leaf && (noChildren || !childIsValue)} class="fu-trash fs:70pc dp:ib c:grey300 p:7px m-b:2px" onclick={leaf.id === 'ghost' && handleDeleteGhost || handleDelete} />
 
           <i if={leaf} class="fu-info fs:70pc p:7px c:grey300 m-b:2px ps:rl {'bg:black c:white-!': showInfo}" onclick={handleInfo}>
-            <div if={showInfo} class="t:0 l:20px fux-boxsh ps:ab bg:prim p:10px z:5 c:white dp:tb dp:tr_div dp:tc_strong,span p-r:5px_strong">
+            <div if={showInfo} class="t:0 l:20px bs:1 ps:ab bg:prim p:10px z:5 c:white dp:tb dp:tr_div dp:tc_strong,span p-r:5px_strong">
               <div> <strong>ID: </strong> <span class="mnw:250px">{leaf.id}</span> </div>
               <div> <strong>PARENT: </strong> <span>{leaf.parent}</span> </div>
               <div> <strong>PATH: </strong> <span>{leaf.path}</span> </div>
@@ -101,6 +101,7 @@
 
       <elem-leaf
         each={leaf in child}
+        key="id"
         leaf={leaf}
         mode-edit={parent.opts.modeEdit}
         poinject={parent.opts.poinject}

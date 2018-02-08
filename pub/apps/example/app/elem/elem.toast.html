@@ -1,0 +1,74 @@
+<elem-toast>
+	<div
+		class="ps:fx c:white p:15px-20px w:300px m-l:150npx l:50pc fs:80pc fw:400 bs:1 ts:all z:99 crs:pt {
+			'bg:black300': message.ok,
+			'bg:err600': !message.ok,
+			'br:5px-5px-0-0 b:0': posType === 'bottom',
+			'br:0-0-5px-5px t:0': posType === 'top',
+			'trl:0-100pc': posType === 'bottom' && !_show,
+			'trl:0-105npc': posType === 'top' && !_show,
+		}"
+		onclick="{ handleToastRemove }">{ message.msg }</div>
+
+	<script>
+
+		this.mixin('tag');
+
+		const tag = this.setState(opts, {
+			debug: 		false,
+			delay: 		3000,					// opts.delay !== undefined ? opts.delay : 5000;
+			posType: 	'bottom', 		// ['top', 'bottom'].indexOf(opts.pos) >= 0 ? opts.pos : 'bottom';
+			posShowDim: '0%',
+			posHideDim: '-100%',
+
+			message: {
+				msg: 				'Hey there! thats me toast guy! how are you today?',
+				ok: 				true,
+				timestamp: 	null,
+			},
+
+			_posDim:			0,
+			_timer: 			null,
+			_innerUpdate: false,
+			_optsUpdate:  false,
+			_show:     		false,
+
+			onRemove: 		((e) => console.log(`${this.__.tagName} onRemove(e)`)),
+		});
+
+		tag.handleToastRemove = handleToastRemove;
+
+		//tag.on('mount', handleMount);
+		tag.on('update', handleUpdate);
+		tag.on('message', handleNewMessage);
+
+		function handleMount(){
+			tag.update({ _show : true });
+		}
+
+		function handleNewMessage(message){
+			tag.update({ _show: true, message: Object.assign({}, tag.default.message, message)});
+		}
+
+		function handleToastRemove(e){
+			tag.update({ _show: false });
+			//tag.trigger('toastRemove');
+			//tag.onRemove && tag.onRemove(e);
+			if(e) e.preventUpdate = true;
+		}
+
+		function handleUpdate(data){
+			tag._timer && clearTimeout(tag._timer);
+
+			if(tag._optsUpdate)
+				tag._show = true;
+
+			if(tag.delay && tag._show === true)
+				tag._timer = setTimeout(handleToastRemove, tag.delay);
+
+			tag._optsUpdate = false;
+		}
+
+	</script>
+
+</elem-toast>

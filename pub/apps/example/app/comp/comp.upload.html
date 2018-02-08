@@ -2,14 +2,14 @@
   <div class="p:20px">
     <form method="post" enctype="multipart/form-data">
       <input id="file" class="op:0 ps:ab w,h:0 dp:n" type="file" name="files" onchange={change} multiple />
-      <label for="file" class="dp:ib p:15px-30px bg:prim c:white br:3px crs:pt fux-boxsh fw:400">
+      <label for="file" class="dp:ib p:15px-30px bg:prim c:white br:3px crs:pt bs:1 fw:400">
         Upload {files.length || ''}
       </label>
     </form>
 
     <div if={files.length} class="p:10px w:100pc dp:flx flxf:wrap jc:c">
       <div
-        class="m:10px ps:rl ta:l op:0.8 hv-op:1 hv-op:0_span crs:pt fux-trans"
+        class="m:10px ps:rl ta:l op:0.8 hv-op:1 hv-op:0_span crs:pt ts:all"
         onclick={file.type === 'image' && fullscreen(i)}
         each={file, i in files}>
 
@@ -22,7 +22,7 @@
           <i class="fux-spinner brd-t-c:prim-! brd-w:1px-!" />
         </span>
 
-        <i class="ps:ab t,r:15npx fu-cross bg:white br:50pc p:10px fux-boxsh" onclick={remove(i)} />
+        <i class="ps:ab t,r:15npx fu-cross bg:white br:50pc p:10px bs:1" onclick={remove(i)} />
 
         <span if={file.filename} class="ps:ab b,l:0 w:100pc c:white bg:blacka5 fs:80pc p:5px-10px">
           <h2 if={false} class="fw:500">{file.filename}</h2>
@@ -36,7 +36,7 @@
     </div>
 
     <div if={fullsceenFile} class="t,l:0 w,h:100pc ps:fx bg:blacka9 dp:flx jc:c ai:c fux-fadeIn" onclick={fullscreenExit}>
-      <div class="w:80pc mxh:100pc p:1pc bg:white br:2px fux-boxsh of:auto">
+      <div class="w:80pc mxh:100pc p:1pc bg:white br:2px bs:1 of:auto">
         <img src={fullsceenFile.src} class="dp:bk w:100pc" />
       </div>
     </div>

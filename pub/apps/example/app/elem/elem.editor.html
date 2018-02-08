@@ -1,9 +1,9 @@
 <elem-editor>
   <a
     ref="editor"
-    class="dp:ib ps:ab p:10px br:5px-2px-0-5px c:white z:11 op:0.9 fux-trans m-t:1px fux-boxsh {'bg:prim': textIsValid, 'bg:grey200 c:grey': !textIsValid }"
+    class="dp:ib ps:ab p:10px br:5px-2px-0-5px c:white z:11 op:0.9 ts:all m-t:1px bs:1 {'bg:prim': textIsValid, 'bg:grey200 c:grey': !textIsValid }"
     style={editorPos}>
-      <span class="ps:ab t,l:0 fs:70pc fw:600 p:0-2px-1px-1px br:3px-0-50pc-0 fux-boxsh {'bg:white c:black300': textIsValid, 'bg:err c:white': !textIsValid }">
+      <span class="ps:ab t,l:0 fs:70pc fw:600 p:0-2px-1px-1px br:3px-0-50pc-0 bs:1 {'bg:white c:black300': textIsValid, 'bg:err c:white': !textIsValid }">
         { getValidTextLength() }
       </span>
       <span class="fs:130pc {'fu-check': textIsValid, 'fu-esc': !textIsValid}" />
