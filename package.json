@@ -4,7 +4,8 @@
   "description": "simple template generator",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --ignore /public -e html,js index.js",
+    "start": "node index.js",
+    "dev": "nodemon --ignore /public -e html,js index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -19,9 +20,9 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "express": "^4.15.4",
-    "exriothing": "0.0.1",
+    "exriothing": "0.0.3",
     "multer": "^1.3.0",
-    "poinject": "^0.0.2"
+    "poinject": "^0.0.5"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

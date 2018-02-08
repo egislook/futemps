@@ -2,8 +2,8 @@
 
 const express     = global.express = require('express'),
       bodyParser  = require('body-parser'),
-      exriothing  = require('../_packs/exriothing'),
-      poinject    = require('../_packs/poinject'),
+      exriothing  = require('exriothing'),
+      poinject    = require('poinject'),
       cfg         = require('./cfg.js');
 
 
