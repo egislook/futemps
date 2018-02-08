@@ -21,24 +21,26 @@ const appStore    = exriothing.cleantRequire(`${cfg.storesPath}/app.store.js`);
 
 const storeMixin  = exriothing.cleantRequire(`${cfg.mixinsPath}/store.mixin.js`);
 const tagMixin    = exriothing.cleantRequire(`${cfg.mixinsPath}/tag.mixin.js`);
+const globalMixin = exriothing.cleantRequire(`${cfg.mixinsPath}/global.mixin.js`);
+
+const appActions  = exriothing.cleantRequire(`${cfg.actionsPath}/app.actions.js`);
 
 
 const stores = {}, actions = {}, mixins = {};
 
-mixins.store = storeMixin(stores);
-mixins.tag   = tagMixin(stores);
+mixins.store  = storeMixin(stores);
+mixins.tag    = tagMixin(stores);
+mixins.global = globalMixin(stores);
 
 /** actions */
 actions.initRouter = () => {
   /** Server Routing */
   app.use('/poinject', require('./func/poinject.func.js'));
   app.use('/upload', require('./func/upload.func.js'));
-  app.get('/content', (req, res) => {
-    res.json({
-      poinject: poinject.poinject(),
-      content: poinject.json()
-    });
-  });
+  app.get('/content', (req, res) => res.json({
+    poinject: poinject.poinject(),
+    content: poinject.json()
+  }));
 
   exriothing.initMixins(mixins);
   exriothing.init(cfg);

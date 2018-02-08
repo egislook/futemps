@@ -144,7 +144,8 @@ class appStore{
       .then(json => {
         this.triggerMessage(json, { path, id });
         cb && cb();
-      });
+      })
+      .catch(e => console.log(e));
   }
 
   handleMove(leaf, sibling, onlyClient){

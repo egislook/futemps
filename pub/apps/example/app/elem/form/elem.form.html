@@ -2,14 +2,17 @@
 
   <virtual each="{field, name in opts.fields}">
 
-    <span class="m:0 m-b:20px ta:l dp:bk">
-      <span if={false} class="{'c:grey600 mnw:200px': !_isFieldType(field), 'c:black fw:600 td:ul': _isFieldType(field)}">
+    <span class="m:0 m-b:25px ta:l dp:bk">
+      <span if={false} class="{
+        'c:grey600 mnw:200px': !_isFieldType(field),
+        'c:black fw:600 td:ul': _isFieldType(field)
+      }">
         <i if={_isRequired(field)} class="fu-asterisk fs:50pc c:prim"/>
         <span class="p-tb:10px">{getDef(name)}</span>
         <i class="m-l:10px fu-chevron-small-right c:grey300" />
       </span>
 
-      <div class="lh:1 m-b:3px">
+      <div if={dp:n} class="lh:1 m-b:3px">
         <span class="fw:600 fs:75pc m:0 {
           'c:prim': _isRequired(field) && !_isValid(field),
           'c:ok': _isRequired(field) && _isValid(field),
@@ -27,13 +30,18 @@
         on-return-value={ onReturnValue }
         extras={ _getExtras(field, name) }
         text={ field.value }
-        noautoclass={true}>
+        no-placeholder={true}
+        noautoclass={true}
+        label-on={true}>
           <h2
-            class="c:black100 ta:l md-mnw:50pc w:100pc fs:120pc dp:ib p:0px fc-p:5px-10px bd-b-w:1px bd-c:grey200 ts:all ws:pl ww:nm fc-bs:2 {
-              'fc-bd-c:prim': !parent._isValid(opts.field),
-              'fc-bd-c:ok': parent._isValid(opts.field)
-            }"
-            placeholder={ placeholder }
+            class="ps:rl z:1 c:black100 ta:l md-mnw:50pc w:100pc fs:120pc dp:ib p:0px bd-b-w:1px bd-c:grey200 ws:pl ww:nm
+              ts:all fc-p:5px-10px fc-bs:2
+              fc-m-t:0_~label fc-fs:75pc_~label fc-c:prim_~label
+              {
+                'fc-bd-c:prim': !parent._isValid(opts.field),
+                'fc-bd-c:ok': parent._isValid(opts.field)
+              }"
+            placeholder="&nbsp;"
             contenteditable="true">{ text }</h2>
       </elem-text3>
 

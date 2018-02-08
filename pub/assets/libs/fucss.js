@@ -16,6 +16,7 @@ fucss.seps = {
   'and': '+',
   'fStart': '(',
   'fEnd': ')',
+  'next': '~',
 };
 
 fucss.media = {
@@ -718,6 +719,7 @@ fucss.generateStyling = function(opts){
     className = className.replace(fucss.seps.and, '\\+');
     className = className.replace(fucss.seps.fStart, '\\(');
     className = className.replace(fucss.seps.fEnd, '\\)');
+    className = className.replace(fucss.seps.next, '\\~');
 
     var firstAddon = props.length && props[0];
     var isGroup = fucss.groups.indexOf(firstAddon) !== -1;
@@ -749,8 +751,9 @@ fucss.generateStyling = function(opts){
 
     if(target && target.length){
       var allIndex = target.indexOf('all');
-      if(allIndex !== -1) { target[allIndex] = '*' };
-      //className = className.split(',').join('\\,');
+      if(allIndex !== -1)
+        target[allIndex] = '*';
+
       className = className + ' ' + target.join(' ');
     }
 
@@ -890,7 +893,7 @@ fucss.generateGlobalExtras = function(){
     // ".dp\\:flx > *": 'margin: 0;',
     "a":    'text-decoration: none; color: inherit;',
     "a, span, img, button, i, label": 'display: inline-block; vertical-align: middle;',
-    "button, a, i, label": 'cursor: pointer',
+    "button, a, i, label": 'cursor: pointer; font-style: normal;',
     "input, button, select, option, textarea": 'font-size: 100%; font-family: inherit;',
     "::-moz-selection": 'background: ' + fucss.colors.prim + '; color: ' + fucss.colors.white + ';',
     "::selection": 'background: ' + fucss.colors.prim + '; color: ' + fucss.colors.white + ';',

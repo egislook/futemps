@@ -1,10 +1,15 @@
 <elem-text3>
 
-  <div
-    if={false}
-    class="ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim ts:all fc-bs:2 fc-mxh:500px mxh:250px fc-of:auto of:hd"></div>
+  <label if={labelOn} class="ps:ab fs:120pc fw:600 ts:all z:1n c:grey300 {
+    'm-t:15npx fs:75pc c:prim': text.length || _focused,
+    'm-t:0': !text.length || !_focused
+  }">{ placeholder }</label>
 
   <yield />
+
+  <div
+    if={false}
+    class="ws:pl ww:nm bd-r-w:1px bd-c:ts fc-bd-c:prim ts:all fc-bs:2 fc-mxh:500px mxh:250px fc-of:auto of:hd" />
 
   <script>
     this.mixin('tag');
@@ -14,6 +19,7 @@
     tag._textIsTruncated = null;
     tag._elemPos         = null;
     tag._contenteditable = true;
+    tag._focused         = false;
     tag.textIsValid      = false;
     tag.clickToEdit      = opts.clickToEdit     || false;
     tag.oneLiner         = opts.oneLiner        || false;
@@ -31,6 +37,7 @@
     tag.truncate         = opts.truncate        || 200;
     tag.noPlaceholder    = opts.noPlaceholder   || false;
     tag.placeholderPath  = opts.placeholderPath || null;
+    tag.labelOn          = opts.labelOn         || false;
     tag.textLimits       = opts.textLimits      || {min: opts.min || 1, max: opts.max || 550 };
     tag.placeholder      = opts.placeholder     || opts.placeholderPath && opts.getDef(opts.placeholderPath, opts) || 'enter text';
     tag.validateText     = opts.validateText    || validateText;
@@ -72,7 +79,7 @@
 
     function handleMount(){
       if(!this.root.children) return;
-      const elem = this.root.lastChild;
+      const elem = this.root.firstChild.nextElementSibling;
 
       !tag.noautoclass && elem.classList.add(...tag.class.split(' '));
       if(!tag.clickToEdit)
@@ -91,22 +98,24 @@
       tag.autofocus && elem.focus();
     }
 
-    function handleUpdate(){
-      if(typeof opts.truncate !== 'undefined')
-        tag.truncate = opts.truncate;
+    function handleUpdate(data){
+      if(!data){
+        if(typeof opts.truncate !== 'undefined')
+          tag.truncate = opts.truncate;
 
-      if(!tag.id && opts.text !== tag.text){
-        tag.text = opts.text || '';
+        if(!tag.id && opts.text !== tag.text){
+          tag.text = opts.text || '';
 
-        // if(opts.onReturnValue)
-        //   console.log(tag.id, opts.text, tag.text);
+          // if(opts.onReturnValue)
+          //   console.log(tag.id, opts.text, tag.text);
 
-        if(this.root.children){
-          const elem = this.root.lastChild;
-          if(elem.innerText !== tag.text)
-            elem.innerText = tag.text;
+          if(this.root.children){
+            const elem = this.root.lastChild;
+            if(elem.innerText !== tag.text)
+              elem.innerText = tag.text;
+          }
+
         }
-
       }
     }
 
@@ -129,6 +138,7 @@
       e.target.classList.add(...tag.activeClass.split(' '));
       if(e.target.innerText !== tag.text)
         e.target.innerText = tag.text;
+      tag.labelOn && tag.update({ _focused: true });
     }
 
     function handleKeyDown(e){
@@ -167,6 +177,7 @@
         e.target.innerText = tag._textIsTruncated ? tag.truncateText(text): text;
 
       tag.store.trigger('editor');
+      tag.labelOn && tag.update({ _focused: false });
       //tag.update({ _elemPos: null });
 
     }
